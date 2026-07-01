@@ -15,59 +15,73 @@
         android:layout_gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
-
         />
 
     <Button
+        android:id="@+id/one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureOne"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureTwo"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureThree"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/four"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureFour"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/five"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureFive"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/six"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureSix"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/seven"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureSeven"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         />
+
     <Button
+        android:id="@+id/eight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/featureEight"
