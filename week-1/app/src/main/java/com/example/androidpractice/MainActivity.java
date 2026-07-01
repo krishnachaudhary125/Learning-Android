@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(MainActivity.this);
         one = findViewById(R.id.one);
         two = findViewById(R.id.two);
+        three = findViewById(R.id.three);
+
         one.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -46,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewAllAccountDialog();
+            }
+        });
+
+        three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchAccountDialog();
             }
         });
     }
@@ -186,5 +196,74 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void searchAccountDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.search_account, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        EditText accountNumber = view.findViewById(R.id.accountNumber);
+        TextView display = view.findViewById(R.id.display);
+
+        Button submit = view.findViewById(R.id.submit);
+        Button cancel = view.findViewById(R.id.cancel);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String accountNoText = accountNumber.getText().toString().trim();
+
+                if (accountNoText.isEmpty()) {
+                    accountNumber.setError("Account number is required");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                int accNo;
+
+                try {
+                    accNo = Integer.parseInt(accountNoText);
+                } catch (NumberFormatException e) {
+                    accountNumber.setError("Enter a valid account number");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                Account account = bank.searchAccount(accNo);
+
+                if (account != null) {
+
+                    display.setText(
+                            "Account Number : " + account.getAccountNumber() +
+                                    "\n\nAccount Holder : " + account.getAccountHolderName() +
+                                    "\nPhone Number : " + account.getPhoneNumber() +
+                                    "\nEmail : " + account.getEmail() +
+                                    "\nAddress : " + account.getAddress() +
+                                    "\nAccount Type : " + account.getAccountType() +
+                                    "\nBalance : Rs. " + account.getBalance()
+                    );
+
+                } else {
+                    display.setText("Account not found.");
+                }
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Clicked Cancel", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
     }
 }

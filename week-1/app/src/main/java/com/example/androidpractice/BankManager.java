@@ -24,4 +24,13 @@ public class BankManager {
     public ArrayList<Account> getAllAccounts() {
         return accounts;
     }
+
+    public Account searchAccount(int accountNumber) {
+        for (Account account : accounts) {
+            if (account.getAccountNumber() == accountNumber) {
+                return account;
+            }
+        }
+        return null;
+    }
 }
