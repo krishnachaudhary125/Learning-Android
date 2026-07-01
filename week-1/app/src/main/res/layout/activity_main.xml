@@ -11,10 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        android:layout_margin="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
         android:layout_gravity="center"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
+        android:layout_marginBottom="70dp"
         />
 
     <Button
@@ -24,6 +27,7 @@
         android:text="@string/featureOne"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -33,6 +37,7 @@
         android:text="@string/featureTwo"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -42,6 +47,7 @@
         android:text="@string/featureThree"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -51,6 +57,7 @@
         android:text="@string/featureFour"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -60,6 +67,7 @@
         android:text="@string/featureFive"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -69,6 +77,7 @@
         android:text="@string/featureSix"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -78,6 +87,7 @@
         android:text="@string/featureSeven"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
     <Button
@@ -87,6 +97,7 @@
         android:text="@string/featureEight"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
         />
 
 </LinearLayout>
