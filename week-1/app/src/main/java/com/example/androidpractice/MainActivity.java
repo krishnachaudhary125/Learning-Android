@@ -15,11 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     Button one, two, three, four, five, six, seven, eight;
     BankManager bank = new BankManager();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         Dialog dialog = new Dialog(MainActivity.this);
         one = findViewById(R.id.one);
+        two = findViewById(R.id.two);
         one.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 createAccountDialog();
+            }
+        });
+
+        two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewAllAccountDialog();
             }
         });
     }
@@ -149,5 +162,29 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.dismiss();
             }
         });
+    }
+
+    public void viewAllAccountDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.view_all_acount, null);
+        builder.setView(view);
+        recyclerView = view.findViewById(R.id.recyclerView);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ArrayList<Account> accountList = bank.getAllAccounts();
+
+        if(accountList.isEmpty()){
+            Toast.makeText(this, "No account found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ViewAllAccountAdapter adapter = new ViewAllAccountAdapter(accountList);
+        recyclerView.setAdapter(adapter);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
