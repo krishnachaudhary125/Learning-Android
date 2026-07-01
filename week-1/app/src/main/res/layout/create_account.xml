@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/featureOne"
+        android:layout_margin="25dp"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/accountNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputAccountNumber"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/accountHolderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputAccountHolderName"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputPhoneNumber"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputEmail"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputAddress"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/accountType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputAccountType"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inputOpeningBalance"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="fill_horizontal"
+        android:layout_marginBottom="25dp">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
