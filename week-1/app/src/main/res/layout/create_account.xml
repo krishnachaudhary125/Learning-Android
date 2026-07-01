@@ -75,7 +75,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="fill_horizontal"
-        android:layout_marginBottom="25dp">
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp">
 
         <Button
             android:id="@+id/submit"
