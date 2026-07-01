@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         submit = view.findViewById(R.id.submit);
         cancel = view.findViewById(R.id.cancel);
-        accountNumber = findViewById(R.id.accountNumber);
+        accountNumber = view.findViewById(R.id.accountNumber);
         accountHolderName = view.findViewById(R.id.accountHolderName);
         phoneNumber = view.findViewById(R.id.phoneNumber);
         email = view.findViewById(R.id.email);
@@ -62,15 +62,74 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int accNo = Integer.parseInt(accountNumber.getText().toString());
+                String accNo = accountNumber.getText().toString();
                 String accHn = accountHolderName.getText().toString();
                 String phNo = phoneNumber.getText().toString();
                 String em = email.getText().toString();
                 String addr = address.getText().toString();
                 String accTy = accountType.getText().toString();
-                double bal = Double.parseDouble(balance.getText().toString());
+                String bal = balance.getText().toString();
 
-                Account account = new Account(accNo, accHn, phNo, em, addr, accTy, bal);
+                if(accNo.isEmpty()){
+                    accountNumber.setError("Please enter an account number.");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                if(accHn.isEmpty()){
+                    email.setError("Please enter an account holder name.");
+                    email.requestFocus();
+                    return;
+                }
+
+                if(phNo.isEmpty()){
+                    phoneNumber.setError("Please enter a phone number.");
+                    phoneNumber.requestFocus();
+                    return;
+                }
+
+                if(em.isEmpty()){
+                    email.setError("Please enter an email.");
+                    email.requestFocus();
+                    return;
+                }
+
+                if(addr.isEmpty()){
+                    address.setError("Please enter the address.");
+                    address.requestFocus();
+                    return;
+                }
+
+                if(accTy.isEmpty()){
+                    accountType.setError("Please enter an account type.");
+                    accountType.requestFocus();
+                    return;
+                }
+
+                if(bal.isEmpty()){
+                    balance.setError("Please enter a balance.");
+                    balance.requestFocus();
+                    return;
+                }
+                int accNumber;
+                double balan;
+                try {
+                    accNumber = Integer.parseInt(accNo);
+                }catch(NumberFormatException e){
+                    accountNumber.setError("Enter a valid account number.");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                try {
+                    balan = Double.parseDouble(bal);
+                }catch(NumberFormatException e){
+                    balance.setError("Enter a valid balance.");
+                    balance.requestFocus();
+                    return;
+                }
+
+                Account account = new Account(accNumber, accHn, phNo, em, addr, accTy, balan);
                 boolean create = bank.createAccount(account);
 
                 if(create){
