@@ -20,4 +20,8 @@ public class BankManager {
         accounts.add(account);
         return true;
     }
+
+    public ArrayList<Account> getAllAccounts() {
+        return accounts;
+    }
 }
