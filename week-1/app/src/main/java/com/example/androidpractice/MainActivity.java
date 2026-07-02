@@ -366,13 +366,11 @@ public class MainActivity extends AppCompatActivity {
                                 "Deposit Successful",
                                 Toast.LENGTH_SHORT).show();
 
-                        accountNumber.setText("");
-                        amount.setText("");
+                        alertDialog.dismiss();
                     }
 
                 } else {
-                    accountNumber.setError("Account not found");
-                    accountNumber.requestFocus();
+                    Toast.makeText(MainActivity.this, "Money Deposit Failed", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -452,13 +450,11 @@ public class MainActivity extends AppCompatActivity {
                                 "Withdraw Successful",
                                 Toast.LENGTH_SHORT).show();
 
-                        accountNumber.setText("");
-                        amount.setText("");
+                        alertDialog.dismiss();
                     }
 
                 } else {
-                    accountNumber.setError("Account not found");
-                    accountNumber.requestFocus();
+                    Toast.makeText(MainActivity.this, "Money Withdraw Failed", Toast.LENGTH_SHORT).show();
                 }
 
             }
