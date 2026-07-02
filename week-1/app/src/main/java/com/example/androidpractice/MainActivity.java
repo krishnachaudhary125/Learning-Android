@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidpractice.validation.CreateAccountValidation;
 import com.example.androidpractice.validation.DepositMoneyValidation;
 import com.example.androidpractice.validation.SearchAccountValidation;
+import com.example.androidpractice.validation.TransferMoneyValidation;
 import com.example.androidpractice.validation.ValidationResult;
 import com.example.androidpractice.validation.WithdrawMoneyValidation;
 
@@ -455,69 +456,44 @@ public class MainActivity extends AppCompatActivity {
         transfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderAccountNoText = senderAccountNumber.getText().toString().trim();
-                String receiverAccountNoText = receiverAccountNumber.getText().toString().trim();
+                String senderAccountNo = senderAccountNumber.getText().toString().trim();
+                String receiverAccountNo = receiverAccountNumber.getText().toString().trim();
                 String  balance = amount.getText().toString().trim();
 
-                if (senderAccountNoText.isEmpty()) {
-                    senderAccountNumber.setError("Sender account number is required");
-                    senderAccountNumber.requestFocus();
+                ValidationResult result = TransferMoneyValidation.transferValidate(senderAccountNo, receiverAccountNo, balance);
+
+                if (!result.getValid()) {
+                    switch (result.getField()) {
+                        case "senderAccountNumber":
+                            senderAccountNumber.setError(result.getMessage());
+                            senderAccountNumber.requestFocus();
+                            break;
+
+                        case "receiverAccountNumber":
+                            receiverAccountNumber.setError(result.getMessage());
+                            receiverAccountNumber.requestFocus();
+                            break;
+
+                        case "balance":
+                            amount.setError(result.getMessage());
+                            amount.requestFocus();
+                            break;
+                    }
                     return;
                 }
-                if (receiverAccountNoText.isEmpty()) {
-                    receiverAccountNumber.setError("Receiver account number is required");
-                    receiverAccountNumber.requestFocus();
-                    return;
-                }
-                if (balance.isEmpty()) {
-                    amount.setError("Withdraw amount is required");
-                    amount.requestFocus();
-                    return;
-                }
-
-                int senderAccNo, receiverAccNo;
-                double money;
-
-                try {
-                    senderAccNo = Integer.parseInt(senderAccountNoText);
-                } catch (NumberFormatException e) {
-                    senderAccountNumber.setError("Enter a valid account number");
-                    senderAccountNumber.requestFocus();
-                    return;
-                }
-
-                try {
-                    receiverAccNo = Integer.parseInt(receiverAccountNoText);
-                } catch (NumberFormatException e) {
-                    receiverAccountNumber.setError("Enter a valid account number");
-                    receiverAccountNumber.requestFocus();
-                    return;
-                }
-
-                try{
-                    money = Double.parseDouble(balance);
-                } catch(NumberFormatException e){
-                    amount.setError("Enter a valid amount");
-                    amount.requestFocus();
-                    return;
-                }
-
-                Account sender = bank.searchAccount(senderAccNo);
-                Account receiver = bank.searchAccount(receiverAccNo);
-
-                if (sender != null && receiver != null) {
-
-                    boolean success = bank.transferMoney(senderAccNo, receiverAccNo, money);
+                if(result.getValid()) {
+                    boolean success = bank.transferMoney(senderAccountNo, receiverAccountNo, balance);
 
                     if (success) {
                         Toast.makeText(MainActivity.this,
                                 "Transfer Successful",
                                 Toast.LENGTH_SHORT).show();
+
+                        senderAccountNumber.setText("");
+                        receiverAccountNumber.setText("");
+                        amount.setText("");
                         alertDialog.dismiss();
                     }
-
-                } else {
-                    Toast.makeText(MainActivity.this, "Transfer Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
