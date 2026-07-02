@@ -50,4 +50,21 @@ public class BankManager {
 
         return false;
     }
+
+    public boolean withdrawMoney(int accountNumber, double amount){
+        if(amount <= 0){
+            return false;
+        }
+        for (Account account : accounts){
+            if (account.getAccountNumber() == accountNumber){
+                if(account.getBalance() < amount){
+                    return false;
+                }else {
+                    account.setBalance(account.getBalance() - amount);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
