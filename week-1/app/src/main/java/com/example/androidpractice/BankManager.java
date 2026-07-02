@@ -67,4 +67,37 @@ public class BankManager {
         }
         return false;
     }
+
+    public boolean transferMoney(int senderAccountNumber, int receiverAccountNumber, double amount) {
+
+        if (amount <= 0) {
+            return false;
+        }
+
+        Account sender = null;
+        Account receiver = null;
+
+        for (Account account : accounts) {
+            if (account.getAccountNumber() == senderAccountNumber) {
+                sender = account;
+            }
+
+            if (account.getAccountNumber() == receiverAccountNumber) {
+                receiver = account;
+            }
+        }
+
+        if (sender == null || receiver == null) {
+            return false;
+        }
+
+        if (sender.getBalance() < amount) {
+            return false;
+        }
+
+        sender.setBalance(sender.getBalance() - amount);
+        receiver.setBalance(receiver.getBalance() + amount);
+
+        return true;
+    }
 }
