@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         two = findViewById(R.id.two);
         three = findViewById(R.id.three);
         four = findViewById(R.id.four);
+        five = findViewById(R.id.five);
 
         one.setOnClickListener(new View.OnClickListener() {
 
@@ -64,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 depositMoneyDialog();
+            }
+        });
+
+        five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                withdrawMoneyDialog();
             }
         });
     }
@@ -316,8 +324,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (balance.isEmpty()) {
-                    accountNumber.setError("Deposit amount is required");
-                    accountNumber.requestFocus();
+                    amount.setError("Deposit amount is required");
+                    amount.requestFocus();
                     return;
                 }
 
@@ -367,6 +375,93 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Clicked Cancel", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    public void withdrawMoneyDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.withdraw_money, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        EditText accountNumber, amount;
+        Button withdraw, cancel;
+        TextView display;
+
+        accountNumber = view.findViewById(R.id.accountNumber);
+        amount = view.findViewById(R.id.amount);
+        withdraw = view.findViewById(R.id.withdraw);
+        cancel = view.findViewById(R.id.cancel);
+
+        withdraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String accountNoText = accountNumber.getText().toString().trim();
+                String  balance = amount.getText().toString().trim();
+
+                if (accountNoText.isEmpty()) {
+                    accountNumber.setError("Account number is required");
+                    accountNumber.requestFocus();
+                    return;
+                }
+                if (balance.isEmpty()) {
+                    amount.setError("Withdraw amount is required");
+                    amount.requestFocus();
+                    return;
+                }
+
+                int accNo;
+                double money;
+
+                try {
+                    accNo = Integer.parseInt(accountNoText);
+                } catch (NumberFormatException e) {
+                    accountNumber.setError("Enter a valid account number");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                try{
+                    money = Double.parseDouble(balance);
+                } catch(NumberFormatException e){
+                    amount.setError("Enter a valid amount");
+                    amount.requestFocus();
+                    return;
+                }
+
+                Account account = bank.searchAccount(accNo);
+
+                if (account != null) {
+
+                    boolean success = bank.withdrawMoney(accNo, money);
+
+                    if (success) {
+                        Toast.makeText(MainActivity.this,
+                                "Withdraw Successful",
+                                Toast.LENGTH_SHORT).show();
+
+                        accountNumber.setText("");
+                        amount.setText("");
+                    }
+
+                } else {
+                    accountNumber.setError("Account not found");
+                    accountNumber.requestFocus();
+                }
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Clicked cancel", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
         });
