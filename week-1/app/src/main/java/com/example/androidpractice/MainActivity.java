@@ -1,6 +1,7 @@
 package com.example.androidpractice;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         five = findViewById(R.id.five);
         six = findViewById(R.id.six);
         seven = findViewById(R.id.seven);
+        eight = findViewById(R.id.eight);
 
         one.setOnClickListener(new View.OnClickListener() {
 
@@ -88,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deleteAccountDialog();
+            }
+        });
+
+        eight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Exit");
+                builder.setMessage("Do you want to Exit?");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.exit(0);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
     }
