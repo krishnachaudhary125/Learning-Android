@@ -39,7 +39,7 @@
         android:layout_marginTop="25dp">
 
         <Button
-            android:id="@+id/deposit"
+            android:id="@+id/withdraw"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
