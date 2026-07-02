@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">AndroidPractice</string>
+    <string name="title">Bank Management System</string>
+    <string name="featureOne">Create Account</string>
+    <string name="featureTwo">View All Account</string>
+    <string name="featureThree">Search Account</string>
+    <string name="featureFour">Deposit Money</string>
+    <string name="featureFive">Withdraw Money</string>
+    <string name="featureSix">Transfer Money</string>
+    <string name="featureSeven">Delete Account</string>
+    <string name="featureEight">Exit</string>
+    <string name="inputAccountNumber">Enter account number</string>
+    <string name="inputAccountHolderName">Enter account holder name</string>
+    <string name="inputPhoneNumber">Enter phone number</string>
+    <string name="inputEmail">Enter email</string>
+    <string name="inputAddress">Enter address</string>
+    <string name="inputAccountType">Enter account type (Saving or Current)</string>
+    <string name="inputOpeningBalance">Enter opening balance</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="search">Search</string>
+    <string name="inputAmount">Enter amount to be deposited</string>
+    <string name="deposit">Deposit</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="withdrawAmount">Enter amount to be withdrawn</string>
+    <string name="sender">Enter sender account number</string>
+    <string name="receiver">Enter receiver account number</string>
+    <string name="inputTransfer">Enter amount to be transferred</string>
+    <string name="transfer">Transfer</string>
+    <string name="deleteAccountNumber">Enter account number to be deleted</string>
+    <string name="delete">Delete</string>
+</resources>
