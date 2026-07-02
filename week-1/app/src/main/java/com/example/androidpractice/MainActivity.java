@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidpractice.validation.CreateAccountValidation;
+import com.example.androidpractice.validation.ValidationResult;
 
 import java.util.ArrayList;
 
@@ -128,7 +133,8 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
         Button submit, cancel;
-        EditText accountNumber, accountHolderName, phoneNumber, email, address, accountType, balance;
+        EditText accountNumber, accountHolderName, phoneNumber, email, address, balance;
+        RadioGroup accountType;
 
         submit = view.findViewById(R.id.submit);
         cancel = view.findViewById(R.id.cancel);
@@ -148,69 +154,64 @@ public class MainActivity extends AppCompatActivity {
                 String phNo = phoneNumber.getText().toString();
                 String em = email.getText().toString();
                 String addr = address.getText().toString();
-                String accTy = accountType.getText().toString();
+                int selectedId = accountType.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    Toast.makeText(MainActivity.this, "Please select an account type.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                RadioButton radioButton = findViewById(selectedId);
+                String accountTypeValue = radioButton.getText().toString();
                 String bal = balance.getText().toString();
 
-                if(accNo.isEmpty()){
-                    accountNumber.setError("Please enter an account number.");
-                    accountNumber.requestFocus();
+                ValidationResult result = CreateAccountValidation.accountValidate(
+                        accNo,
+                        accHn,
+                        phNo,
+                        em,
+                        addr,
+                        accountTypeValue,
+                        bal
+                );
+
+                if (!result.getValid()) {
+
+                    switch (result.getField()) {
+
+                        case "accountNumber":
+                            accountNumber.setError(result.getMessage());
+                            accountNumber.requestFocus();
+                            break;
+
+                        case "accountHolderName":
+                            accountHolderName.setError(result.getMessage());
+                            accountHolderName.requestFocus();
+                            break;
+
+                        case "phoneNumber":
+                            phoneNumber.setError(result.getMessage());
+                            phoneNumber.requestFocus();
+                            break;
+
+                        case "email":
+                            email.setError(result.getMessage());
+                            email.requestFocus();
+                            break;
+
+                        case "address":
+                            address.setError(result.getMessage());
+                            address.requestFocus();
+                            break;
+
+                        case "balance":
+                            balance.setError(result.getMessage());
+                            balance.requestFocus();
+                            break;
+                    }
+
                     return;
                 }
 
-                if(accHn.isEmpty()){
-                    email.setError("Please enter an account holder name.");
-                    email.requestFocus();
-                    return;
-                }
-
-                if(phNo.isEmpty()){
-                    phoneNumber.setError("Please enter a phone number.");
-                    phoneNumber.requestFocus();
-                    return;
-                }
-
-                if(em.isEmpty()){
-                    email.setError("Please enter an email.");
-                    email.requestFocus();
-                    return;
-                }
-
-                if(addr.isEmpty()){
-                    address.setError("Please enter the address.");
-                    address.requestFocus();
-                    return;
-                }
-
-                if(accTy.isEmpty()){
-                    accountType.setError("Please enter an account type.");
-                    accountType.requestFocus();
-                    return;
-                }
-
-                if(bal.isEmpty()){
-                    balance.setError("Please enter a balance.");
-                    balance.requestFocus();
-                    return;
-                }
-                int accNumber;
-                double balan;
-                try {
-                    accNumber = Integer.parseInt(accNo);
-                }catch(NumberFormatException e){
-                    accountNumber.setError("Enter a valid account number.");
-                    accountNumber.requestFocus();
-                    return;
-                }
-
-                try {
-                    balan = Double.parseDouble(bal);
-                }catch(NumberFormatException e){
-                    balance.setError("Enter a valid balance.");
-                    balance.requestFocus();
-                    return;
-                }
-
-                Account account = new Account(accNumber, accHn, phNo, em, addr, accTy, balan);
+                Account account = new Account(accNo, accHn, phNo, em, addr, accountTypeValue, bal);
                 boolean create = bank.createAccount(account);
 
                 if(create){

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BankManager {
     ArrayList<Account> accounts = new ArrayList<>();
 
-    public boolean accountExist(int accountNumber){
+    public boolean accountExist(String accountNumber){
         for(Account account : accounts){
             if(account.getAccountNumber() == accountNumber){
                 return true;
@@ -25,7 +25,7 @@ public class BankManager {
         return accounts;
     }
 
-    public Account searchAccount(int accountNumber) {
+    public Account searchAccount(String accountNumber) {
         for (Account account : accounts) {
             if (account.getAccountNumber() == accountNumber) {
                 return account;
@@ -34,8 +34,8 @@ public class BankManager {
         return null;
     }
 
-    public boolean depositMoney(int accountNumber, double amount){
-        if (amount <= 0) {
+    public boolean depositMoney(String accountNumber, String amount){
+        if (Double.parseDouble(amount) <= 0) {
             return false;
         }
 
@@ -51,16 +51,16 @@ public class BankManager {
         return false;
     }
 
-    public boolean withdrawMoney(int accountNumber, double amount){
-        if(amount <= 0){
+    public boolean withdrawMoney(String accountNumber, String  amount){
+        if(Double.parseDouble(amount) <= 0){
             return false;
         }
         for (Account account : accounts){
             if (account.getAccountNumber() == accountNumber){
-                if(account.getBalance() < amount){
+                if(Double.parseDouble(account.getBalance()) < Double.parseDouble(amount)){
                     return false;
                 }else {
-                    account.setBalance(account.getBalance() - amount);
+                    account.setBalance(String.valueOf(Double.parseDouble(account.getBalance()) - Double.parseDouble(amount)));
                     return true;
                 }
             }

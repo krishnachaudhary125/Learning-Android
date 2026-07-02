@@ -54,13 +54,30 @@
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"/>
 
-    <EditText
+    <RadioGroup
         android:id="@+id/accountType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/inputAccountType"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"/>
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/saving"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:text="@string/saving"/>
+
+        <RadioButton
+            android:id="@+id/current"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:text="@string/current"/>
+    </RadioGroup>
 
     <EditText
         android:id="@+id/balance"

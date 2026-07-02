@@ -14,7 +14,6 @@
     <string name="inputPhoneNumber">Enter phone number</string>
     <string name="inputEmail">Enter email</string>
     <string name="inputAddress">Enter address</string>
-    <string name="inputAccountType">Enter account type (Saving or Current)</string>
     <string name="inputOpeningBalance">Enter opening balance</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
@@ -29,4 +28,6 @@
     <string name="transfer">Transfer</string>
     <string name="deleteAccountNumber">Enter account number to be deleted</string>
     <string name="delete">Delete</string>
+    <string name="saving">Saving</string>
+    <string name="current">Current</string>
 </resources>
