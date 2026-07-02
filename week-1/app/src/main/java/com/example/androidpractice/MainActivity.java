@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidpractice.validation.CreateAccountValidation;
+import com.example.androidpractice.validation.DeleteAccountValidation;
 import com.example.androidpractice.validation.DepositMoneyValidation;
 import com.example.androidpractice.validation.SearchAccountValidation;
 import com.example.androidpractice.validation.TransferMoneyValidation;
@@ -529,38 +530,30 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String accNo = accountNumber.getText().toString().trim();
 
-                if(accNo.isEmpty()){
-                    accountNumber.setError("Account number is required");
-                    accountNumber.requestFocus();
+                ValidationResult result = DeleteAccountValidation.deleteValidate(accNo);
+
+                if (!result.getValid()) {
+                    switch (result.getField()) {
+                        case "accountNumber":
+                            accountNumber.setError(result.getMessage());
+                            accountNumber.requestFocus();
+                            break;
+                    }
                     return;
                 }
+                if(result.getValid()) {
+                    boolean success = bank.deleteAccount(accNo);
 
-                int deleteAccNo;
-
-                try {
-                    deleteAccNo = Integer.parseInt(accNo);
-                } catch (NumberFormatException e) {
-                    accountNumber.setError("Enter a valid account number");
-                    accountNumber.requestFocus();
-                    return;
-                }
-
-                Account account = bank.searchAccount(deleteAccNo);
-
-                if (account != null) {
-                    boolean delete = bank.deleteAccount(deleteAccNo);
-
-                    if (delete) {
+                    if (success) {
                         Toast.makeText(MainActivity.this,
-                                "Account delete successful",
+                                "Delete Successful",
                                 Toast.LENGTH_SHORT).show();
+
+                        accountNumber.setText("");
+                        accountNumber.setText("");
                         dialog.dismiss();
                     }
                 }
-                else {
-                    Toast.makeText(MainActivity.this, "Account deletion failed", Toast.LENGTH_SHORT).show();
-                }
-
             }
         });
 
