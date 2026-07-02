@@ -26,7 +26,7 @@ object SearchAccountValidation {
                 "Invalid account number."
             )
         }
-        var account: Account? = bank.searchAccount(accNo)
+        val account: Account? = bank.searchAccount(accNo)
 
         if (account == null) {
             return ValidationResult(

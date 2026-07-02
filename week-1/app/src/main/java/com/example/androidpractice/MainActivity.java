@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidpractice.validation.CreateAccountValidation;
+import com.example.androidpractice.validation.DepositMoneyValidation;
 import com.example.androidpractice.validation.SearchAccountValidation;
 import com.example.androidpractice.validation.ValidationResult;
 
@@ -322,57 +323,38 @@ public class MainActivity extends AppCompatActivity {
         deposit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String accountNoText = accountNumber.getText().toString().trim();
+                String accountNo = accountNumber.getText().toString().trim();
                 String  balance = amount.getText().toString().trim();
 
-                if (accountNoText.isEmpty()) {
-                    accountNumber.setError("Account number is required");
-                    accountNumber.requestFocus();
+                ValidationResult result = DepositMoneyValidation.depositValidate(accountNo, balance);
+
+                if (!result.getValid()) {
+                    switch (result.getField()) {
+                        case "accountNumber":
+                            accountNumber.setError(result.getMessage());
+                            accountNumber.requestFocus();
+                            break;
+
+                        case "balance":
+                            amount.setError(result.getMessage());
+                            amount.requestFocus();
+                            break;
+                    }
                     return;
                 }
-                if (balance.isEmpty()) {
-                    amount.setError("Deposit amount is required");
-                    amount.requestFocus();
-                    return;
-                }
-
-                int accNo;
-                double money;
-
-                try {
-                    accNo = Integer.parseInt(accountNoText);
-                } catch (NumberFormatException e) {
-                    accountNumber.setError("Enter a valid account number");
-                    accountNumber.requestFocus();
-                    return;
-                }
-
-                try{
-                    money = Double.parseDouble(balance);
-                } catch(NumberFormatException e){
-                    amount.setError("Enter a valid amount");
-                    amount.requestFocus();
-                    return;
-                }
-
-                Account account = bank.searchAccount(accNo);
-
-                if (account != null) {
-
-                    boolean success = bank.depositMoney(accNo, money);
+                if(result.getValid()) {
+                    boolean success = bank.depositMoney(accountNo, balance);
 
                     if (success) {
                         Toast.makeText(MainActivity.this,
                                 "Deposit Successful",
                                 Toast.LENGTH_SHORT).show();
 
+                        accountNumber.setText("");
+                        amount.setText("");
                         alertDialog.dismiss();
                     }
-
-                } else {
-                    Toast.makeText(MainActivity.this, "Money Deposit Failed", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
