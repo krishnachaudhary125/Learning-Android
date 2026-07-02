@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         three = findViewById(R.id.three);
         four = findViewById(R.id.four);
         five = findViewById(R.id.five);
+        six = findViewById(R.id.six);
 
         one.setOnClickListener(new View.OnClickListener() {
 
@@ -72,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 withdrawMoneyDialog();
+            }
+        });
+
+        six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transferMoneyDialog();
             }
         });
     }
@@ -305,7 +313,6 @@ public class MainActivity extends AppCompatActivity {
 
         EditText accountNumber, amount;
         Button deposit, cancel;
-        TextView display;
 
         accountNumber = view.findViewById(R.id.accountNumber);
         amount = view.findViewById(R.id.amount);
@@ -392,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
 
         EditText accountNumber, amount;
         Button withdraw, cancel;
-        TextView display;
 
         accountNumber = view.findViewById(R.id.accountNumber);
         amount = view.findViewById(R.id.amount);
@@ -454,6 +460,41 @@ public class MainActivity extends AppCompatActivity {
                     accountNumber.setError("Account not found");
                     accountNumber.requestFocus();
                 }
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Clicked cancel", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    public void transferMoneyDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.transfer_money, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        EditText senderAccountNumber, receiverAccountNumber, amount;
+        Button transfer, cancel;
+
+        senderAccountNumber = view.findViewById(R.id.senderAccountNumber);
+        receiverAccountNumber = view.findViewById(R.id.receiverAccountNumber);
+        amount = view.findViewById(R.id.amount);
+        transfer = view.findViewById(R.id.transfer);
+        cancel = view.findViewById(R.id.cancel);
+
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
