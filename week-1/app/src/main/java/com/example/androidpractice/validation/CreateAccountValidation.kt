@@ -9,7 +9,6 @@ object CreateAccountValidation {
         phNo: String,
         em: String,
         addr: String,
-        accountTypeValue: String,
         bal: String
     ): ValidationResult{
         val accountRegex = Regex("^\\d+$")

@@ -68,9 +68,9 @@ public class BankManager {
         return false;
     }
 
-    public boolean transferMoney(int senderAccountNumber, int receiverAccountNumber, double amount) {
+    public boolean transferMoney(String senderAccountNumber, String receiverAccountNumber, String amount) {
 
-        if (amount <= 0) {
+        if (Double.parseDouble(amount) <= 0) {
             return false;
         }
 
@@ -78,11 +78,11 @@ public class BankManager {
         Account receiver = null;
 
         for (Account account : accounts) {
-            if (account.getAccountNumber() == senderAccountNumber) {
+            if (account.getAccountNumber().equals(senderAccountNumber)) {
                 sender = account;
             }
 
-            if (account.getAccountNumber() == receiverAccountNumber) {
+            if (account.getAccountNumber().equals(receiverAccountNumber)) {
                 receiver = account;
             }
         }
@@ -91,20 +91,20 @@ public class BankManager {
             return false;
         }
 
-        if (sender.getBalance() < amount) {
+        if (Double.parseDouble(sender.getBalance()) < Double.parseDouble(amount)) {
             return false;
         }
 
-        sender.setBalance(sender.getBalance() - amount);
-        receiver.setBalance(receiver.getBalance() + amount);
+        sender.setBalance(String.valueOf(Double.parseDouble(sender.getBalance()) - Double.parseDouble(amount)));
+        receiver.setBalance(String.valueOf(Double.parseDouble(receiver.getBalance()) + Double.parseDouble(amount)));
 
         return true;
     }
 
-    public boolean deleteAccount(int deleteAccNo){
+    public boolean deleteAccount(String deleteAccNo){
         for (Account account : accounts) {
 
-            if (account.getAccountNumber() == deleteAccNo) {
+            if (Integer.parseInt(account.getAccountNumber()) == Integer.parseInt(deleteAccNo)) {
                 accounts.remove(account);
                 return true;
             }
