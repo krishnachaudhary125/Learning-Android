@@ -33,4 +33,21 @@ public class BankManager {
         }
         return null;
     }
+
+    public boolean depositMoney(int accountNumber, double amount){
+        if (amount <= 0) {
+            return false;
+        }
+
+        for (Account account : accounts) {
+
+            if (account.getAccountNumber() == accountNumber) {
+
+                account.setBalance(account.getBalance() + amount);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
