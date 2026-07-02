@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         four = findViewById(R.id.four);
         five = findViewById(R.id.five);
         six = findViewById(R.id.six);
+        seven = findViewById(R.id.seven);
 
         one.setOnClickListener(new View.OnClickListener() {
 
@@ -80,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 transferMoneyDialog();
+            }
+        });
+
+        seven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAccountDialog();
             }
         });
     }
@@ -563,6 +571,72 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Clicked cancel", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
+            }
+        });
+    }
+
+    public void deleteAccountDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_account, null);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        EditText accountNumber;
+        Button delete, cancel;
+
+        accountNumber = view.findViewById(R.id.accountNumber);
+        delete = view.findViewById(R.id.delete);
+        cancel = view.findViewById(R.id.cancel);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String accNo = accountNumber.getText().toString().trim();
+
+                if(accNo.isEmpty()){
+                    accountNumber.setError("Account number is required");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                int deleteAccNo;
+
+                try {
+                    deleteAccNo = Integer.parseInt(accNo);
+                } catch (NumberFormatException e) {
+                    accountNumber.setError("Enter a valid account number");
+                    accountNumber.requestFocus();
+                    return;
+                }
+
+                Account account = bank.searchAccount(deleteAccNo);
+
+                if (account != null) {
+                    boolean delete = bank.deleteAccount(deleteAccNo);
+
+                    if (delete) {
+                        Toast.makeText(MainActivity.this,
+                                "Account delete successful",
+                                Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Account deletion failed", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Clicked cancel", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
     }

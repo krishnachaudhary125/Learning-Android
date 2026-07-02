@@ -100,4 +100,15 @@ public class BankManager {
 
         return true;
     }
+
+    public boolean deleteAccount(int deleteAccNo){
+        for (Account account : accounts) {
+
+            if (account.getAccountNumber() == deleteAccNo) {
+                accounts.remove(account);
+                return true;
+            }
+        }
+        return false;
+    }
 }
