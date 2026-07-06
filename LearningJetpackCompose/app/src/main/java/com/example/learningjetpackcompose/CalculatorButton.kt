@@ -1,6 +1,5 @@
 package com.example.learningjetpackcompose
 
-import android.icu.util.IslamicCalendar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
