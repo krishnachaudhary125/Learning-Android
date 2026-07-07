@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Forgot Password"
-        android:textSize="50dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:textAlignment="center"
         android:paddingTop="35sp"/>
@@ -17,7 +17,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:layout_margin="10dp"
         android:padding="25sp"
         android:orientation="vertical">
 

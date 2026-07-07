@@ -31,9 +31,13 @@ class MainActivity : AppCompatActivity() {
         login.setOnClickListener {
             val userText: String = user.text.toString()
             val pswText: String = psw.text.toString()
-            if(userText == userName && pswText == userPsw){
-//                val intent = Intent(this, SecondActivity::class.java)
-//                startActivity(intent)
+            if(userText.isEmpty()||pswText.isEmpty()){
+                Toast.makeText(this, "Username and Password cannot be empty", Toast.LENGTH_SHORT).show()
+            }
+            else if(userText == userName && pswText == userPsw){
+                val intent = Intent(this, SecondActivity::class.java)
+                intent.putExtra("userName", userText)
+                startActivity(intent)
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
             }
             else {
