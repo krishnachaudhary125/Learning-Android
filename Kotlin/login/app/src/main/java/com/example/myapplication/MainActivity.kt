@@ -69,7 +69,9 @@ class MainActivity : AppCompatActivity() {
                         val newPsw: String = nPsw.text.toString()
                         val conPsw: String = cPsw.text.toString()
 
-                        if(newPsw == conPsw){
+                        if(newPsw.isEmpty() || conPsw.isEmpty()){
+                            Toast.makeText(this, "Password cannot be empty.", Toast.LENGTH_SHORT).show()
+                        } else if(newPsw == conPsw){
                             userPsw = newPsw
                             dia.dismiss()
                             Toast.makeText(this, "Password change successfully", Toast.LENGTH_SHORT).show()
