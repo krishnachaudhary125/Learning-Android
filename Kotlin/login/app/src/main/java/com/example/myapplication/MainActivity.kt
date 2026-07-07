@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val forgot = findViewById<TextView>(R.id.forgot)
         val login = findViewById<Button>(R.id.btn)
         val register = findViewById<Button>(R.id.register)
-        val userName: String = "krishna"
+        var userName: String = "krishna"
         var userPsw: String = "Krishna@123"
 
         login.setOnClickListener {
@@ -92,7 +92,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         register.setOnClickListener {
-            Toast.makeText(this, "Register here", Toast.LENGTH_SHORT).show()
+
+            val alert = AlertDialog.Builder(this)
+            val a = layoutInflater.inflate(R.layout.register, null)
+            alert.setView(a)
+            val d = alert.create()
+            d.show()
+
+            val userNa = a.findViewById<EditText>(R.id.userName)
+            val psw = a.findViewById<EditText>(R.id.psw)
+            val cpsw = a.findViewById<EditText>(R.id.cpsw)
+            val registerAcc = a.findViewById<Button>(R.id.registerAcc)
+
+            registerAcc.setOnClickListener {
+                val userN = userNa.text.toString()
+                val ps = psw.text.toString()
+                val cps = cpsw.text.toString()
+
+                if(userN.isEmpty() || ps.isEmpty() || cps.isEmpty()){
+                    Toast.makeText(this, "Username and Password cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+                else if(ps == cps){
+                    userName = userN
+                    userPsw = ps
+                    d.dismiss()
+                    Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }
