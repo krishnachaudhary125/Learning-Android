@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f9fbfe">
+    android:background="#E2E8EF">
 
     <LinearLayout
         android:id="@+id/toolBar"
@@ -184,7 +184,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_weight="14"
-                android:text="Feature Products"/>
+                android:text="Featured Products"/>
 
             <ImageView
                 android:layout_width="46dp"
@@ -193,6 +193,8 @@
                 android:background="@drawable/transparent_background"/>
 
         </LinearLayout>
+
+
 
     </LinearLayout>
 
