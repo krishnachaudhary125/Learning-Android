@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
+import com.example.atry.ui.adapters.CategoryAdapter
 import com.example.atry.ui.viewmodels.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -18,6 +19,7 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var bannerAdapter: BannerAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +35,7 @@ class HomeFragment : Fragment() {
 
         initAdapters()
         setupBannerRecyclerView()
+        setupCategoryRecyclerView()
         observeData()
     }
 
@@ -45,6 +48,13 @@ class HomeFragment : Fragment() {
             ).show()
         }
 
+        categoryAdapter = CategoryAdapter { category ->
+            Toast.makeText(
+                requireContext(),
+                "Category: ",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
     private fun setupBannerRecyclerView() {
         binding.bannerRecyclerView.apply {
@@ -57,9 +67,25 @@ class HomeFragment : Fragment() {
             isNestedScrollingEnabled = false
         }
     }
+
+    private fun setupCategoryRecyclerView() {
+        binding.categoryRecyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = categoryAdapter
+            isNestedScrollingEnabled = false
+        }
+    }
     private fun observeData() {
         homeViewModel.banners.observe(viewLifecycleOwner) { banners ->
             bannerAdapter.submitList(banners)
+        }
+
+        homeViewModel.category.observe(viewLifecycleOwner) { category ->
+            categoryAdapter.submitList(category)
         }
     }
 }

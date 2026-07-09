@@ -15,22 +15,11 @@
 
         <ImageView
             android:id="@+id/bannerImage"
+            android:background="@drawable/edit_text_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="Banner"
             android:scaleType="centerCrop" />
-
-        <Button
-            android:id="@+id/shopNowBtn"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="12dp"
-            android:background="@drawable/button_green_shop"
-            android:text="Shop Now"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
 
     </RelativeLayout>
 

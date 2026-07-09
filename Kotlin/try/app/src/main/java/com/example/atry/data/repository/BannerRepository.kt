@@ -15,17 +15,17 @@ class BannerRepository {
         _banners.value = listOf(
             Banner(
                 id = 1,
-                imageUrl = "android.resource://com.example.atry/${R.drawable.banner}",
+                imageUrl = "android.resource://com.example.atry/${R.drawable.banner1}",
                 actionUrl = null
             ),
             Banner(
                 id = 2,
-                imageUrl = "android.resource://com.example.atry/${R.drawable.banner}",
+                imageUrl = "android.resource://com.example.atry/${R.drawable.banner2}",
                 actionUrl = null
             ),
             Banner(
                 id = 3,
-                imageUrl = "android.resource://com.example.atry/${R.drawable.banner}",
+                imageUrl = "android.resource://com.example.atry/${R.drawable.banner3}",
                 actionUrl = null
             )
         )

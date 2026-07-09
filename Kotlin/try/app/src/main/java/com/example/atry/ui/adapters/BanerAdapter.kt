@@ -20,14 +20,10 @@ class BannerAdapter(
         fun bind(banner: Banner) {
             Glide.with(binding.root.context)
                 .load(banner.imageUrl)
-                .placeholder(R.drawable.banner)
+                .placeholder(R.drawable.banner1)
                 .into(binding.bannerImage)
 
             binding.root.setOnClickListener {
-                onBannerClick(banner)
-            }
-
-            binding.shopNowBtn.setOnClickListener {
                 onBannerClick(banner)
             }
         }

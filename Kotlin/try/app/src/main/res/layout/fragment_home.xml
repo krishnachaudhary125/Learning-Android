@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F4F4F4">
+    android:background="#f9fbfe">
 
     <LinearLayout
         android:id="@+id/toolBar"
@@ -118,31 +118,79 @@
        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_width="375dp"
+            android:layout_height="128dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bannerRecyclerView"
-                android:layout_width="375dp"
-                android:layout_height="128dp"
+                android:layout_width="343dp"
+                android:layout_height="126.6dp"
                 android:orientation="horizontal"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:scrollbars="none"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/bannerIndicator"
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="Categories"/>
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="@drawable/transparent_background"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryRecyclerView"
+            android:layout_width="359dp"
+            android:layout_height="85dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scrollbars="none"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:weightSum="15">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                app:tabBackground="@drawable/tab_selector"
-                app:tabIndicatorHeight="0dp"
-                app:tabMaxWidth="12dp"
-                app:tabMinWidth="12dp" />
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_weight="14"
+                android:text="Feature Products"/>
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="@drawable/transparent_background"/>
 
         </LinearLayout>
 
