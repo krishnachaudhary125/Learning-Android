@@ -197,13 +197,246 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/firstProduct"
+                android:layout_width="168dp"
+                android:layout_height="268dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/edit_text_background"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/p1"
+                    android:layout_width="168dp"
+                    android:layout_height="161dp"
+                    android:background="@drawable/edit_text_background"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/categoryImage1"
+                        android:layout_width="152dp"
+                        android:layout_height="146dp"
+                        android:src="@drawable/tshirt" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="161dp"
+                    android:text="50 T-shirt"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="181dp"
+                    android:text="In STOCK - 99Shop"
+                    android:textSize="10sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="195dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="16dp"
+                        android:layout_height="20dp"
+                        android:paddingTop="4dp"
+                        android:text="Rs."
+                        android:textColor="@color/green"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="840"
+                        android:textColor="@color/green"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="234dp"
+                    android:src="@drawable/ic_fav"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="36dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="131dp"
+                    android:layout_marginTop="225dp"
+                    android:background="@drawable/add_cartt_green_button"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_plus_button" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fourthProduct"
+                android:layout_width="168dp"
+                android:layout_height="268dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/edit_text_background"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="168dp"
+                    android:layout_height="161dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/hotDealImage2"
+                        android:layout_width="152dp"
+                        android:layout_height="146dp"
+                        android:src="@drawable/shoes" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="161dp"
+                    android:text="Nike Air Monarch"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="181dp"
+                    android:text="In STOCK - NIKE"
+                    android:textSize="10sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="195dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:paddingTop="4dp"
+                        android:text="Rs."
+                        android:textColor="@color/green"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="8200"
+                        android:textColor="@color/green"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="234dp"
+                    android:src="@drawable/ic_fav"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="36dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="131dp"
+                    android:layout_marginTop="225dp"
+                    android:background="@drawable/add_cartt_green_button"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_plus_button" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="Hot Deals of the Day"/>
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="@drawable/transparent_background"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginTop="16dp"
             android:layout_marginStart="24dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:background="@drawable/edit_text_background"
-                android:id="@+id/firstProduct"
+                android:id="@+id/thirdProduct"
                 android:layout_width="168dp"
                 android:layout_height="268dp"
                 android:orientation="vertical"
@@ -211,7 +444,7 @@
                 android:layout_marginEnd="12dp">
 
                 <LinearLayout
-                    android:id="@+id/p1"
+                    android:id="@+id/p3"
                     android:layout_width="168dp"
                     android:layout_height="161dp"
                     android:orientation="vertical"
@@ -221,16 +454,29 @@
                     app:layout_constraintRight_toRightOf="parent">
 
                     <ImageView
-                        android:id="@+id/categoryImage1"
+                        android:id="@+id/hotDealImage"
                         android:layout_width="152dp"
                         android:layout_height="146dp"
-                        android:src="@drawable/tshirt"/>
+                        android:src="@drawable/laptop"/>
+
                 </LinearLayout>
+
+                <EditText
+                    android:gravity="center"
+                    android:layout_width="56dp"
+                    android:layout_height="24dp"
+                    android:textFontWeight="400"
+                    android:layout_marginTop="8dp"
+                    android:textSize="10sp"
+                    android:text="15% OFF"
+                    android:background="@drawable/discount_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="50 T-shirt"
+                    android:text="Dell Latitude 13"
                     android:layout_marginTop="161dp"
                     android:textSize="14sp"
                     android:layout_marginStart="9dp"
@@ -241,7 +487,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
-                    android:text="In STOCK - 99Shop"
+                    android:text="In STOCK - DELL"
                     android:layout_marginTop="181dp"
                     android:textSize="10sp"
                     android:layout_marginStart="9dp"
@@ -270,7 +516,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:textSize="16sp"
-                        android:text="840"
+                        android:text="8200"
                         android:textColor="@color/green"/>
 
                 </LinearLayout>
@@ -326,13 +572,25 @@
                         android:id="@+id/categoryImage2"
                         android:layout_width="152dp"
                         android:layout_height="146dp"
-                        android:src="@drawable/shoes"/>
+                        android:src="@drawable/mobile_phone"/>
                 </LinearLayout>
+
+                <EditText
+                    android:gravity="center"
+                    android:layout_width="56dp"
+                    android:layout_height="24dp"
+                    android:textFontWeight="400"
+                    android:layout_marginTop="8dp"
+                    android:textSize="10sp"
+                    android:text="15% OFF"
+                    android:background="@drawable/discount_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="Nike Air Monarch"
+                    android:text="Opp0 A74 (6GB)"
                     android:layout_marginTop="161dp"
                     android:textSize="14sp"
                     android:layout_marginStart="9dp"
@@ -343,7 +601,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
-                    android:text="In STOCK - NIKE"
+                    android:text="In STOCK - OPPO"
                     android:layout_marginTop="181dp"
                     android:textSize="10sp"
                     android:layout_marginStart="9dp"
@@ -372,7 +630,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:textSize="16sp"
-                        android:text="8200"
+                        android:text="840"
                         android:textColor="@color/green"/>
 
                 </LinearLayout>
@@ -408,30 +666,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="380dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="36dp"
-            android:orientation="horizontal"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="Hot Deals of the Day"/>
-
-            <ImageView
-                android:layout_width="46dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_right"
-                android:background="@drawable/transparent_background"/>
-
-        </LinearLayout>
-
-
 
     </LinearLayout>
 
