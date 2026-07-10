@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#E2E8EF">
+    android:background="#F9FBFE">
 
     <LinearLayout
         android:id="@+id/toolBar"
@@ -673,6 +673,49 @@
             android:layout_marginTop="24dp"
             android:layout_marginStart="24dp"
             android:src="@drawable/benchmark"/>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="Most Popular"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hotDealCategoriesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="Popular Brand"/>
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="@drawable/transparent_background"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

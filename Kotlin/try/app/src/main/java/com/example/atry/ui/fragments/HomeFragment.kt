@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
-import com.example.atry.ui.viewmodels.HomeViewModel
+import com.example.atry.ui.adapters.HotDealCategoryAdapter
+import com.example.atry.ui.viewmodel.HomeViewModel
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 
 class HomeFragment : Fragment() {
 
@@ -20,6 +24,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +41,7 @@ class HomeFragment : Fragment() {
         initAdapters()
         setupBannerRecyclerView()
         setupCategoryRecyclerView()
+        setupHotDealCategoryRecyclerView()
         observeData()
     }
 
@@ -49,6 +55,14 @@ class HomeFragment : Fragment() {
         }
 
         categoryAdapter = CategoryAdapter { category ->
+            Toast.makeText(
+                requireContext(),
+                "Category: ",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        hotDealCategoryAdapter = HotDealCategoryAdapter { hotDealCategories ->
             Toast.makeText(
                 requireContext(),
                 "Category: ",
@@ -86,6 +100,23 @@ class HomeFragment : Fragment() {
 
         homeViewModel.category.observe(viewLifecycleOwner) { category ->
             categoryAdapter.submitList(category)
+        }
+
+        homeViewModel.hotDealCategories.observe(viewLifecycleOwner) { hotDealCategories ->
+            hotDealCategoryAdapter.submitList(hotDealCategories)
+        }
+    }
+
+    private fun setupHotDealCategoryRecyclerView() {
+        binding.hotDealCategoriesRecyclerView.apply {
+
+            layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+            }
+
+            adapter = hotDealCategoryAdapter
+            isNestedScrollingEnabled = false
         }
     }
 }
