@@ -11,4 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <include
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/bottom_navigation"
+        android:layout_gravity="bottom"/>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
