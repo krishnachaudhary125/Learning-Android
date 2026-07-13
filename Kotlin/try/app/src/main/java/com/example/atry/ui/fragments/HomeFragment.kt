@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
@@ -56,6 +58,11 @@ class HomeFragment : Fragment() {
         setupHotDealProductRecyclerView()
         setupRecommendedRecyclerView()
         observeData()
+
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.loading)
+            .into(binding.loadingGif)
     }
 
     private fun initAdapters() {
