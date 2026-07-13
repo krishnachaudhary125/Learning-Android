@@ -22,7 +22,7 @@ class CategoryRepository {
             Category(
                 id = 2,
                 imageUrl = R.drawable.ic_shop_computer,
-                text = "Electronic",
+                text = "Electronic Device",
                 actionUrl = null
             ),
             Category(
@@ -40,7 +40,7 @@ class CategoryRepository {
             Category(
                 id = 5,
                 imageUrl = R.drawable.ic_shop_homestyle,
-                text = "Lifestyles",
+                text = "Home & Lifestyles",
                 actionUrl = null
             ),
             Category(

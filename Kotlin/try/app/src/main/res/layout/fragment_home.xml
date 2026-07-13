@@ -136,20 +136,28 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </LinearLayout>
-        
+
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="24dp"
             android:layout_marginTop="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp">
+            android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="320dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Categories"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="Categories"/>
+                android:layout_weight="14"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="46dp"
@@ -161,7 +169,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryRecyclerView"
-            android:layout_width="359dp"
+            android:layout_width="wrap_content"
             android:layout_height="85dp"
             android:orientation="horizontal"
             android:layout_marginStart="16dp"
@@ -171,20 +179,26 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="24dp"
             android:layout_marginTop="36dp"
-            android:orientation="horizontal"
             android:layout_marginStart="16dp"
-            android:weightSum="15">
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Featured Products"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_weight="14"
-                android:text="Featured Products"/>
+                android:layout_weight="14"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="46dp"
@@ -200,18 +214,26 @@
             android:layout_height="match_parent"/>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="24dp"
             android:layout_marginTop="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp">
+            android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="320dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Hot Deals of The Day"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="Hot Deals of the Day"/>
+                android:layout_weight="14"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="46dp"
@@ -256,18 +278,26 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp">
+            android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="320dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Popular Brand"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="Popular Brand"/>
+                android:layout_weight="14"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="46dp"
