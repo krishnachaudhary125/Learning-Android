@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
+import com.example.atry.ui.adapters.FeaturedProductAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
 import com.example.atry.ui.adapters.ProductAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
@@ -27,8 +28,8 @@ class HomeFragment : Fragment() {
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
-
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var featuredProductAdapter: FeaturedProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +48,7 @@ class HomeFragment : Fragment() {
         setupCategoryRecyclerView()
         setupHotDealCategoryRecyclerView()
         setupPopularBrandRecyclerView()
+        setupFeaturedProductRecyclerView()
         observeData()
     }
 
@@ -76,6 +78,14 @@ class HomeFragment : Fragment() {
         }
 
         productAdapter = ProductAdapter { product ->
+            Toast.makeText(
+                requireContext(),
+                product.title,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        featuredProductAdapter = FeaturedProductAdapter { product ->
             Toast.makeText(
                 requireContext(),
                 product.title,
@@ -122,6 +132,10 @@ class HomeFragment : Fragment() {
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
             productAdapter.submitList(products.take(4))
         }
+
+        homeViewModel.products.observe(viewLifecycleOwner) { products ->
+            featuredProductAdapter.submitList(products.take(2))
+        }
     }
 
     private fun setupHotDealCategoryRecyclerView() {
@@ -140,6 +154,12 @@ class HomeFragment : Fragment() {
     private fun setupPopularBrandRecyclerView(){
         binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPopularBrand.adapter = productAdapter
+
+    }
+
+    private fun setupFeaturedProductRecyclerView(){
+        binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvFeaturedProduct.adapter = featuredProductAdapter
 
     }
 }
