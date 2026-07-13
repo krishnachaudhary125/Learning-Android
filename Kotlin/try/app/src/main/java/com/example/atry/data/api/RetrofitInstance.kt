@@ -16,4 +16,12 @@ object RetrofitInstance {
             .build()
             .create(ApiService::class.java)
     }
+
+    val productApi: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://fakestoreapi.noksha.dev")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+    }
 }
