@@ -16,6 +16,7 @@ import com.example.atry.ui.adapters.FeaturedProductAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
 import com.example.atry.ui.adapters.HotDealProductAdapter
 import com.example.atry.ui.adapters.ProductAdapter
+import com.example.atry.ui.adapters.RecommendedAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
     private lateinit var productAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: FeaturedProductAdapter
     private lateinit var hotDealProductAdapter: HotDealProductAdapter
+    private lateinit var recommendedAdapter: RecommendedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +54,7 @@ class HomeFragment : Fragment() {
         setupPopularBrandRecyclerView()
         setupFeaturedProductRecyclerView()
         setupHotDealProductRecyclerView()
+        setupRecommendedRecyclerView()
         observeData()
     }
 
@@ -99,6 +102,13 @@ class HomeFragment : Fragment() {
         hotDealProductAdapter = HotDealProductAdapter { product ->
             Toast.makeText(
                 requireContext(),
+                product.title,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        recommendedAdapter = RecommendedAdapter{ product ->
+            Toast.makeText(requireContext(),
                 product.title,
                 Toast.LENGTH_SHORT
             ).show()
@@ -151,6 +161,10 @@ class HomeFragment : Fragment() {
         homeViewModel.products.observe(viewLifecycleOwner){ products ->
             hotDealProductAdapter.submitList(products.take(2))
         }
+
+        homeViewModel.products.observe(viewLifecycleOwner){ products ->
+            recommendedAdapter.submitList(products.take(8))
+        }
     }
 
     private fun setupHotDealCategoryRecyclerView() {
@@ -181,6 +195,12 @@ class HomeFragment : Fragment() {
     private fun setupHotDealProductRecyclerView(){
         binding.rvHotDealProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvHotDealProduct.adapter = hotDealProductAdapter
+
+    }
+
+    private fun setupRecommendedRecyclerView(){
+        binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvRecommended.adapter = recommendedAdapter
 
     }
 }

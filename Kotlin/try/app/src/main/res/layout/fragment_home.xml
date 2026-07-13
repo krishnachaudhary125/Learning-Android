@@ -140,7 +140,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
@@ -181,7 +181,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
@@ -216,7 +216,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
@@ -280,7 +280,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
@@ -309,6 +309,41 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPopularBrand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recommended for you"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_weight="14"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="@drawable/transparent_background"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecommended"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
