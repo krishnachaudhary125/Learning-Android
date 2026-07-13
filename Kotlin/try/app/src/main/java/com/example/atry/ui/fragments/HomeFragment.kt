@@ -14,6 +14,7 @@ import com.example.atry.ui.adapters.BannerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
 import com.example.atry.ui.adapters.FeaturedProductAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
+import com.example.atry.ui.adapters.HotDealProductAdapter
 import com.example.atry.ui.adapters.ProductAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
     private lateinit var productAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: FeaturedProductAdapter
+    private lateinit var hotDealProductAdapter: HotDealProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +51,7 @@ class HomeFragment : Fragment() {
         setupHotDealCategoryRecyclerView()
         setupPopularBrandRecyclerView()
         setupFeaturedProductRecyclerView()
+        setupHotDealProductRecyclerView()
         observeData()
     }
 
@@ -86,6 +89,14 @@ class HomeFragment : Fragment() {
         }
 
         featuredProductAdapter = FeaturedProductAdapter { product ->
+            Toast.makeText(
+                requireContext(),
+                product.title,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        hotDealProductAdapter = HotDealProductAdapter { product ->
             Toast.makeText(
                 requireContext(),
                 product.title,
@@ -136,6 +147,10 @@ class HomeFragment : Fragment() {
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
             featuredProductAdapter.submitList(products.take(2))
         }
+
+        homeViewModel.products.observe(viewLifecycleOwner){ products ->
+            hotDealProductAdapter.submitList(products.take(2))
+        }
     }
 
     private fun setupHotDealCategoryRecyclerView() {
@@ -160,6 +175,12 @@ class HomeFragment : Fragment() {
     private fun setupFeaturedProductRecyclerView(){
         binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvFeaturedProduct.adapter = featuredProductAdapter
+
+    }
+
+    private fun setupHotDealProductRecyclerView(){
+        binding.rvHotDealProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvHotDealProduct.adapter = hotDealProductAdapter
 
     }
 }
