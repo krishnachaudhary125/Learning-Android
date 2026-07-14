@@ -475,6 +475,8 @@
                                     android:text="Customer Support"/>
 
                                 <TextView
+                                    android:id="@+id/faq"
+                                    android:clickable="true"
                                     android:layout_width="wrap_content"
                                     android:layout_height="20dp"
                                     android:text="FAQs"/>

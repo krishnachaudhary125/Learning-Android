@@ -1,5 +1,6 @@
 package com.example.atry
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.atry.ui.fragments.CartFragment
 import com.example.atry.ui.fragments.FavouriteFragment
 import com.example.atry.ui.fragments.HomeFragment
 import com.example.atry.ui.fragments.MoreFragment
+import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
