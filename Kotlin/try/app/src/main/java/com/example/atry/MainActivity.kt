@@ -1,11 +1,13 @@
 package com.example.atry
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.atry.ui.fragments.CartFragment
 import com.example.atry.ui.fragments.FavouriteFragment
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             loadFragment(HomeFragment())
         }
 
@@ -40,149 +42,90 @@ class MainActivity : AppCompatActivity() {
         val moreLabel: TextView? = findViewById(R.id.moreLabel)
 
         shop?.setOnClickListener {
-            if(selectedTab != 1){
+            if (selectedTab != 1) {
                 loadFragment(HomeFragment())
 
-                cartLabel?.visibility = View.INVISIBLE
-                favouriteLabel?.visibility = View.INVISIBLE
-                moreLabel?.visibility = View.INVISIBLE
-
-                cartIcon?.setImageResource(R.drawable.ic_cart)
-                favouriteIcon?.setImageResource(R.drawable.ic_favourite)
-                moreIcon?.setImageResource(R.drawable.ic_more)
-
-                cart?.setBackgroundResource(android.R.color.transparent)
-                favourite?.setBackgroundResource(android.R.color.transparent)
-                more?.setBackgroundResource(android.R.color.transparent)
-
-                shopLabel?.visibility = View.VISIBLE
-                shopIcon?.setImageResource(R.drawable.ic_shop_selected)
-                shop.setBackgroundResource(R.drawable.navigation_background)
-
-                shop.animate()
-                    .scaleX(1.1f)
-                    .scaleY(1.1f)
-                    .setDuration(100)
-                    .withEndAction {
-                        shop.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(100)
-                    }
+                onSelect(shop, shopLabel, shopIcon)
+                onDeselect(cart, cartLabel, cartIcon)
+                onDeselect(favourite, favouriteLabel, favouriteIcon)
+                onDeselect(more, moreLabel, moreIcon)
 
                 selectedTab = 1
             }
         }
 
         cart?.setOnClickListener {
-            if(selectedTab != 2){
+            if (selectedTab != 2) {
                 loadFragment(CartFragment())
 
-                shopLabel?.visibility = View.INVISIBLE
-                favouriteLabel?.visibility = View.INVISIBLE
-                moreLabel?.visibility = View.INVISIBLE
-
-                shopIcon?.setImageResource(R.drawable.ic_shop)
-                favouriteIcon?.setImageResource(R.drawable.ic_favourite)
-                moreIcon?.setImageResource(R.drawable.ic_more)
-
-                shop?.setBackgroundResource(android.R.color.transparent)
-                favourite?.setBackgroundResource(android.R.color.transparent)
-                more?.setBackgroundResource(android.R.color.transparent)
-
-                cartLabel?.visibility = View.VISIBLE
-                cartIcon?.setImageResource(R.drawable.ic_cart_selected)
-                cart.setBackgroundResource(R.drawable.navigation_background)
-
-                cart.animate()
-                    .scaleX(1.1f)
-                    .scaleY(1.1f)
-                    .setDuration(100)
-                    .withEndAction {
-                        cart.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(100)
-                    }
+                onSelect(cart, cartLabel, cartIcon)
+                onDeselect(shop, shopLabel, shopIcon)
+                onDeselect(favourite, favouriteLabel, favouriteIcon)
+                onDeselect(more, moreLabel, moreIcon)
 
                 selectedTab = 2
             }
         }
 
         favourite?.setOnClickListener {
-            if(selectedTab != 3){
+            if (selectedTab != 3) {
                 loadFragment(FavouriteFragment())
 
-                shopLabel?.visibility = View.INVISIBLE
-                cartLabel?.visibility = View.INVISIBLE
-                moreLabel?.visibility = View.INVISIBLE
-
-                shopIcon?.setImageResource(R.drawable.ic_shop)
-                cartIcon?.setImageResource(R.drawable.ic_cart)
-                moreIcon?.setImageResource(R.drawable.ic_more)
-
-                shop?.setBackgroundResource(android.R.color.transparent)
-                cart?.setBackgroundResource(android.R.color.transparent)
-                more?.setBackgroundResource(android.R.color.transparent)
-
-                favouriteLabel?.visibility = View.VISIBLE
-                favouriteIcon?.setImageResource(R.drawable.ic_favourite_selected)
-                favourite.setBackgroundResource(R.drawable.navigation_background)
-
-                favourite.animate()
-                    .scaleX(1.1f)
-                    .scaleY(1.1f)
-                    .setDuration(100)
-                    .withEndAction {
-                        favourite.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(100)
-                    }
+                onSelect(favourite, favouriteLabel, favouriteIcon)
+                onDeselect(shop, shopLabel, shopIcon)
+                onDeselect(cart, cartLabel, cartIcon)
+                onDeselect(more, moreLabel, moreIcon)
 
                 selectedTab = 3
             }
         }
 
         more?.setOnClickListener {
-            if(selectedTab != 4){
+            if (selectedTab != 4) {
                 loadFragment(MoreFragment())
 
-                shopLabel?.visibility = View.INVISIBLE
-                cartLabel?.visibility = View.INVISIBLE
-                favouriteLabel?.visibility = View.INVISIBLE
-
-                shopIcon?.setImageResource(R.drawable.ic_shop)
-                cartIcon?.setImageResource(R.drawable.ic_cart)
-                favouriteIcon?.setImageResource(R.drawable.ic_favourite)
-
-                shop?.setBackgroundResource(android.R.color.transparent)
-                cart?.setBackgroundResource(android.R.color.transparent)
-                favourite?.setBackgroundResource(android.R.color.transparent)
-
-                moreLabel?.visibility = View.VISIBLE
-                moreIcon?.setImageResource(R.drawable.ic_more_selected)
-                more.setBackgroundResource(R.drawable.navigation_background)
-
-                more.animate()
-                    .scaleX(1.1f)
-                    .scaleY(1.1f)
-                    .setDuration(100)
-                    .withEndAction {
-                        more.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(100)
-                    }
+                onSelect(more, moreLabel, moreIcon)
+                onDeselect(shop, shopLabel, shopIcon)
+                onDeselect(cart, cartLabel, cartIcon)
+                onDeselect(favourite, favouriteLabel, favouriteIcon)
 
                 selectedTab = 4
             }
         }
     }
 
-    private fun loadFragment(fragment: Fragment){
+    private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFrame, fragment)
             .commit()
+    }
+
+
+    private fun onSelect(linearLayout: LinearLayout?, textView: TextView?, imageView: ImageView?) {
+        textView?.visibility = View.VISIBLE
+        imageView?.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
+        linearLayout?.setBackgroundResource(R.drawable.navigation_background)
+        linearLayout?.animate()
+            ?.scaleX(1.1f)
+            ?.scaleY(1.1f)
+            ?.setDuration(100)
+            ?.withEndAction {
+                linearLayout?.animate()
+                    ?.scaleX(1f)
+                    ?.scaleY(1f)
+                    ?.setDuration(100)
+            }
+    }
+
+    private fun onDeselect(
+        linearLayout: LinearLayout?,
+        textView: TextView?,
+        imageView: ImageView?
+    ) {
+        textView?.visibility = View.GONE
+        imageView?.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
+        linearLayout?.setBackgroundResource(android.R.color.transparent)
     }
 }
