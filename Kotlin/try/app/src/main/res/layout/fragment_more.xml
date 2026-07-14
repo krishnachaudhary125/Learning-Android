@@ -164,8 +164,8 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:layout_marginEnd="8dp"
                                 android:src="@drawable/ic_my_products"/>
 
@@ -198,8 +198,8 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:layout_marginEnd="8dp"
                                 android:src="@drawable/ic_shippping_address"/>
 
@@ -239,8 +239,8 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
                                     android:layout_marginEnd="8dp"
                                     android:src="@drawable/ic_my_products"/>
 
@@ -272,8 +272,8 @@
                                 android:gravity="center">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
                                     android:layout_marginEnd="8dp"
                                     android:src="@drawable/ic_return"/>
 
@@ -297,8 +297,8 @@
                                 android:gravity="center">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
                                     android:layout_marginEnd="8dp"
                                     android:src="@drawable/ic_cancellation"/>
 
@@ -330,7 +330,8 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
                             
                             <TextView
                                 android:layout_width="wrap_content"
@@ -339,9 +340,89 @@
                                 android:textSize="14sp"
                                 android:paddingTop="8dp"
                                 android:paddingBottom="8dp"
-                                android:text="Reward & Promotions"/>
+                                android:text="Reward and Promotions"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:src="@drawable/ic_reward"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Rewards Points"/>
+
+                                <Space
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:src="@drawable/ic_promocode"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Apply Promocode"/>
+
+                                <Space
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:src="@drawable/ic_bonus"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Daily Buy Bonus"/>
+
+                                <Space
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
+
+
 
                 </LinearLayout>
 
