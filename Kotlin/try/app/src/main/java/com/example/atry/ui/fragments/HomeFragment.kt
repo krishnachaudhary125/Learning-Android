@@ -1,5 +1,6 @@
 package com.example.atry.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.atry.FaqActivity
+import com.example.atry.NotificationActivity
 import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
@@ -63,6 +66,11 @@ class HomeFragment : Fragment() {
             .asGif()
             .load(R.drawable.loading)
             .into(binding.loadingGif)
+
+        binding.notification.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initAdapters() {
