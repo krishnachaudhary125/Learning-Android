@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.atry.FaqActivity
+import com.example.atry.MyReturnActivity
 import com.example.atry.databinding.FragmentMoreBinding
 
 class MoreFragment : Fragment() {
@@ -21,6 +22,11 @@ class MoreFragment : Fragment() {
 
         binding.faq.setOnClickListener {
             val intent = Intent(requireContext(), FaqActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.myReturn.setOnClickListener {
+            val intent = Intent(requireContext(), MyReturnActivity::class.java)
             startActivity(intent)
         }
 
