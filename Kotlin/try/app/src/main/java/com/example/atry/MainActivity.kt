@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         val favouriteLabel: TextView? = findViewById(R.id.favouriteLabel)
         val moreLabel: TextView? = findViewById(R.id.moreLabel)
 
+        if(intent.getBooleanExtra("openHome", false)){
+            loadFragment(HomeFragment())
+        }
+
         shop?.setOnClickListener {
             if (selectedTab != 1) {
                 loadFragment(HomeFragment())

@@ -1,5 +1,6 @@
 package com.example.atry
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.atry.databinding.ActivityReturnBinding
@@ -12,5 +13,16 @@ class MyReturnActivity : AppCompatActivity() {
 
         binding = ActivityReturnBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.myReturnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.continueShopping.setOnClickListener {
+            val intent =  Intent(this, MainActivity::class.java)
+            intent.putExtra("openHome", true)
+            startActivity(intent)
+            finish()
+        }
     }
 }
