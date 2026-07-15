@@ -26,6 +26,7 @@
         <activity android:name=".FaqActivity"/>
         <activity android:name=".NotificationActivity"/>
         <activity android:name=".MyReturnActivity"/>
+        <activity android:name=".ShippingAddressActivity"/>
     </application>
 
 </manifest>

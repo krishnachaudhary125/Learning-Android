@@ -192,10 +192,12 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/shippingAddress"
                             android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_marginTop="8dp"
                             android:layout_height="36dp"
+                            android:clickable="true"
                             android:orientation="horizontal">
 
                             <ImageView

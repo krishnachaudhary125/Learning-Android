@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Toolbar
-        android:id="@+id/notificationTitle"
+        android:id="@+id/addressTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="56dp"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/myReturnBack"
+            android:id="@+id/shippingAddressBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="24dp"
@@ -32,7 +32,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_gravity="center"
-            android:text="My Returns"/>
+            android:text="Shipping Address"/>
 
         <Space
             android:layout_width="0dp"
@@ -42,69 +42,71 @@
     </Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/returnBox"
+        android:id="@+id/addressBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:paddingBottom="72dp"
         android:background="#ffffff"
-        app:layout_constraintTop_toBottomOf="@id/notificationTitle"
+        app:layout_constraintTop_toBottomOf="@id/addressTitle"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/noAddressIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="150dp"
-            android:minWidth="150dp"
-            android:src="@drawable/ic_my_return"
+            android:minHeight="132dp"
+            android:minWidth="145dp"
+            android:src="@drawable/ic_no_address"
             android:layout_marginTop="48dp"
             android:padding="64dp"
             android:background="@drawable/bg_return"
-            app:layout_constraintTop_toTopOf="@id/returnBox"
-            app:layout_constraintStart_toStartOf="@id/returnBox"
-            app:layout_constraintEnd_toEndOf="@id/returnBox"/>
+            app:layout_constraintTop_toTopOf="@id/addressBox"
+            app:layout_constraintStart_toStartOf="@id/addressBox"
+            app:layout_constraintEnd_toEndOf="@id/addressBox"/>
 
         <LinearLayout
+            android:id="@+id/noAddressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="260dp"
             android:orientation="vertical"
             android:gravity="center"
-            app:layout_constraintTop_toTopOf="@id/returnBox"
-            app:layout_constraintStart_toStartOf="@id/returnBox"
-            app:layout_constraintEnd_toEndOf="@id/returnBox">
+            app:layout_constraintTop_toBottomOf="@id/noAddressIcon"
+            app:layout_constraintStart_toStartOf="@id/addressBox"
+            app:layout_constraintEnd_toEndOf="@id/addressBox">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Empty returns"/>
+                android:text="No address added yet!"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="4dp"
                 android:textSize="16sp"
                 android:textColor="#8E90A6"
-                android:text="There are no returns yet."/>
+                android:text="You have not added any shipping \naddress yet."/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/continueShopping"
+            android:id="@+id/addAddressNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="343dp"
+            android:layout_marginTop="16dp"
             android:textColor="@android:color/white"
             android:background="@drawable/bg_continue_shopping"
-            android:text="CONTINUE SHOPPING"
+            android:text="ADD ADDRESS NOW"
             android:textSize="14sp"
             android:paddingVertical="12dp"
             android:paddingHorizontal="16dp"
             android:letterSpacing="0.15"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noAddressText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

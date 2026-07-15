@@ -174,11 +174,11 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.products.observe(viewLifecycleOwner){ products ->
-            hotDealProductAdapter.submitList(products.take(2))
+            hotDealProductAdapter.submitList(products.drop(2).take(2))
         }
 
         homeViewModel.products.observe(viewLifecycleOwner){ products ->
-            recommendedAdapter.submitList(products.take(8))
+            recommendedAdapter.submitList(products.drop(4).take(8))
         }
     }
 
