@@ -1,11 +1,13 @@
 package com.example.atry.ui.fragments
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -97,6 +99,30 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+
+        var animator : ValueAnimator? = null
+        var btnExpanded = true
+        binding.shopScrollLayer.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+                if(animator == null){
+                    animator = createAnimator()
+                }
+
+                if (scrollY > oldScrollY && btnExpanded) {
+                    animator.start()
+                    btnExpanded = !btnExpanded
+                } else if (scrollY < oldScrollY && !btnExpanded) {
+                    animator.reverse()
+                    btnExpanded = !btnExpanded
+                }
+
+
+                val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
+                if (scrollY >= totalHeight) {
+
+                }
+            }
+        )
     }
 
     private fun initAdapters() {
@@ -243,5 +269,19 @@ class HomeFragment : Fragment() {
         binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvRecommended.adapter = recommendedAdapter
 
+    }
+
+    private fun createAnimator(): ValueAnimator{
+        val initSize = binding.floatingSell.measuredWidth
+        val animator = ValueAnimator.ofInt(initSize, 0)
+        animator.duration = 250
+
+        animator.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            val layoutParams = binding.floatingSell.layoutParams
+            layoutParams.width = value
+            binding.floatingSell.requestLayout()
+        }
+        return animator
     }
 }
