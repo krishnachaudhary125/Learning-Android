@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E6ECF4"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Toolbar
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:gravity="center"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent"

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:state_selected="true">
-        <shape android:shape="oval">
-            <solid android:color="#1976D2"/>
-            <size android:width="12dp" android:height="12dp"/>
-        </shape>
+        <inset android:insetLeft="3dp" android:insetRight="3dp">
+            <shape android:shape="oval">
+                <solid android:color="#2ABB00"/>
+                <size android:width="6dp" android:height="6dp"/>
+            </shape>
+        </inset>
     </item>
 
     <item android:state_selected="false">
-        <shape android:shape="oval">
-            <solid android:color="#CCCCCC"/>
-            <size android:width="12dp" android:height="12dp"/>
-        </shape>
+        <inset android:insetLeft="3dp" android:insetRight="3dp">
+            <shape android:shape="oval">
+                <solid android:color="#E3E4EB"/>
+                <size android:width="6dp" android:height="6dp"/>
+            </shape>
+        </inset>
     </item>
-
 </selector>

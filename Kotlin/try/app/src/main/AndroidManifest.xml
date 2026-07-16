@@ -27,6 +27,7 @@
         <activity android:name=".NotificationActivity"/>
         <activity android:name=".MyReturnActivity"/>
         <activity android:name=".ShippingAddressActivity"/>
+        <activity android:name=".NewAddressActivity"/>
     </application>
 
 </manifest>

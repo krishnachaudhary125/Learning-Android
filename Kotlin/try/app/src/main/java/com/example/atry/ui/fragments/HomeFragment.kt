@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.atry.FaqActivity
 import com.example.atry.NotificationActivity
@@ -26,6 +28,7 @@ import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {
 
@@ -71,6 +74,29 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
         }
+
+        binding.bannerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.bannerRecyclerView.adapter = bannerAdapter
+
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.bannerRecyclerView)
+
+        repeat(3) {
+            binding.tabLayoutIndicator.addTab(binding.tabLayoutIndicator.newTab())
+        }
+
+        binding.bannerRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val centerView = snapHelper.findSnapView(recyclerView.layoutManager)
+                    centerView?.let { view ->
+                        val position = recyclerView.layoutManager?.getPosition(view) ?: 0
+                        binding.tabLayoutIndicator.selectTab(binding.tabLayoutIndicator.getTabAt(position))
+                    }
+                }
+            }
+        })
     }
 
     private fun initAdapters() {
