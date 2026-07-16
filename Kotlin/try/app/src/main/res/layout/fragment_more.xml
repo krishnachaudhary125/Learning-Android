@@ -177,10 +177,7 @@
                                 android:textSize="14sp"
                                 android:text="My Products"/>
 
-                            <Space
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
+                            <Space style="@style/Widget.Card.layout_weight"/>
 
                             <TextView
                                 android:layout_width="20dp"
@@ -213,10 +210,8 @@
                                 android:textSize="14sp"
                                 android:text="Shipping Address"/>
 
-                            <Space
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
+                            <Space style="@style/Widget.Card.layout_weight"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -262,10 +257,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="My Order"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                                 <TextView
                                     android:layout_width="20dp"
@@ -297,10 +289,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="My Return"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                             </LinearLayout>
 
@@ -322,10 +311,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="My Cancellation"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                             </LinearLayout>
 
@@ -375,10 +361,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="Rewards Points"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                             </LinearLayout>
 
@@ -401,10 +384,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="Apply Promocode"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                             </LinearLayout>
 
@@ -427,10 +407,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="Daily Buy Bonus"/>
 
-                                <Space
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"/>
+                                <Space style="@style/Widget.Card.layout_weight"/>
 
                             </LinearLayout>
 
