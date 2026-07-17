@@ -16,6 +16,10 @@ class PostProductActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadFragment(PostProductFragment())
+
+        binding.postProductBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
