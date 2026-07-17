@@ -7,6 +7,8 @@
     <string name="product_title">Product Title</string>
     <string name="asterisk">*</string>
     <string name="enter_title">Enter Title</string>
+    <string name="size_less_than">SIZE LESS THAN</string>
+    <string name="one_mb">1MB</string>
     <string name="step_one">Step One</string>
     <string name="step_two">Step Two</string>
     <string name="step_three">Step Three</string>
@@ -15,4 +17,5 @@
     <string name="two">2</string>
     <string name="three">3</string>
     <string name="four">4</string>
+    <string name="continue_btn">CONTINUE</string>
 </resources>
