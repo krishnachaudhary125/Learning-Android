@@ -28,6 +28,7 @@
         <activity android:name=".MyReturnActivity"/>
         <activity android:name=".ShippingAddressActivity"/>
         <activity android:name=".NewAddressActivity"/>
+        <activity android:name=".PostProductActivity"/>
     </application>
 
 </manifest>

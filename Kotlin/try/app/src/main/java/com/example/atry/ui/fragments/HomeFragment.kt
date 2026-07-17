@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.atry.FaqActivity
 import com.example.atry.NotificationActivity
+import com.example.atry.PostProductActivity
 import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
@@ -123,6 +124,11 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+
+        binding.floatingSellButton.setOnClickListener {
+            val intent = Intent(requireContext(), PostProductActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initAdapters() {

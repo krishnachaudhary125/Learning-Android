@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:minHeight="16dp"
             android:padding="5dp"
+            android:letterSpacing="0.05"
             android:textSize="10sp"/>
 
     </LinearLayout>

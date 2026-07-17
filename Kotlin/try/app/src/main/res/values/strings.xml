@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Try</string>
+    <string name="back_arrow">Back</string>
+    <string name="post_product">Post Product</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="next_step_two">NEXT: Product Details</string>
+    <string name="product_title">Product Title</string>
+    <string name="asterisk">*</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="step_one">Step One</string>
+    <string name="step_two">Step Two</string>
+    <string name="step_three">Step Three</string>
+    <string name="step_four">Step Four</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
 </resources>
