@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.atry.FaqActivity
 import com.example.atry.NotificationActivity
 import com.example.atry.PostProductActivity
+import com.example.atry.ProductDetailActivity
 import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
@@ -157,19 +158,13 @@ class HomeFragment : Fragment() {
         }
 
         productAdapter = ProductAdapter { product ->
-            Toast.makeText(
-                requireContext(),
-                product.title,
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            startActivity(intent)
         }
 
         featuredProductAdapter = FeaturedProductAdapter { product ->
-            Toast.makeText(
-                requireContext(),
-                product.title,
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            startActivity(intent)
         }
 
         hotDealProductAdapter = HotDealProductAdapter { product ->

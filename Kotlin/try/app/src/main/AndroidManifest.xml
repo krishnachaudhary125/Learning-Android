@@ -29,6 +29,7 @@
         <activity android:name=".ShippingAddressActivity"/>
         <activity android:name=".NewAddressActivity"/>
         <activity android:name=".PostProductActivity"/>
+        <activity android:name=".ProductDetailActivity"/>
     </application>
 
 </manifest>

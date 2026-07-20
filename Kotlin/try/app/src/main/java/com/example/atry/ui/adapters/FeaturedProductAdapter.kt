@@ -50,6 +50,10 @@ class FeaturedProductAdapter(
             Glide.with(productImage.context)
                 .load(products.image)
                 .into(productImage)
+
+            root.setOnClickListener {
+                onClick(products)
+            }
         }
     }
 
