@@ -44,11 +44,11 @@ class ProductAdapter(
         holder.binding.apply {
             val products = product[position]
             productTitle.text = products.title
-            brand.text = products.brand
+            brand.text = products.category
             price.text = products.price.toString()
 
             Glide.with(productImage.context)
-                .load(products.image)
+                .load(products.thumbnail)
                 .into(productImage)
         }
     }

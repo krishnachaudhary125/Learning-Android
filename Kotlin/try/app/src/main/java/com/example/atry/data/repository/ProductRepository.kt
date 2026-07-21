@@ -14,7 +14,7 @@ class ProductRepository {
     suspend fun fetchProduct() {
         try {
             val response = RetrofitInstance.productApi.getProduct()
-            _product.postValue(response.data)
+            _product.postValue(response)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
         }

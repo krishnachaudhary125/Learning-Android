@@ -19,7 +19,7 @@ object RetrofitInstance {
 
     val productApi: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.noksha.dev")
+            .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
