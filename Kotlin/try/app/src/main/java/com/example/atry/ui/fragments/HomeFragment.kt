@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.atry.FaqActivity
 import com.example.atry.NotificationActivity
 import com.example.atry.PostProductActivity
 import com.example.atry.ProductDetailActivity
@@ -23,16 +22,12 @@ import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
-import com.example.atry.ui.adapters.FeaturedProductAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
-import com.example.atry.ui.adapters.HotDealProductAdapter
 import com.example.atry.ui.adapters.ProductAdapter
-import com.example.atry.ui.adapters.RecommendedAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {
 
@@ -42,10 +37,14 @@ class HomeFragment : Fragment() {
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
+
+    // single ProductAdapter class, four independent instances
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var featuredProductAdapter: FeaturedProductAdapter
-    private lateinit var hotDealProductAdapter: HotDealProductAdapter
-    private lateinit var recommendedAdapter: RecommendedAdapter
+    private lateinit var featuredProductAdapter: ProductAdapter
+    private lateinit var hotDealProductAdapter: ProductAdapter
+    private lateinit var recommendedAdapter: ProductAdapter
+
+    private var recommendedCache: List<com.example.atry.data.models.Product>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,11 +101,11 @@ class HomeFragment : Fragment() {
             }
         })
 
-        var animator : ValueAnimator? = null
+        var animator: ValueAnimator? = null
         var btnExpanded = true
         binding.shopScrollLayer.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-                if(animator == null){
+                if (animator == null) {
                     animator = createAnimator()
                 }
 
@@ -117,7 +116,6 @@ class HomeFragment : Fragment() {
                     animator.reverse()
                     btnExpanded = !btnExpanded
                 }
-
 
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight) {
@@ -134,27 +132,15 @@ class HomeFragment : Fragment() {
 
     private fun initAdapters() {
         bannerAdapter = BannerAdapter { banner ->
-            Toast.makeText(
-                requireContext(),
-                "Banner: ",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Banner: ", Toast.LENGTH_SHORT).show()
         }
 
         categoryAdapter = CategoryAdapter { category ->
-            Toast.makeText(
-                requireContext(),
-                "Category: ",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
         hotDealCategoryAdapter = HotDealCategoryAdapter { hotDealCategories ->
-            Toast.makeText(
-                requireContext(),
-                "Category: ",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
         productAdapter = ProductAdapter { product ->
@@ -162,33 +148,23 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        featuredProductAdapter = FeaturedProductAdapter { product ->
+        featuredProductAdapter = ProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
             startActivity(intent)
         }
 
-        hotDealProductAdapter = HotDealProductAdapter { product ->
-            Toast.makeText(
-                requireContext(),
-                product.title,
-                Toast.LENGTH_SHORT
-            ).show()
+        hotDealProductAdapter = ProductAdapter { product ->
+            Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
         }
 
-        recommendedAdapter = RecommendedAdapter{ product ->
-            Toast.makeText(requireContext(),
-                product.title,
-                Toast.LENGTH_SHORT
-            ).show()
+        recommendedAdapter = ProductAdapter { product ->
+            Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun setupBannerRecyclerView() {
         binding.bannerRecyclerView.apply {
-            layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = bannerAdapter
             isNestedScrollingEnabled = false
         }
@@ -196,15 +172,12 @@ class HomeFragment : Fragment() {
 
     private fun setupCategoryRecyclerView() {
         binding.categoryRecyclerView.apply {
-            layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = categoryAdapter
             isNestedScrollingEnabled = false
         }
     }
+
     private fun observeData() {
         homeViewModel.banners.observe(viewLifecycleOwner) { banners ->
             bannerAdapter.submitList(banners)
@@ -220,59 +193,46 @@ class HomeFragment : Fragment() {
 
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
             productAdapter.submitList(products.drop(4).take(4))
-        }
-
-        homeViewModel.products.observe(viewLifecycleOwner) { products ->
             featuredProductAdapter.submitList(products.take(2))
-        }
-
-        homeViewModel.products.observe(viewLifecycleOwner){ products ->
             hotDealProductAdapter.submitList(products.drop(2).take(2))
-        }
 
-        homeViewModel.products.observe(viewLifecycleOwner){ products ->
-            recommendedAdapter.submitList(products.shuffled().take(8))
+            val recommended = recommendedCache ?: products.shuffled().take(8).also { recommendedCache = it }
+            recommendedAdapter.submitList(recommended)
         }
     }
 
     private fun setupHotDealCategoryRecyclerView() {
         binding.hotDealCategoriesRecyclerView.apply {
-
             layoutManager = FlexboxLayoutManager(requireContext()).apply {
                 flexDirection = FlexDirection.ROW
                 flexWrap = FlexWrap.WRAP
             }
-
             adapter = hotDealCategoryAdapter
             isNestedScrollingEnabled = false
         }
     }
 
-    private fun setupPopularBrandRecyclerView(){
+    private fun setupPopularBrandRecyclerView() {
         binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPopularBrand.adapter = productAdapter
-
     }
 
-    private fun setupFeaturedProductRecyclerView(){
+    private fun setupFeaturedProductRecyclerView() {
         binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvFeaturedProduct.adapter = featuredProductAdapter
-
     }
 
-    private fun setupHotDealProductRecyclerView(){
+    private fun setupHotDealProductRecyclerView() {
         binding.rvHotDealProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvHotDealProduct.adapter = hotDealProductAdapter
-
     }
 
-    private fun setupRecommendedRecyclerView(){
+    private fun setupRecommendedRecyclerView() {
         binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvRecommended.adapter = recommendedAdapter
-
     }
 
-    private fun createAnimator(): ValueAnimator{
+    private fun createAnimator(): ValueAnimator {
         val initSize = binding.floatingSell.measuredWidth
         val animator = ValueAnimator.ofInt(initSize, 0)
         animator.duration = 250

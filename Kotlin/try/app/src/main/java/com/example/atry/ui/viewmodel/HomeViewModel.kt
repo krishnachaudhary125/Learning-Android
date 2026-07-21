@@ -20,11 +20,10 @@ class HomeViewModel : ViewModel() {
     private val hotDealCategoryRepository = HotDealCategoryRepository()
     private val productRepository = ProductRepository()
 
-
     val banners: LiveData<List<Banner>> = bannerRepository.banners
     val category: LiveData<List<Category>> = categoryRepository.category
     val hotDealCategories: LiveData<List<HotDeal>> = hotDealCategoryRepository.hotDealCategories
-    val products: LiveData<List<Product>> = productRepository.product
+    val products: LiveData<List<Product>> = productRepository.products
 
     init {
         loadAllData()
@@ -57,7 +56,7 @@ class HomeViewModel : ViewModel() {
 
     fun loadProduct() {
         viewModelScope.launch {
-            productRepository.fetchProduct()
+            productRepository.fetchProducts()
         }
     }
 }

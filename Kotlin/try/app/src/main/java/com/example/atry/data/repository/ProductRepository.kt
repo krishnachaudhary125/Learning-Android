@@ -7,14 +7,13 @@ import com.example.atry.data.models.Product
 
 class ProductRepository {
 
-    private val _product = MutableLiveData<List<Product>>()
+    private val _products = MutableLiveData<List<Product>>()
+    val products: LiveData<List<Product>> = _products
 
-    val product: LiveData<List<Product>> = _product
-
-    suspend fun fetchProduct() {
+    suspend fun fetchProducts() {
         try {
             val response = RetrofitInstance.productApi.getProduct()
-            _product.postValue(response)
+            _products.postValue(response)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
         }
