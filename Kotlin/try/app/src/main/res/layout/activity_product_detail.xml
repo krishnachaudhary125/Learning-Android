@@ -8,10 +8,10 @@
         style="@style/Widget.Card.Match"
         android:layout_marginTop="36dp">
 
-        <ImageView
-            android:id="@+id/productImage"
-            style="@style/Widget.Card.Wrap"
-            android:src="@drawable/test_image"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductImage"
+            style="@style/Widget.Card.MatchWrap"
+            android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -68,18 +68,18 @@
             app:tint="@color/white"
             android:background="@drawable/bg_green_circle"
             android:src="@drawable/ic_favourite"
-            app:layout_constraintTop_toBottomOf="@id/productImage"
-            app:layout_constraintBottom_toBottomOf="@id/productImage"
+            app:layout_constraintTop_toBottomOf="@id/rvProductImage"
+            app:layout_constraintBottom_toBottomOf="@id/rvProductImage"
             app:layout_constraintEnd_toEndOf="parent"
             android:elevation="1dp"/>
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:orientation="vertical"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/productImage"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/rvProductImage">
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
@@ -87,19 +87,19 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/productName"
                     style="@style/Widget.Card.Wrap"
-                    android:textSize="20sp"
                     android:letterSpacing="0.05"
-                    android:textStyle="bold"
                     android:paddingVertical="2dp"
-                    android:text="Jacket In Nylon"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/productPrice"
                     style="@style/Widget.Card.Wrap"
-                    android:textSize="24sp"
                     android:letterSpacing="0.1"
                     android:paddingVertical="2dp"
-                    android:text="Rs.2500.00"/>
+                    android:textSize="24sp" />
 
                 <LinearLayout
                     style="@style/Widget.Card.MatchWrap"
@@ -107,39 +107,39 @@
 
                     <TextView
                         style="@style/Widget.Card.Wrap"
-                        android:textSize="14sp"
-                        android:paddingVertical="4dp"
                         android:letterSpacing="0.05"
-                        android:textStyle="bold"
+                        android:paddingVertical="4dp"
+                        android:text="Rs.5000.00"
                         android:textColor="@color/text_dark"
-                        android:text="Rs.5000.00"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                    <Space style="@style/Widget.Card.layout_weight"/>
+                    <Space style="@style/Widget.Card.layout_weight" />
 
                     <TextView
                         style="@style/Widget.Card.Wrap"
-                        android:textSize="10sp"
-                        android:paddingEnd="4dp"
                         android:letterSpacing="0.025"
-                        android:text="Availability"/>
+                        android:paddingEnd="4dp"
+                        android:text="Availability"
+                        android:textSize="10sp" />
 
                     <TextView
+                        android:id="@+id/productStock"
                         style="@style/Widget.Card.Wrap"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
                         android:textColor="@color/green"
-                        android:text="In Stock"/>
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:background="#E6ECF4"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"/>
+                android:background="#E6ECF4"
+                android:orientation="horizontal" />
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
@@ -150,39 +150,39 @@
                 <TextView
                     style="@style/Widget.Card.MatchWrap"
                     android:layout_marginBottom="8dp"
-                    android:textSize="16sp"
                     android:letterSpacing="0.05"
-                    android:textStyle="bold"
+                    android:text="Description"
                     android:textColor="@color/text_dark"
-                    android:text="Description"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/productDescription"
                     style="@style/Widget.Card.MatchWrap"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_dark"
-                    android:lineHeight="30dp"
                     android:letterSpacing="0.05"
-                    android:text="✅\tApprox. model measurements: height:5’10”, bust: 31-1/2”, waist: 24”\n✅\tHits at hip\n✅\tV-neck\n✅\tCreated for Macy’s\n✅\tCreated for Macy’s\n✅\tCreated for Macy’s\n✅\tCreated for Macy’s\n✅\tCreated for Macy’s"/>
+                    android:lineHeight="30dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp" />
 
                 <TextView
                     style="@style/Widget.Card.Wrap"
-                    android:letterSpacing="0.05"
-                    android:paddingVertical="10dp"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/green"
-                    android:background="@drawable/discount_background"
                     android:layout_gravity="center"
-                    android:text="VIEW MORE" />
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/discount_background"
+                    android:letterSpacing="0.05"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:text="VIEW MORE"
+                    android:textColor="@color/green" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:background="#E6ECF4"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"/>
+                android:background="#E6ECF4"
+                android:orientation="horizontal" />
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
@@ -194,11 +194,11 @@
                 <TextView
                     style="@style/Widget.Card.Wrap"
                     android:layout_marginBottom="8dp"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:letterSpacing="0.05"
+                    android:text="Select Size"
                     android:textColor="@color/text_dark"
-                    android:text="Select Size"/>
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     style="@style/Widget.Card.MatchWrap"
@@ -206,63 +206,63 @@
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
                         android:button="@android:color/transparent"
-                        android:text="S"/>
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:text="S"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
                         android:button="@android:color/transparent"
-                        android:text="M"/>
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:text="M"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
                         android:button="@android:color/transparent"
-                        android:text="L"/>
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:text="L"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
                         android:button="@android:color/transparent"
-                        android:text="XL"/>
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:text="XL"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </RadioGroup>
 
                 <TextView
                     style="@style/Widget.Card.Wrap"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
                     android:letterSpacing="0.05"
+                    android:text="Select Color"
                     android:textColor="@color/text_dark"
-                    android:text="Select Color"/>
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     style="@style/Widget.Card.MatchWrap"
@@ -270,51 +270,66 @@
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"/>
+                        android:button="@android:color/transparent"
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"/>
+                        android:button="@android:color/transparent"
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"/>
+                        android:button="@android:color/transparent"
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         style="@style/Widget.Card.Wrap"
-                        android:minHeight="32dp"
                         android:layout_marginEnd="8dp"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@drawable/text_radio"
-                        android:gravity="center"
                         android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"/>
+                        android:button="@android:color/transparent"
+                        android:gravity="center"
+                        android:minHeight="32dp"
+                        android:textColor="@drawable/text_radio"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </RadioGroup>
 
             </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/Widget.Card.MatchWrap"
+                android:layout_width="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="301dp"
+                    android:foreground="@drawable/bg_green_to_blue_overlay"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/product_detail_bg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

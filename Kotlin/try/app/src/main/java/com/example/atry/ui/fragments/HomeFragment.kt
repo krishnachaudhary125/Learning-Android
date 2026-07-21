@@ -145,21 +145,25 @@ class HomeFragment : Fragment() {
 
         productAdapter = ProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
 
         featuredProductAdapter = ProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
 
         hotDealProductAdapter = ProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
 
         recommendedAdapter = ProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
     }
