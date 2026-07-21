@@ -154,11 +154,13 @@ class HomeFragment : Fragment() {
         }
 
         hotDealProductAdapter = ProductAdapter { product ->
-            Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            startActivity(intent)
         }
 
         recommendedAdapter = ProductAdapter { product ->
-            Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -175,29 +177,6 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = categoryAdapter
             isNestedScrollingEnabled = false
-        }
-    }
-
-    private fun observeData() {
-        homeViewModel.banners.observe(viewLifecycleOwner) { banners ->
-            bannerAdapter.submitList(banners)
-        }
-
-        homeViewModel.category.observe(viewLifecycleOwner) { category ->
-            categoryAdapter.submitList(category)
-        }
-
-        homeViewModel.hotDealCategories.observe(viewLifecycleOwner) { hotDealCategories ->
-            hotDealCategoryAdapter.submitList(hotDealCategories)
-        }
-
-        homeViewModel.products.observe(viewLifecycleOwner) { products ->
-            productAdapter.submitList(products.drop(4).take(4))
-            featuredProductAdapter.submitList(products.take(2))
-            hotDealProductAdapter.submitList(products.drop(2).take(2))
-
-            val recommended = recommendedCache ?: products.shuffled().take(8).also { recommendedCache = it }
-            recommendedAdapter.submitList(recommended)
         }
     }
 
@@ -230,6 +209,29 @@ class HomeFragment : Fragment() {
     private fun setupRecommendedRecyclerView() {
         binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvRecommended.adapter = recommendedAdapter
+    }
+
+    private fun observeData() {
+        homeViewModel.banners.observe(viewLifecycleOwner) { banners ->
+            bannerAdapter.submitList(banners)
+        }
+
+        homeViewModel.category.observe(viewLifecycleOwner) { category ->
+            categoryAdapter.submitList(category)
+        }
+
+        homeViewModel.hotDealCategories.observe(viewLifecycleOwner) { hotDealCategories ->
+            hotDealCategoryAdapter.submitList(hotDealCategories)
+        }
+
+        homeViewModel.products.observe(viewLifecycleOwner) { products ->
+            productAdapter.submitList(products.drop(4).take(4))
+            featuredProductAdapter.submitList(products.take(2))
+            hotDealProductAdapter.submitList(products.drop(2).take(2))
+
+            val recommended = recommendedCache ?: products.shuffled().take(8).also { recommendedCache = it }
+            recommendedAdapter.submitList(recommended)
+        }
     }
 
     private fun createAnimator(): ValueAnimator {
