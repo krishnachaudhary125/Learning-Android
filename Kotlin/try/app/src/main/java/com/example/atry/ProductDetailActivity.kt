@@ -2,9 +2,11 @@ package com.example.atry
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.atry.data.models.Product
 import com.example.atry.databinding.ActivityProductDetailBinding
 import com.example.atry.ui.adapters.ProductImageAdapter
 import com.example.atry.ui.viewmodel.ProductDetailViewModel
@@ -62,6 +64,24 @@ class ProductDetailActivity : AppCompatActivity() {
             }
             binding.productDescription.text = product.description
             imageGalleryAdapter.submitList(product.images)
+
+            optionVisibility(product,"Size", binding.sizeLabel, binding.sizeRadioBtn)
+            optionVisibility(product, "Color", binding.colorLabel, binding.colorRadioBtn)
         }
+    }
+    fun optionVisibility(
+        product: Product,
+        optionName: String,
+        label: View,
+        radioGroup: View
+    ) {
+        val visibility = if (product.options.containsKey(optionName)) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        label.visibility = visibility
+        radioGroup.visibility = visibility
     }
 }

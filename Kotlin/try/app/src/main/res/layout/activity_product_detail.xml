@@ -192,6 +192,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/sizeLabel"
                     style="@style/Widget.Card.Wrap"
                     android:layout_marginBottom="8dp"
                     android:letterSpacing="0.05"
@@ -201,6 +202,7 @@
                     android:textStyle="bold" />
 
                 <RadioGroup
+                    android:id="@+id/sizeRadioBtn"
                     style="@style/Widget.Card.MatchWrap"
                     android:orientation="horizontal">
 
@@ -255,6 +257,7 @@
                 </RadioGroup>
 
                 <TextView
+                    android:id="@+id/colorLabel"
                     style="@style/Widget.Card.Wrap"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
@@ -265,6 +268,7 @@
                     android:textStyle="bold" />
 
                 <RadioGroup
+                    android:id="@+id/colorRadioBtn"
                     style="@style/Widget.Card.MatchWrap"
                     android:orientation="horizontal">
 
