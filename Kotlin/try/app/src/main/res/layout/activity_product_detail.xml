@@ -201,60 +201,9 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <RadioGroup
-                    android:id="@+id/sizeRadioBtn"
-                    style="@style/Widget.Card.MatchWrap"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        style="@style/Widget.Card.Wrap"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"
-                        android:gravity="center"
-                        android:minHeight="32dp"
-                        android:text="S"
-                        android:textColor="@drawable/text_radio"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        style="@style/Widget.Card.Wrap"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"
-                        android:gravity="center"
-                        android:minHeight="32dp"
-                        android:text="M"
-                        android:textColor="@drawable/text_radio"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        style="@style/Widget.Card.Wrap"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"
-                        android:gravity="center"
-                        android:minHeight="32dp"
-                        android:text="L"
-                        android:textColor="@drawable/text_radio"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        style="@style/Widget.Card.Wrap"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_radio_selector"
-                        android:button="@android:color/transparent"
-                        android:gravity="center"
-                        android:minHeight="32dp"
-                        android:text="XL"
-                        android:textColor="@drawable/text_radio"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                </RadioGroup>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSizeOption"
+                    style="@style/Widget.Card.MatchWrap"/>
 
                 <TextView
                     android:id="@+id/colorLabel"

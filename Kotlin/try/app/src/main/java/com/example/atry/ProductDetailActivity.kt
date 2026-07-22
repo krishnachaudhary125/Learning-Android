@@ -2,20 +2,26 @@ package com.example.atry
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.atry.data.models.Product
 import com.example.atry.databinding.ActivityProductDetailBinding
+import com.example.atry.ui.adapters.OptionAdapter
 import com.example.atry.ui.adapters.ProductImageAdapter
 import com.example.atry.ui.viewmodel.ProductDetailViewModel
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
     private val viewModel: ProductDetailViewModel by viewModels()
-
     private lateinit var imageGalleryAdapter: ProductImageAdapter
+    private val optionAdapters = mutableMapOf<String, OptionAdapter>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +41,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
 
         setupImageGallery()
+        setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
 
         viewModel.loadProduct(productId)
@@ -52,6 +59,18 @@ class ProductDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupOptionRecyclerView(
+        optionName: String,
+        recyclerView: RecyclerView
+    ) {
+        val adapter = OptionAdapter()
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter
+
+        optionAdapters[optionName] = adapter
+    }
+
     private fun observeProduct(){
         viewModel.selectedProduct.observe(this){ product ->
             binding.productName.text = product.title
@@ -65,8 +84,10 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.productDescription.text = product.description
             imageGalleryAdapter.submitList(product.images)
 
-            optionVisibility(product,"Size", binding.sizeLabel, binding.sizeRadioBtn)
+            optionVisibility(product,"Size", binding.sizeLabel, binding.rvSizeOption)
             optionVisibility(product, "Color", binding.colorLabel, binding.colorRadioBtn)
+
+            optionAdapters["Size"]?.submitList(product.options["Size"] ?: emptyList())
         }
     }
     fun optionVisibility(
