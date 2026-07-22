@@ -72,15 +72,35 @@
 
            </LinearLayout>
 
-           <TextView
-               android:layout_width="255dp"
-               android:layout_height="16dp"
-               android:textFontWeight="400"
-               android:textSize="10sp"
-               android:letterSpacing="0.04"
+           <LinearLayout
+               style="@style/Widget.Card.MatchWrap"
+               android:orientation="horizontal"
                android:layout_marginStart="16dp"
-               android:layout_marginTop="20dp"
-               android:text="Good morning John, Everything you will discover here" />
+               android:layout_marginTop="20dp">
+
+               <TextView
+                   style="@style/Widget.Card.Wrap"
+                   android:textFontWeight="400"
+                   android:textSize="10sp"
+                   android:letterSpacing="0.04"
+                   android:text="@string/greet" />
+
+               <TextView
+                   style="@style/Widget.Card.Wrap"
+                   android:textStyle="bold"
+                   android:layout_marginHorizontal="2dp"
+                   android:textSize="10sp"
+                   android:letterSpacing="0.04"
+                   android:text="@string/name" />
+
+               <TextView
+                   style="@style/Widget.Card.Wrap"
+                   android:textFontWeight="400"
+                   android:textSize="10sp"
+                   android:letterSpacing="0.04"
+                   android:text="@string/discover" />
+
+           </LinearLayout>
 
            <LinearLayout
                android:layout_width="match_parent"
@@ -106,7 +126,7 @@
                    android:textFontWeight="400"
                    android:textSize="14sp"
                    android:autofillHints="What are you searching for?"
-                   android:hint="What are you searching for?"
+                   android:hint="@string/search_hint"
                    android:inputType="text"
                    android:background="@drawable/edit_text_background"/>
 
@@ -166,7 +186,7 @@
 
             <TextView
                 style="@style/Widget.Card.Wrap"
-                android:text="Categories"
+                android:text="@string/categories"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -201,7 +221,7 @@
 
             <TextView
                 style="@style/Widget.Card.Wrap"
-                android:text="Featured Products"
+                android:text="@string/featured"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -230,7 +250,7 @@
 
             <TextView
                 style="@style/Widget.Card.Wrap"
-                android:text="Hot Deals of The Day"
+                android:text="@string/hot_deal"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -287,7 +307,7 @@
 
             <TextView
                 style="@style/Widget.Card.Wrap"
-                android:text="Popular Brand"
+                android:text="@string/popular"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -316,7 +336,7 @@
 
             <TextView
                 style="@style/Widget.Card.Wrap"
-                android:text="Recommended for you"
+                android:text="@string/recommended"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -352,7 +372,7 @@
                 style="@style/Widget.Card.Wrap"
                 android:layout_gravity="center"
                 android:textSize="10sp"
-                android:text="LOADING..."/>
+                android:text="@string/loading"/>
 
         </LinearLayout>
 
@@ -393,7 +413,7 @@
             android:textStyle="bold"
             android:letterSpacing="0.1"
             android:textColor="@color/white"
-            android:text="SELL"/>
+            android:text="@string/sell_btn"/>
 
     </LinearLayout>
 
