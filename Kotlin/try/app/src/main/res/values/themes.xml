@@ -7,6 +7,13 @@
 
     <style name="Theme.Try" parent="Base.Theme.Try" />
 
+    <style name="App.Theme.SplashScreen" parent="Base.Theme.Try"/>
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.Try</item>
+    </style>
+
     <style name="Widget.Card" parent="Widget.MaterialComponents.CardView">
 
     </style>
