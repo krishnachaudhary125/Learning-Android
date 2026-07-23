@@ -143,33 +143,34 @@
             android:orientation="vertical"
             android:gravity="center">
 
-        <LinearLayout
-            style="@style/Widget.Card.MatchWrap"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/bannerRecyclerView"
+            <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
                 android:orientation="horizontal"
-                android:scrollbars="none"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center">
 
-        </LinearLayout>
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:scrollbars="none"
+                    android:orientation="horizontal"/>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutIndicator"
-            android:layout_width="42dp"
-            android:minWidth="42dp"
-            android:background="@android:color/transparent"
-            android:layout_height="10dp"
-            android:minHeight="8dp"
-            android:layout_marginTop="12dp"
-            app:tabBackground="@drawable/tab_selector"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"/>
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayoutIndicator"
+                android:layout_width="42dp"
+                android:minWidth="42dp"
+                android:background="@android:color/transparent"
+                android:layout_height="10dp"
+                android:minHeight="8dp"
+                android:layout_marginTop="12dp"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -266,10 +267,10 @@
             style="@style/Widget.Card.Match"/>
         
         <ImageView
-            android:layout_width="360dp"
-            android:layout_height="128dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginHorizontal="24dp"
             android:src="@drawable/benchmark"/>
 
         <LinearLayout

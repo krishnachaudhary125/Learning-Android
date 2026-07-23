@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.atry.NotificationActivity
 import com.example.atry.PostProductActivity
 import com.example.atry.ProductDetailActivity
 import com.example.atry.R
 import com.example.atry.databinding.FragmentHomeBinding
-import com.example.atry.ui.adapters.BannerAdapter
+import com.example.atry.ui.adapters.BannerPagerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
 import com.example.atry.ui.adapters.ProductAdapter
@@ -28,13 +29,14 @@ import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var bannerAdapter: BannerAdapter
+    private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
 
@@ -59,7 +61,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapters()
-        setupBannerRecyclerView()
+        setupBannerViewPager()
         setupCategoryRecyclerView()
         setupHotDealCategoryRecyclerView()
         setupPopularBrandRecyclerView()
@@ -78,28 +80,9 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.bannerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.bannerRecyclerView.adapter = bannerAdapter
+        binding.vpBanner.adapter = bannerAdapter
 
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(binding.bannerRecyclerView)
-
-        repeat(3) {
-            binding.tabLayoutIndicator.addTab(binding.tabLayoutIndicator.newTab())
-        }
-
-        binding.bannerRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    val centerView = snapHelper.findSnapView(recyclerView.layoutManager)
-                    centerView?.let { view ->
-                        val position = recyclerView.layoutManager?.getPosition(view) ?: 0
-                        binding.tabLayoutIndicator.selectTab(binding.tabLayoutIndicator.getTabAt(position))
-                    }
-                }
-            }
-        })
+        TabLayoutMediator(binding.tabLayoutIndicator, binding.vpBanner){_,_ -> }.attach()
 
         var animator: ValueAnimator? = null
         var btnExpanded = true
@@ -131,7 +114,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initAdapters() {
-        bannerAdapter = BannerAdapter { banner ->
+        bannerAdapter = BannerPagerAdapter { banner ->
             Toast.makeText(requireContext(), "Banner: ", Toast.LENGTH_SHORT).show()
         }
 
@@ -168,11 +151,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupBannerRecyclerView() {
-        binding.bannerRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    private fun setupBannerViewPager() {
+        binding.vpBanner.apply {
             adapter = bannerAdapter
-            isNestedScrollingEnabled = false
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            isUserInputEnabled = true
         }
     }
 
