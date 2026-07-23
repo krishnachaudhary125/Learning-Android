@@ -19,11 +19,8 @@
 
        <LinearLayout
            android:layout_width="match_parent"
-           android:layout_height="136dp"
-           android:orientation="vertical"
-           android:background="@color/white"
-           android:layout_marginTop="36dp"
-           >
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
 
            <LinearLayout
                style="@style/Widget.Card.MatchWrap"
@@ -405,7 +402,7 @@
         <TextView
             android:id="@+id/floatingSell"
             style="@style/Widget.Card.Wrap"
-            android:maxHeight="20dp"
+            android:maxHeight="16dp"
             android:paddingStart="6dp"
             android:textSize="14sp"
             android:gravity="center"

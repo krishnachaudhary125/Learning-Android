@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/Widget.Card.Match"
-        android:layout_marginTop="36dp">
+        style="@style/Widget.Card.Match">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProductImage"
@@ -106,6 +105,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:visibility="invisible"
                         style="@style/Widget.Card.Wrap"
                         android:letterSpacing="0.05"
                         android:paddingVertical="4dp"
@@ -283,6 +283,81 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                style="@style/Widget.Card.MatchWrap"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/Widget.Card.MatchWrap"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        style="@style/Widget.Card.MatchWrap"
+                        app:cardBackgroundColor="#E2E0E0"
+                        app:cardCornerRadius="16dp"
+                        android:minWidth="136dp"
+                        android:minHeight="84dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ratingBox"
+                            android:padding="32dp"
+                            style="@style/Widget.Card.MatchWrap">
+
+                            <TextView
+                                android:id="@+id/avgRating"
+                                style="@style/Widget.Card.Wrap"
+                                android:paddingVertical="2dp"
+                                android:textSize="34sp"
+                                android:letterSpacing="0.05"
+                                android:text="4.0"
+                                app:layout_constraintStart_toStartOf="@id/ratingBox"
+                                app:layout_constraintTop_toTopOf="@id/ratingBox"/>
+
+                            <TextView
+                                style="@style/Widget.Card.Wrap"
+                                android:text=" /5"
+                                android:paddingVertical="2dp"
+                                android:letterSpacing="0.05"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toEndOf="@id/avgRating"
+                                app:layout_constraintBottom_toBottomOf="@id/avgRating"/>
+
+                            <TextView
+                                android:id="@+id/basedOn"
+                                style="@style/Widget.Card.Wrap"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_dark"
+                                android:textStyle="bold"
+                                android:text="Based on "
+                                app:layout_constraintTop_toBottomOf="@id/avgRating"
+                                app:layout_constraintStart_toStartOf="@id/ratingBox"/>
+                            <TextView
+                                android:id="@+id/totalReviews"
+                                style="@style/Widget.Card.Wrap"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_dark"
+                                android:text="23"
+                                app:layout_constraintTop_toBottomOf="@id/avgRating"
+                                app:layout_constraintStart_toEndOf="@id/basedOn"/>
+                            <TextView
+                                style="@style/Widget.Card.Wrap"
+                                android:text=" reviews"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_dark"
+                                app:layout_constraintTop_toBottomOf="@id/avgRating"
+                                app:layout_constraintStart_toEndOf="@id/totalReviews"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
