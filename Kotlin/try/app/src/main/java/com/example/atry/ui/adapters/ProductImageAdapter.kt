@@ -25,7 +25,7 @@ class ProductImageAdapter(
             .into(holder.binding.productImage)
     }
 
-    override fun getItemCount() = images.size
+    override fun getItemCount(): Int = images.size
 
     fun submitList(newImages: List<String>) {
         Log.d("ImageAdapter", "Images = $newImages")

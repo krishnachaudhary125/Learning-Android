@@ -161,15 +161,16 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayoutIndicator"
-                android:layout_width="42dp"
-                android:minWidth="42dp"
-                android:background="@android:color/transparent"
-                android:layout_height="10dp"
-                android:minHeight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tabPaddingStart="5dp"
+                app:tabPaddingEnd="5dp"
                 android:layout_marginTop="12dp"
-                app:tabBackground="@drawable/tab_selector"
+                android:layout_marginBottom="16dp"
                 app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"/>
+                app:tabIndicatorHeight="0dp"
+                app:tabBackground="@drawable/tab_selector"
+                android:background="@android:color/transparent"/>
 
         </LinearLayout>
 

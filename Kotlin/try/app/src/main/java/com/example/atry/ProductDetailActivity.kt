@@ -1,8 +1,6 @@
 package com.example.atry
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +12,7 @@ import com.example.atry.databinding.ActivityProductDetailBinding
 import com.example.atry.ui.adapters.OptionAdapter
 import com.example.atry.ui.adapters.ProductImageAdapter
 import com.example.atry.ui.viewmodel.ProductDetailViewModel
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
@@ -44,8 +40,6 @@ class ProductDetailActivity : AppCompatActivity() {
         setupImageGallery()
         setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
-
-        binding.vpProductImage.adapter = imageGalleryAdapter
 
         viewModel.loadProduct(productId)
     }
@@ -82,6 +76,12 @@ class ProductDetailActivity : AppCompatActivity() {
             }
             binding.productDescription.text = product.description
             imageGalleryAdapter.submitList(product.images)
+
+            binding.vpProductImage.adapter = imageGalleryAdapter
+
+            if (imageGalleryAdapter.itemCount > 1){
+                TabLayoutMediator(binding.imageDotIndicator, binding.vpProductImage){_,_ -> }.attach()
+            }
 
             optionVisibility(product,"Size", binding.sizeLabel, binding.rvSizeOption)
             optionVisibility(product, "Color", binding.colorLabel, binding.colorRadioBtn)

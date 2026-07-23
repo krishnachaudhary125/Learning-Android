@@ -42,21 +42,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <com.google.android.material.tabs.TabLayout-->
-<!--            android:id="@+id/tabLayoutIndicator"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:minWidth="42dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:layout_height="10dp"-->
-<!--            android:minHeight="8dp"-->
-<!--            android:layout_marginTop="12dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            app:tabBackground="@drawable/tab_selector"-->
-<!--            app:tabGravity="center"-->
-<!--            app:tabIndicatorHeight="0dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/productImage"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/imageDotIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tabPaddingStart="5dp"
+            app:tabPaddingEnd="5dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabBackground="@drawable/tab_selector"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@id/vpProductImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
             style="@style/Widget.Card.Wrap"
