@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.atry.data.models.Product
 import com.example.atry.databinding.ActivityProductDetailBinding
 import com.example.atry.ui.adapters.OptionAdapter
@@ -44,18 +45,16 @@ class ProductDetailActivity : AppCompatActivity() {
         setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
 
+        binding.vpProductImage.adapter = imageGalleryAdapter
+
         viewModel.loadProduct(productId)
     }
 
     private fun setupImageGallery(){
         imageGalleryAdapter = ProductImageAdapter()
-        binding.rvProductImage.apply {
-            layoutManager = LinearLayoutManager(
-                this@ProductDetailActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = imageGalleryAdapter
+        binding.vpProductImage.apply {
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            isUserInputEnabled = true
         }
     }
 
