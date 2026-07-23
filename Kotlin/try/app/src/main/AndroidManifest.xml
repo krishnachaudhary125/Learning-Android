@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Try">
         <activity
-            android:name="com.example.atry.MainActivity"
+            android:name="com.example.try.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.SplashScreen">
             <intent-filter>
