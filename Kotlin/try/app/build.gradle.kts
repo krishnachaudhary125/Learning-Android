@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.try"
+    namespace = "com.example.atry"
     compileSdk = 36
 
     packaging {

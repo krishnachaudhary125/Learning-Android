@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.try.MainActivity">
+    tools:context="com.example.atry.MainActivity">
 
     <FrameLayout
         android:id="@+id/mainFrame"
@@ -13,7 +13,7 @@
         android:layout_height="match_parent"/>
 
     <include
-        android:id="@+id/bottomBar"
+        android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/bottom_navigation"
