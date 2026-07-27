@@ -226,7 +226,7 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
-            productAdapter.submitList(products.take(getItemsToShow(2)))
+            productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
             featuredProductAdapter.submitList(products.take(getItemsToShow(1)))
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
 
