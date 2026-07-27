@@ -18,7 +18,7 @@ class OptionAdapter : RecyclerView.Adapter<OptionAdapter.OptionViewHolder>() {
         options.clear()
         options.addAll(list)
         selectedPosition = RecyclerView.NO_POSITION
-        notifyDataSetChanged()
+        notifyItemChanged(selectedPosition)
     }
 
     override fun onCreateViewHolder(
