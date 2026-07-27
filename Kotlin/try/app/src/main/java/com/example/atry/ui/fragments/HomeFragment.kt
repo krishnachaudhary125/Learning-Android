@@ -193,22 +193,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupPopularBrandRecyclerView() {
-        binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvPopularBrand.adapter = productAdapter
     }
 
     private fun setupFeaturedProductRecyclerView() {
-        binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvFeaturedProduct.adapter = featuredProductAdapter
     }
 
     private fun setupHotDealProductRecyclerView() {
-        binding.rvHotDealProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvHotDealProduct.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvHotDealProduct.adapter = hotDealProductAdapter
     }
 
     private fun setupRecommendedRecyclerView() {
-        binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvRecommended.adapter = recommendedAdapter
     }
 
@@ -226,11 +226,11 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
-            productAdapter.submitList(products.drop(22).take(4))
-            featuredProductAdapter.submitList(products.take(2))
-            hotDealProductAdapter.submitList(products.drop(2).take(2))
+            productAdapter.submitList(products.take(getItemsToShow(2)))
+            featuredProductAdapter.submitList(products.take(getItemsToShow(1)))
+            hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
 
-            val recommended = recommendedCache ?: products.shuffled().take(8).also { recommendedCache = it }
+            val recommended = recommendedCache ?: products.shuffled().take(getItemsToShow(4)).also { recommendedCache = it }
             recommendedAdapter.submitList(recommended)
         }
     }
@@ -247,5 +247,17 @@ class HomeFragment : Fragment() {
             binding.floatingSell.requestLayout()
         }
         return animator
+    }
+
+    private fun getProductSpanCount(): Int {
+        return when {
+            resources.configuration.screenWidthDp >= 840 -> 4
+            resources.configuration.screenWidthDp >= 600 -> 3
+            else -> 2
+        }
+    }
+
+    private fun getItemsToShow(rows: Int): Int {
+        return rows * getProductSpanCount()
     }
 }
