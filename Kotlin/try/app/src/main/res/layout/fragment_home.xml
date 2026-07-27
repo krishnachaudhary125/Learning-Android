@@ -95,7 +95,7 @@
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:layout_marginTop="16dp"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginHorizontal="16dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -119,11 +119,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFeaturedProduct"
+            android:layout_marginStart="@dimen/margin_medium"
             style="@style/Widget.Card.Match"/>
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:layout_marginTop="16dp"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginHorizontal="16dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -147,6 +148,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHotDealProduct"
+            android:layout_marginStart="@dimen/margin_medium"
             style="@style/Widget.Card.Match"/>
         
         <ImageView
@@ -177,7 +179,7 @@
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:layout_marginTop="16dp"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginHorizontal="16dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -201,11 +203,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPopularBrand"
+            android:layout_marginStart="@dimen/margin_medium"
             style="@style/Widget.Card.Match"/>
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:layout_marginTop="16dp"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginHorizontal="16dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -229,6 +232,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecommended"
+            android:layout_marginStart="@dimen/margin_medium"
             style="@style/Widget.Card.Match"/>
 
         <LinearLayout
