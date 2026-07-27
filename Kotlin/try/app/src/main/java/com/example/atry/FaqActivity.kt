@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atry.databinding.ActivityFaqBinding
 import com.example.atry.ui.adapters.FaqAdapter
@@ -17,12 +20,27 @@ class FaqActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        WindowCompat.enableEdgeToEdge(window)
 
         binding = ActivityFaqBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.faqBack.setOnClickListener {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarFaq.toolbarBackTitle) { view, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+
+            view.setPadding(
+                view.paddingLeft,
+                top,
+                view.paddingRight,
+                view.paddingBottom
+            )
+
+            insets
+        }
+
+        binding.toolbarFaq.toolbarTitle.text = "FAQs"
+
+        binding.toolbarFaq.backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 

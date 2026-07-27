@@ -5,59 +5,13 @@
     android:layout_height="match_parent"
     android:background="#E6ECF4">
 
-    <LinearLayout
-        android:id="@+id/newAddressToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center"
-        android:minHeight="56dp"
-        android:orientation="horizontal"
+    <include
+        android:id="@+id/toolbarNewShippingAddress"
+        style="@style/Widget.Card.MatchWrap"
+        layout="@layout/toolbar_back_title_action"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/newShippingAddressBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:minWidth="24dp"
-            android:minHeight="24dp"
-            android:contentDescription="@string/back_arrow"
-            android:src="@drawable/ic_back_arrow" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingVertical="16dp"
-            android:text="@string/add_new_address"
-            android:textSize="16sp"
-            android:letterSpacing="0.05"
-            android:textStyle="bold" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/newAddressClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_faq_question"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="12dp"
-            android:contentDescription="@string/close_btn"
-            android:src="@drawable/ic_close" />
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/shippingAddressForm"
@@ -67,7 +21,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newAddressToolbar"
+        app:layout_constraintTop_toBottomOf="@id/toolbarNewShippingAddress"
         app:strokeWidth="0dp">
 
         <LinearLayout
