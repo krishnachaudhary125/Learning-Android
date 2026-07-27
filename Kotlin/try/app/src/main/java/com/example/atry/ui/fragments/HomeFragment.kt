@@ -7,7 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,8 +43,6 @@ class HomeFragment : Fragment() {
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
-
-    // single ProductAdapter class, four independent instances
     private lateinit var productAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
@@ -54,6 +56,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.homeAppBar.appBar) { view, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+
+            view.setPadding(
+                view.paddingLeft,
+                top,
+                view.paddingRight,
+                view.paddingBottom
+            )
+
+            insets
+        }
         return binding.root
     }
 
@@ -75,7 +89,7 @@ class HomeFragment : Fragment() {
             .load(R.drawable.loading)
             .into(binding.loadingGif)
 
-        binding.notification.setOnClickListener {
+        binding.homeAppBar.notification.setOnClickListener {
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
         }

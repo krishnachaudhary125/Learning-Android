@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.example.atry.data.models.NavItem
 import com.example.atry.databinding.ActivityMainBinding
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Thread.sleep(1000)
         installSplashScreen()
+        WindowCompat.enableEdgeToEdge(window)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

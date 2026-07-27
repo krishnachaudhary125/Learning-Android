@@ -5,6 +5,7 @@
     style="@style/Widget.Card.MatchWrap">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/homeToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
@@ -18,13 +19,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/Widget.Card.Wrap"
                     android:src="@drawable/esewa_logo"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/Widget.Card.Wrap"
                     android:layout_marginStart="7dp"
                     android:layout_marginTop="14dp"
                     android:src="@drawable/market" />
@@ -32,22 +31,23 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Card.Wrap"
+                android:minWidth="72dp"
                 android:orientation="horizontal"
-                android:layout_marginEnd="16dp">
+                android:layout_marginEnd="@dimen/margin_medium">
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/notification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_notify"
-                    android:layout_marginEnd="12dp"/>
-
-                <ImageView
                     style="@style/Widget.Card.Wrap"
-                    android:layout_marginStart="12dp"
-                    android:src="@drawable/ic_overflow_option" />
+                    android:src="@drawable/ic_notify"
+                    android:background="@null"/>
+
+                <Space style="@style/Widget.Card.layout_weight"/>
+
+                <ImageButton
+                    style="@style/Widget.Card.Wrap"
+                    android:src="@drawable/ic_overflow_option"
+                    android:background="@null"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -57,8 +57,8 @@
     <LinearLayout
         style="@style/Widget.Card.MatchWrap"
         android:orientation="horizontal"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="16dp">
+        android:layout_marginVertical="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_medium">
 
         <TextView
             style="@style/Widget.Card.Wrap"
@@ -86,19 +86,18 @@
 
     <LinearLayout
         style="@style/Widget.Card.MatchWrap"
-        android:minHeight="45dp"
+        android:minHeight="48dp"
         android:orientation="horizontal"
         android:background="@drawable/edit_text_background"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:elevation="4dp">
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:gravity="center">
 
         <ImageView
             style="@style/Widget.Card.Wrap"
-            android:minHeight="24dp"
-            android:minWidth="24dp"
-            android:layout_marginHorizontal="16dp"
+            android:minHeight="@dimen/icon_size"
+            android:minWidth="@dimen/icon_size"
+            android:layout_marginHorizontal="@dimen/margin_medium"
             android:src="@drawable/ic_search"/>
 
         <EditText
@@ -110,14 +109,15 @@
             android:autofillHints="What are you searching for?"
             android:hint="@string/search_hint"
             android:inputType="text"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@null"/>
 
-        <ImageView
+        <ImageButton
             style="@style/Widget.Card.Wrap"
-            android:minHeight="24dp"
-            android:minWidth="24dp"
-            android:layout_marginHorizontal="16dp"
-            android:src="@drawable/ic_slider"/>
+            android:minHeight="@dimen/icon_size"
+            android:minWidth="@dimen/icon_size"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:src="@drawable/ic_slider"
+            android:background="@android:color/transparent"/>
 
     </LinearLayout>
 

@@ -16,7 +16,11 @@
         style="@style/Widget.Card.MatchWrap"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_home_appbar"/>
+        <include
+            android:id="@+id/homeAppBar"
+            layout="@layout/layout_home_appbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
