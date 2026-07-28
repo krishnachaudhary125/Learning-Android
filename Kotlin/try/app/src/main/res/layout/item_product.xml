@@ -97,19 +97,48 @@
 
         <LinearLayout
             android:id="@+id/addCartBtn"
-            android:layout_width="36dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="225dp"
-            android:layout_marginStart="131dp"
-            android:background="@drawable/add_cartt_green_button"
+            android:layout_width="wrap_content"
+            android:minWidth="36dp"
+            android:layout_height="wrap_content"
+            android:minHeight="42dp"
+            android:background="@drawable/add_cart_green_button"
             android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_plus_button"/>
+            <ImageButton
+                android:id="@+id/minusProduct"
+                android:visibility="gone"
+                android:paddingVertical="@dimen/margin_medium"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="16dp"
+                android:minHeight="16dp"
+                android:src="@drawable/ic_minus"
+                android:background="@null"/>
+
+            <TextView
+                android:id="@+id/numOfProduct"
+                android:visibility="gone"
+                style="@style/Widget.Card.Wrap"
+                android:paddingVertical="@dimen/padding_small"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="00"
+                android:textColor="@color/white"/>
+
+            <ImageButton
+                android:id="@+id/plusProduct"
+                android:paddingVertical="@dimen/margin_medium"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="16dp"
+                android:minHeight="16dp"
+                android:src="@drawable/ic_plus"
+                android:background="@null"/>
 
         </LinearLayout>
 

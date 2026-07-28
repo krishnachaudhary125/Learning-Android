@@ -1,6 +1,7 @@
 package com.example.atry.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,7 @@ import com.example.atry.databinding.ItemProductBinding
 class ProductAdapter(
     private val onClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
-
+    var numProduct = 0
     inner class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
@@ -50,8 +51,26 @@ class ProductAdapter(
                 .load(product.thumbnail)
                 .into(productImage)
 
-            root.setOnClickListener {
+            imageContainer.setOnClickListener {
                 onClick(product)
+            }
+
+            plusProduct.setOnClickListener {
+                numProduct+=1
+                numOfProduct.text = numProduct.toString()
+                minusProduct.visibility = View.VISIBLE
+                numOfProduct.visibility = View.VISIBLE
+            }
+            minusProduct.setOnClickListener {
+                if (numProduct > 0) {
+                    numProduct--
+                    numOfProduct.text = numProduct.toString()
+                }
+
+                if (numProduct == 0) {
+                    minusProduct.visibility = View.GONE
+                    numOfProduct.visibility = View.GONE
+                }
             }
         }
     }

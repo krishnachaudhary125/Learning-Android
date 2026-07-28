@@ -1,6 +1,7 @@
 package com.example.atry.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,6 +13,7 @@ import com.example.atry.databinding.ItemProductBinding
 
 private const val TYPE_ITEM = 0
 private const val TYPE_LOADING = 1
+var numProduct = 0
 
 class RecommendedProductAdapter(
     private val onClick: (ProductResponse) -> Unit
@@ -53,12 +55,25 @@ class RecommendedProductAdapter(
                     .load(product.thumbnail)
                     .into(productImage)
 
-                root.setOnClickListener {
-                    android.util.Log.d("RECOMMENDED_CLICK", "Clicked product id=${product.id}")
-                    onClick(product)
-                }
+                imageContainer.setOnClickListener { onClick(product) }
 
-                root.setOnClickListener { onClick(product) }
+                plusProduct.setOnClickListener {
+                    numProduct+=1
+                    numOfProduct.text = numProduct.toString()
+                    minusProduct.visibility = View.VISIBLE
+                    numOfProduct.visibility = View.VISIBLE
+                }
+                minusProduct.setOnClickListener {
+                    if (numProduct > 0) {
+                        numProduct--
+                        numOfProduct.text = numProduct.toString()
+                    }
+
+                    if (numProduct == 0) {
+                        minusProduct.visibility = View.GONE
+                        numOfProduct.visibility = View.GONE
+                    }
+                }
             }
         }
         when (holder) {
