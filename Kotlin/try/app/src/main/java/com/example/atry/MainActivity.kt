@@ -3,21 +3,35 @@ package com.example.atry
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.atry.data.models.NavItem
+import com.example.atry.data.repository.ProductCountRepository
 import com.example.atry.databinding.ActivityMainBinding
 import com.example.atry.ui.fragments.CartFragment
 import com.example.atry.ui.fragments.FavouriteFragment
 import com.example.atry.ui.fragments.HomeFragment
 import com.example.atry.ui.fragments.MoreFragment
+import com.example.atry.ui.viewmodel.ProductCountViewModel
+import com.example.atry.ui.viewmodel.ProductCountViewModelFactory
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
+
+    private val productCountViewModel: ProductCountViewModel by viewModels {
+        ProductCountViewModelFactory(
+            ProductCountRepository(applicationContext)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +104,19 @@ class MainActivity : AppCompatActivity() {
                 onDeselect(favourite)
 
                 selectedTab = 4
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                productCountViewModel.cartCount.collect { count ->
+                    if (count > 0){
+                        binding.bottomNav.numOfProductInCart.text = count.toString()
+                        binding.bottomNav.numOfProductInCart.visibility = View.VISIBLE
+                    }else{
+                        binding.bottomNav.numOfProductInCart.visibility = View.GONE
+                    }
+                }
             }
         }
     }

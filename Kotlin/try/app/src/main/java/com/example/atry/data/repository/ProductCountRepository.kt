@@ -34,8 +34,6 @@ class ProductCountRepository(private val context: Context) {
 
     val cartCount: Flow<Int> = cartMapFlow.map { it.values.sum() }
 
-    val cartDistinctCount: Flow<Int> = cartMapFlow.map { it.size }
-
     suspend fun addToCart(productId: String) {
         Log.d("CartDebug", "Repository addToCart: $productId")
 
@@ -76,7 +74,6 @@ class ProductCountRepository(private val context: Context) {
 
     fun getQuantity(productId: String): Flow<Int> =
         cartMapFlow.map {
-            android.util.Log.d("CartDebug", "cartMapFlow emitted: $it")
             it[productId] ?: 0
         }
 
