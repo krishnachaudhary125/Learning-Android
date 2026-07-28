@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,13 +26,30 @@ class ProductDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
 
         binding = ActivityProductDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.productDetailBack.setOnClickListener {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarProductDetail.toolbarBackAction) { view, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+
+            view.setPadding(
+                view.paddingLeft,
+                top,
+                view.paddingRight,
+                view.paddingBottom
+            )
+
+            insets
+        }
+
+        binding.toolbarProductDetail.backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
+        binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
 
         val productId = intent.getIntExtra("product_id", -1)
         if(productId == -1){
