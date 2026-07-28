@@ -20,6 +20,7 @@ import com.example.atry.NotificationActivity
 import com.example.atry.PostProductActivity
 import com.example.atry.ProductDetailActivity
 import com.example.atry.R
+import com.example.atry.data.repository.ProductCountRepository
 import com.example.atry.databinding.FragmentHomeBinding
 import com.example.atry.ui.adapters.BannerPagerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
@@ -27,16 +28,22 @@ import com.example.atry.ui.adapters.HotDealCategoryAdapter
 import com.example.atry.ui.adapters.ProductAdapter
 import com.example.atry.ui.adapters.RecommendedProductAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
+import com.example.atry.ui.viewmodel.ProductCountViewModel
+import com.example.atry.ui.viewmodel.ProductCountViewModelFactory
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlin.getValue
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val productCountViewModel: ProductCountViewModel by viewModels {
+        ProductCountViewModelFactory(ProductCountRepository(requireContext().applicationContext))
+    }
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
@@ -130,19 +137,19 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        productAdapter = ProductAdapter { product ->
+        productAdapter = ProductAdapter(productCountViewModel) { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
             intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
 
-        featuredProductAdapter = ProductAdapter { product ->
+        featuredProductAdapter = ProductAdapter(productCountViewModel) { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
             intent.putExtra("product_id", product.id)
             startActivity(intent)
         }
 
-        hotDealProductAdapter = ProductAdapter { product ->
+        hotDealProductAdapter = ProductAdapter(productCountViewModel) { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
             intent.putExtra("product_id", product.id)
             startActivity(intent)
