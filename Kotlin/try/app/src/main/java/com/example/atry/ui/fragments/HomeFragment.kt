@@ -29,6 +29,7 @@ import com.example.atry.ui.adapters.BannerPagerAdapter
 import com.example.atry.ui.adapters.CategoryAdapter
 import com.example.atry.ui.adapters.HotDealCategoryAdapter
 import com.example.atry.ui.adapters.ProductAdapter
+import com.example.atry.ui.adapters.RecommendedProductAdapter
 import com.example.atry.ui.viewmodel.HomeViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -46,9 +47,7 @@ class HomeFragment : Fragment() {
     private lateinit var productAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
-    private lateinit var recommendedAdapter: ProductAdapter
-
-    private var recommendedCache: List<com.example.atry.data.models.Product>? = null
+    private lateinit var recommendedAdapter: RecommendedProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,8 +114,8 @@ class HomeFragment : Fragment() {
                 }
 
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
-                if (scrollY >= totalHeight) {
-
+                if (scrollY >= totalHeight - 200) {
+                    homeViewModel.loadMoreRecommended()
                 }
             }
         )
@@ -158,9 +157,9 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        recommendedAdapter = ProductAdapter { product ->
+        recommendedAdapter = RecommendedProductAdapter { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-            intent.putExtra("product_id", product.id)
+            intent.putExtra("product_id", product.id.toInt())
             startActivity(intent)
         }
     }
@@ -208,8 +207,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecommendedRecyclerView() {
-        binding.rvRecommended.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
+        val spanCount = getProductSpanCount()
+        val layoutManager = GridLayoutManager(requireContext(), spanCount)
+
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (recommendedAdapter.isLoadingFooterShown() &&
+                    position == recommendedAdapter.itemCount - 1) spanCount else 1
+            }
+        }
+
+        binding.rvRecommended.layoutManager = layoutManager
         binding.rvRecommended.adapter = recommendedAdapter
+        binding.rvRecommended.isNestedScrollingEnabled = false
     }
 
     private fun observeData() {
@@ -229,9 +239,14 @@ class HomeFragment : Fragment() {
             productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
             featuredProductAdapter.submitList(products.take(getItemsToShow(1)))
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
+        }
 
-            val recommended = recommendedCache ?: products.shuffled().take(getItemsToShow(4)).also { recommendedCache = it }
-            recommendedAdapter.submitList(recommended)
+        homeViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
+            recommendedAdapter.submitFullList(recommended)
+        }
+
+        homeViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
+            recommendedAdapter.setLoading(isLoading)
         }
     }
 

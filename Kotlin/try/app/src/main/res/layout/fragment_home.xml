@@ -233,7 +233,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecommended"
             android:layout_marginStart="@dimen/margin_medium"
-            style="@style/Widget.Card.Match"/>
+            style="@style/Widget.Card.MatchWrap"
+            android:nestedScrollingEnabled="false"/>
 
         <LinearLayout
             style="@style/Widget.Card.Wrap"
