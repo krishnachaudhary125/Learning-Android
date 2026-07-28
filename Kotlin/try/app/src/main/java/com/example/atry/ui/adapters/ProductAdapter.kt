@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.atry.R
 import com.example.atry.data.models.Product
 import com.example.atry.databinding.ItemProductBinding
 
@@ -14,6 +15,7 @@ class ProductAdapter(
     private val onClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     var numProduct = 0
+    var isFavourite = false
     inner class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
@@ -71,6 +73,18 @@ class ProductAdapter(
                     minusProduct.visibility = View.GONE
                     numOfProduct.visibility = View.GONE
                 }
+            }
+
+            favourite.setOnClickListener {
+                isFavourite = !isFavourite
+
+                favourite.setImageResource(
+                    if(isFavourite){
+                        R.drawable.ic_fav_filled
+                    }else{
+                        R.drawable.ic_fav
+                    }
+                )
             }
         }
     }

@@ -84,8 +84,8 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/favorite"
+        <ImageButton
+            android:id="@+id/favourite"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="12dp"
@@ -93,7 +93,8 @@
             android:src="@drawable/ic_fav"
             app:layout_constraintTop_toBottomOf="@id/priceLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@null"/>
 
         <LinearLayout
             android:id="@+id/addCartBtn"

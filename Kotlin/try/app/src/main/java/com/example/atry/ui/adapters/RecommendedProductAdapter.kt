@@ -14,6 +14,7 @@ import com.example.atry.databinding.ItemProductBinding
 private const val TYPE_ITEM = 0
 private const val TYPE_LOADING = 1
 var numProduct = 0
+var isFavourite = false
 
 class RecommendedProductAdapter(
     private val onClick: (ProductResponse) -> Unit
@@ -73,6 +74,18 @@ class RecommendedProductAdapter(
                         minusProduct.visibility = View.GONE
                         numOfProduct.visibility = View.GONE
                     }
+                }
+
+                favourite.setOnClickListener {
+                    isFavourite = !isFavourite
+
+                    favourite.setImageResource(
+                        if(isFavourite){
+                            R.drawable.ic_fav_filled
+                        }else{
+                            R.drawable.ic_fav
+                        }
+                    )
                 }
             }
         }
