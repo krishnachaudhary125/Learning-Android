@@ -107,6 +107,9 @@ class ProductDetailActivity : AppCompatActivity() {
             optionVisibility(product, "Color", binding.colorLabel, binding.colorRadioBtn)
 
             optionAdapters["Size"]?.submitList(product.options["Size"] ?: emptyList())
+
+            binding.productTitle.text = product.title
+            binding.bottomProductPrice.text = "Rs.${product.price}"
         }
     }
     fun optionVisibility(
