@@ -155,7 +155,7 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        recommendedAdapter = RecommendedProductAdapter { product ->
+        recommendedAdapter = RecommendedProductAdapter(productCountViewModel) { product ->
             val intent = Intent(requireContext(), ProductDetailActivity::class.java)
             intent.putExtra("product_id", product.id.toInt())
             startActivity(intent)
