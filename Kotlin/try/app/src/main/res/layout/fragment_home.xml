@@ -237,24 +237,10 @@
             android:nestedScrollingEnabled="false"/>
 
         <LinearLayout
+            android:id="@+id/spacingForLoading"
             style="@style/Widget.Card.Wrap"
             android:layout_marginBottom="78dp"
-            android:layout_gravity="center"
             android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/loadingGif"
-                style="@style/Widget.Card.Wrap"
-                android:minWidth="64dp"
-                android:minHeight="64dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"/>
-
-            <TextView
-                style="@style/Widget.Card.Wrap"
-                android:layout_gravity="center"
-                android:textSize="10sp"
-                android:text="@string/loading"/>
 
         </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.atry.R
 import com.example.atry.data.models.Product
 import com.example.atry.data.models.ProductResponse
 import com.example.atry.databinding.ItemLoadingBinding
@@ -22,7 +23,7 @@ class RecommendedProductAdapter(
     inner class ProductViewHolder(val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    inner class LoadingViewHolder(binding: ItemLoadingBinding) :
+    inner class LoadingViewHolder(val binding: ItemLoadingBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun getItemViewType(position: Int): Int {
@@ -58,6 +59,14 @@ class RecommendedProductAdapter(
                 }
 
                 root.setOnClickListener { onClick(product) }
+            }
+        }
+        when (holder) {
+            is LoadingViewHolder -> {
+                Glide.with(holder.binding.root)
+                    .asGif()
+                    .load(R.drawable.loading)
+                    .into(holder.binding.loading)
             }
         }
     }

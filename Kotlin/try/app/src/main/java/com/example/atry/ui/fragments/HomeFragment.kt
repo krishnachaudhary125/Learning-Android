@@ -8,16 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.atry.NotificationActivity
@@ -82,11 +78,6 @@ class HomeFragment : Fragment() {
         setupHotDealProductRecyclerView()
         setupRecommendedRecyclerView()
         observeData()
-
-        Glide.with(this)
-            .asGif()
-            .load(R.drawable.loading)
-            .into(binding.loadingGif)
 
         binding.homeAppBar.notification.setOnClickListener {
             val intent = Intent(requireContext(), NotificationActivity::class.java)

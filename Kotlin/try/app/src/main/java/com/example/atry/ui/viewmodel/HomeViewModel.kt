@@ -14,6 +14,7 @@ import com.example.atry.data.repository.BannerRepository
 import com.example.atry.data.repository.CategoryRepository
 import com.example.atry.data.repository.HotDealCategoryRepository
 import com.example.atry.data.repository.ProductRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.emptyList
 
@@ -89,6 +90,8 @@ class HomeViewModel : ViewModel() {
                     page = recommendedPage,
                     size = RECOMMENDED_PAGE_SIZE
                 )
+
+                delay(1000)
 
                 val current = _recommendedProducts.value.orEmpty()
                 _recommendedProducts.value = current + response.content
