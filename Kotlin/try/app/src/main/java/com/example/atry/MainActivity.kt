@@ -21,6 +21,8 @@ import com.example.atry.ui.fragments.HomeFragment
 import com.example.atry.ui.fragments.MoreFragment
 import com.example.atry.ui.viewmodel.ProductCountViewModel
 import com.example.atry.ui.viewmodel.ProductCountViewModelFactory
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -116,6 +118,18 @@ class MainActivity : AppCompatActivity() {
                     }else{
                         binding.bottomNav.numOfProductInCart.visibility = View.GONE
                     }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                productCountViewModel.favouriteCount.collect { count ->
+
+                    binding.bottomNav.numOfProductInFavourite.visibility =
+                        if (count > 0) View.VISIBLE else View.GONE
+
+                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
                 }
             }
         }

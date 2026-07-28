@@ -12,19 +12,19 @@ import com.example.atry.data.models.Product
 import com.example.atry.databinding.ItemProductBinding
 import com.example.atry.ui.viewmodel.ProductCountViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 
 class ProductAdapter(
     private val viewModel: ProductCountViewModel,
     private val onClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    var isFavourite = false
-
     class ProductViewHolder(val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         var quantityJob: Job? = null
+        var favouriteJob: Job? = null
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
@@ -60,6 +60,7 @@ class ProductAdapter(
     override fun onViewRecycled(holder: ProductViewHolder) {
         super.onViewRecycled(holder)
         holder.quantityJob?.cancel()
+        holder.favouriteJob?.cancel()
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -89,19 +90,7 @@ class ProductAdapter(
                 viewModel.removeOneFromCart(productId)
             }
 
-            favourite.setOnClickListener {
-                isFavourite = !isFavourite
-
-                favourite.setImageResource(
-                    if (isFavourite)
-                        R.drawable.ic_fav_filled
-                    else
-                        R.drawable.ic_fav
-                )
-            }
-
             holder.quantityJob?.cancel()
-
             holder.quantityJob = holder.scope.launch {
                 viewModel.quantityOf(productId).collect { qty ->
 
@@ -110,6 +99,30 @@ class ProductAdapter(
                     val visible = if (qty > 0) View.VISIBLE else View.GONE
                     numOfProduct.visibility = visible
                     minusProduct.visibility = visible
+                }
+            }
+
+            holder.favouriteJob?.cancel()
+            holder.scope.launch {
+                viewModel.isFavourite(productId).collect { isFav ->
+                    favourite.setImageResource(
+                        if (isFav)
+                            R.drawable.ic_fav_filled
+                        else
+                            R.drawable.ic_fav
+                    )
+                }
+            }
+
+            favourite.setOnClickListener {
+                holder.scope.launch {
+                    val isFav = viewModel.isFavourite(productId).first()
+
+                    if (isFav) {
+                        viewModel.removeFromFavourites(productId)
+                    } else {
+                        viewModel.addToFavourites(productId)
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@ class ProductCountViewModel(private val repository: ProductCountRepository) : Vi
     val cartCount: StateFlow<Int> = repository.cartCount
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
-    val favoriteCount: StateFlow<Int> = repository.favouriteCount
+    val favouriteCount: StateFlow<Int> = repository.favouriteCount
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     fun addToCart(productId: String) {
@@ -23,15 +23,15 @@ class ProductCountViewModel(private val repository: ProductCountRepository) : Vi
         viewModelScope.launch { repository.removeOneFromCart(productId) }
     }
 
-    fun addToFavorites(productId: String) {
+    fun addToFavourites(productId: String) {
         viewModelScope.launch { repository.addToFav(productId) }
     }
 
-    fun removeFromFavorites(productId: String) {
+    fun removeFromFavourites(productId: String) {
         viewModelScope.launch { repository.removeFromFavourite(productId) }
     }
 
     fun quantityOf(productId: String) = repository.getQuantity(productId)
 
-    fun isFavorite(productId: String) = repository.isInFav(productId)
+    fun isFavourite(productId: String) = repository.isInFav(productId)
 }
