@@ -54,6 +54,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
+                android:id="@+id/favBtn"
                 style="@style/Widget.Card.Wrap"
                 android:minWidth="56dp"
                 android:minHeight="56dp"
@@ -397,6 +398,7 @@
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
+            android:minWidth="148dp"
             android:background="@drawable/bg_continue_shopping"
             android:gravity="center"
             android:orientation="horizontal">

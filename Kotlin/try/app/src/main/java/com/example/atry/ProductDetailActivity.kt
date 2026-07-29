@@ -1,15 +1,20 @@
 package com.example.atry
 
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,6 +28,7 @@ import com.example.atry.ui.viewmodel.ProductCountViewModelFactory
 import com.example.atry.ui.viewmodel.ProductDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ProductDetailActivity : AppCompatActivity() {
@@ -77,7 +83,21 @@ class ProductDetailActivity : AppCompatActivity() {
         observeProduct()
 
         viewModel.loadProduct(productId)
-        observeQuantity()
+        observeCartQuantity()
+        observeFavouriteQuantity()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                productCountViewModel.cartCount.collect { count ->
+                    if (count > 0){
+                        binding.toolbarProductDetail.numOfProductInCart.text = count.toString()
+                        binding.toolbarProductDetail.numOfProductInCart.visibility = View.VISIBLE
+                    }else{
+                        binding.toolbarProductDetail.numOfProductInCart.visibility = View.GONE
+                    }
+                }
+            }
+        }
     }
 
     private fun setupImageGallery(){
@@ -127,6 +147,12 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.productTitle.text = product.title
             binding.bottomProductPrice.text = "Rs.${product.price}"
 
+            binding.toolbarProductDetail.toolbarIcon.setOnClickListener {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("open_fragment", "cart")
+                startActivity(intent)
+            }
+
             binding.bottomAddToCartBtn.setOnClickListener {
                 productCountViewModel.addToCart(id.toString())
             }
@@ -137,6 +163,19 @@ class ProductDetailActivity : AppCompatActivity() {
 
             binding.minusProductBtn.setOnClickListener {
                 productCountViewModel.removeOneFromCart(id.toString())
+            }
+
+            binding.favBtn.setOnClickListener {
+                favouriteJob = lifecycleScope.launch {
+                    val isFav = productCountViewModel.isFavourite(id.toString()).first()
+
+                    if (isFav) {
+
+                        productCountViewModel.removeFromFavourites(id.toString())
+                    } else {
+                        productCountViewModel.addToFavourites(id.toString())
+                    }
+                }
             }
         }
     }
@@ -157,8 +196,7 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private var quantityJob: Job? = null
-
-    private fun observeQuantity() {
+    private fun observeCartQuantity() {
         quantityJob?.cancel()
 
         quantityJob = lifecycleScope.launch {
@@ -173,6 +211,22 @@ class ProductDetailActivity : AppCompatActivity() {
                 binding.plusProductBtn.visibility = visible
                 binding.tvCartCount.visibility = visible
                 binding.minusProductBtn.visibility = visible
+            }
+        }
+    }
+
+    private var favouriteJob: Job? = null
+    private fun observeFavouriteQuantity() {
+        favouriteJob?.cancel()
+
+        favouriteJob = lifecycleScope.launch {
+            productCountViewModel.isFavourite(id.toString()).collect { isFav ->
+                binding.favBtn.setImageResource(
+                    if (isFav)
+                        R.drawable.ic_fav_filled_white
+                    else
+                        R.drawable.ic_fav
+                )
             }
         }
     }
