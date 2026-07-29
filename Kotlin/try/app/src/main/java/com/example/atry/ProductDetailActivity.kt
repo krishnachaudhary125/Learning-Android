@@ -4,25 +4,38 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.atry.data.models.Product
+import com.example.atry.data.repository.ProductCountRepository
 import com.example.atry.databinding.ActivityProductDetailBinding
 import com.example.atry.ui.adapters.OptionAdapter
 import com.example.atry.ui.adapters.ProductImageAdapter
+import com.example.atry.ui.viewmodel.ProductCountViewModel
+import com.example.atry.ui.viewmodel.ProductCountViewModelFactory
 import com.example.atry.ui.viewmodel.ProductDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var imageGalleryAdapter: ProductImageAdapter
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
-
+    private val productCountViewModel: ProductCountViewModel by viewModels {
+        ProductCountViewModelFactory(
+            ProductCountRepository(applicationContext)
+        )
+    }
+    private var id = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +57,8 @@ class ProductDetailActivity : AppCompatActivity() {
             insets
         }
 
+        id = intent.getIntExtra("product_id", -1)
+
         binding.toolbarProductDetail.backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -62,6 +77,7 @@ class ProductDetailActivity : AppCompatActivity() {
         observeProduct()
 
         viewModel.loadProduct(productId)
+        observeQuantity()
     }
 
     private fun setupImageGallery(){
@@ -110,6 +126,18 @@ class ProductDetailActivity : AppCompatActivity() {
 
             binding.productTitle.text = product.title
             binding.bottomProductPrice.text = "Rs.${product.price}"
+
+            binding.bottomAddToCartBtn.setOnClickListener {
+                productCountViewModel.addToCart(id.toString())
+            }
+
+            binding.plusProductBtn.setOnClickListener {
+                productCountViewModel.addToCart(id.toString())
+            }
+
+            binding.minusProductBtn.setOnClickListener {
+                productCountViewModel.removeOneFromCart(id.toString())
+            }
         }
     }
     fun optionVisibility(
@@ -126,5 +154,26 @@ class ProductDetailActivity : AppCompatActivity() {
 
         label.visibility = visibility
         radioGroup.visibility = visibility
+    }
+
+    private var quantityJob: Job? = null
+
+    private fun observeQuantity() {
+        quantityJob?.cancel()
+
+        quantityJob = lifecycleScope.launch {
+            productCountViewModel.quantityOf(id.toString()).collect { qty ->
+
+                binding.tvCartCount.text = qty.toString()
+
+                val show = if (qty == 0) View.VISIBLE else View.GONE
+                binding.bottomAddToCartBtn.visibility = show
+
+                val visible = if (qty > 0) View.VISIBLE else View.GONE
+                binding.plusProductBtn.visibility = visible
+                binding.tvCartCount.visibility = visible
+                binding.minusProductBtn.visibility = visible
+            }
+        }
     }
 }

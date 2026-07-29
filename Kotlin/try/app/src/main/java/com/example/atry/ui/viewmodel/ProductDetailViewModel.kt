@@ -7,7 +7,7 @@ import com.example.atry.data.models.Product
 import com.example.atry.data.repository.ProductRepository
 import kotlinx.coroutines.launch
 
-class ProductDetailViewModel : ViewModel() {
+class ProductDetailViewModel: ViewModel() {
     private val productRepository = ProductRepository()
 
     val selectedProduct: LiveData<Product> = productRepository.selectedProduct
