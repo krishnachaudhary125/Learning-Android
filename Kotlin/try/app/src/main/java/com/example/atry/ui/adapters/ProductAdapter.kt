@@ -71,7 +71,7 @@ class ProductAdapter(
         holder.binding.apply {
 
             productTitle.text = product.title
-            brand.text = product.category
+            brand.text = product.category.name
             price.text = product.price.toString()
 
             Glide.with(productImage.context)

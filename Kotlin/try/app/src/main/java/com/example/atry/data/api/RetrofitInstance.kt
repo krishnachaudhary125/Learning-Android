@@ -7,19 +7,11 @@ import kotlin.jvm.java
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://dummyjson.com/"
-
-    val api: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService::class.java)
-    }
+    private const val BASE_URL = "https://casualty-elevator-yodel.ngrok-free.dev/"
 
     val productApi: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://casualty-elevator-yodel.ngrok-free.dev/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
