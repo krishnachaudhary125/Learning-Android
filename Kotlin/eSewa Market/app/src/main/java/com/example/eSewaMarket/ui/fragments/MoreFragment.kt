@@ -9,8 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.eSewaMarket.FaqActivity
+import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MyReturnActivity
 import com.example.eSewaMarket.R
+import com.example.eSewaMarket.RegisterActivity
 import com.example.eSewaMarket.ShippingAddressActivity
 import com.example.eSewaMarket.databinding.FragmentMoreBinding
 
@@ -46,6 +48,16 @@ class MoreFragment : Fragment() {
 
         binding.toolbarMore.toolbarTitle.text = "More"
         binding.toolbarMore.toolbarIcon.setImageResource(R.drawable.ic_more_vertical)
+
+        binding.login.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.register.setOnClickListener {
+            val intent = Intent(requireContext(), RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.faq.setOnClickListener {
             val intent = Intent(requireContext(), FaqActivity::class.java)
