@@ -218,6 +218,9 @@ class ProductDetailActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            binding.avgRating.text = product.rating.toString()
+            binding.totalReviews.text = product.reviewCount.toString()
         }
     }
     fun optionVisibility(

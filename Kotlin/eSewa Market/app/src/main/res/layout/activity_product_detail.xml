@@ -307,7 +307,6 @@
                                     android:paddingVertical="2dp"
                                     android:textSize="34sp"
                                     android:letterSpacing="0.05"
-                                    android:text="4.0"
                                     app:layout_constraintStart_toStartOf="@id/ratingBox"
                                     app:layout_constraintTop_toTopOf="@id/ratingBox"/>
 
@@ -335,7 +334,6 @@
                                     android:textStyle="bold"
                                     android:textSize="12sp"
                                     android:textColor="@color/text_dark"
-                                    android:text="23"
                                     app:layout_constraintTop_toBottomOf="@id/avgRating"
                                     app:layout_constraintStart_toEndOf="@id/basedOn"/>
                                 <TextView
