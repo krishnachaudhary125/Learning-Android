@@ -13,6 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/soldOut"
+            style="@style/Widget.Card.Wrap"
+            android:src="@drawable/bg_sold_out"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:visibility="gone"
             android:id="@+id/discount"

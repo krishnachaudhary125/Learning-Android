@@ -1,6 +1,7 @@
 package com.example.eSewaMarket
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -8,6 +9,7 @@ import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -125,9 +127,29 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.productPrice.text = "Rs.${product.price}"
             if(product.stock != 0){
                 binding.productStock.text = "In Stock"
+                binding.productStock.setTextColor(
+                    ContextCompat.getColor(binding.root.context, R.color.green)
+                )
+                binding.addToCartBG.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(binding.root.context, R.color.green)
+                )
+                binding.bottomAddToCartBtn.setTextColor(
+                    ContextCompat.getColor(binding.root.context, R.color.white)
+                )
+                binding.bottomAddToCartBtn.isEnabled = true
             }
             else{
                 binding.productStock.text = "Out of Stock"
+                binding.productStock.setTextColor(
+                    ContextCompat.getColor(binding.root.context, R.color.red)
+                )
+                binding.addToCartBG.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(binding.root.context, R.color.addToCartSoldOut)
+                )
+                binding.bottomAddToCartBtn.setTextColor(
+                    ContextCompat.getColor(binding.root.context, R.color.text_dark)
+                )
+                binding.bottomAddToCartBtn.isEnabled = false
             }
             binding.productDescription.text = product.description
             imageGalleryAdapter.submitList(product.images)

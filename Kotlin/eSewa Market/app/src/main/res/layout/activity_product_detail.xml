@@ -395,6 +395,7 @@
         <Space style="@style/Widget.Card.layout_weight"/>
 
         <LinearLayout
+            android:id="@+id/addToCartBG"
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
