@@ -78,6 +78,14 @@ class ProductAdapter(
                 .load(product.thumbnail)
                 .into(productImage)
 
+            if (product.discountPercentage != null){
+                val dis = product.discountPercentage.toInt()
+                discount.text = "${dis}% OFF"
+                discount.visibility = View.VISIBLE
+            }else{
+                discount.visibility = View.GONE
+            }
+
             imageContainer.setOnClickListener {
                 onClick(product)
             }

@@ -8,5 +8,6 @@ data class ProductResponse(
     val category: ProductCategory,
     val thumbnail: String,
     val images: List<String>? = null,
-    val brand: String? = null
+    val brand: String? = null,
+    val discountPercentage: Double? = null
 )
