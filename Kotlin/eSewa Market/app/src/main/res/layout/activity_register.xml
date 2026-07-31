@@ -262,4 +262,38 @@
 
     </androidx.cardview.widget.CardView>
 
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminateTint="@color/green"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/registerCancelBtn"
+            style="@style/Widget.Card.Wrap"
+            android:text="Cancel"
+            android:paddingVertical="@dimen/padding_small"
+            android:paddingHorizontal="@dimen/padding_large"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:background="@drawable/bg_continue_shopping"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

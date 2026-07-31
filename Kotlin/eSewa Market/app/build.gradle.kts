@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.atry"
+        applicationId = "com.example.eSewaMarket"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -57,6 +57,10 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.firebase.auth)
+    implementation(libs.googleid)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)

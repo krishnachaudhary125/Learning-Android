@@ -30,7 +30,6 @@ class HomeViewModel : ViewModel() {
     val hotDealCategories: LiveData<List<HotDeal>> = hotDealCategoryRepository.hotDealCategories
     val products: LiveData<List<Product>> = productRepository.products
 
-    private val RECOMMENDED_PAGE_SIZE = 8
 
     private val _recommendedProducts = MutableLiveData<List<ProductResponse>>(emptyList())
     val recommendedProducts: LiveData<List<ProductResponse>> = _recommendedProducts
@@ -87,8 +86,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = productRepository.fetchRecommendedProducts(
-                    page = recommendedPage,
-                    size = RECOMMENDED_PAGE_SIZE
+                    page = recommendedPage
                 )
 
                 delay(1000)
