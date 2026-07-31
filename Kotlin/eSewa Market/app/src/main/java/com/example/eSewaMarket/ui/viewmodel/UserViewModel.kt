@@ -10,10 +10,8 @@ import com.example.eSewaMarket.data.models.UserSyncRequest
 import com.example.eSewaMarket.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class UserViewModel : ViewModel() {
-
+class UserViewModel() : ViewModel() {
     private val repository = UserRepository()
-
     private val _user = MutableLiveData<UserResponse>()
     val user: LiveData<UserResponse> = _user
 

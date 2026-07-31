@@ -167,6 +167,7 @@ class RegisterActivity : AppCompatActivity() {
 
                                         val request = UserSyncRequest(
                                             fullName = fullName,
+                                            email = email,
                                             phone = phone
                                         )
 
