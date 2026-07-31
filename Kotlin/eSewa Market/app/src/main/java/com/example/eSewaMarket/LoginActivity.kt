@@ -44,6 +44,12 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        userViewModel.user.observe(this) { user ->
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         userViewModel.error.observe(this) { error ->
 
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
@@ -100,10 +106,6 @@ class LoginActivity : AppCompatActivity() {
             binding.loginBtn.isEnabled = false
 
             loginUser(email, password)
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 
