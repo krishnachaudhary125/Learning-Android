@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
 
 class ProductAdapter(
     private val viewModel: ProductCountViewModel,
+    private val itemWidth: Int? = null,
     private val onClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
@@ -66,6 +67,10 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+
+        itemWidth?.let {
+            holder.itemView.layoutParams.width = it
+        }
 
         val product = productList[position]
         val productId = product.id.toString()

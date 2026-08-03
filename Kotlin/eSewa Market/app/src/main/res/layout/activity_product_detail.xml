@@ -266,17 +266,74 @@
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/Widget.Card.MatchWrap"
-                    android:layout_width="match_parent">
+                    style="@style/Widget.Card.MatchWrap">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="301dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:scaleType="centerCrop"
                         android:foreground="@drawable/bg_green_to_blue_overlay"
-                        android:scaleType="fitXY"
                         android:src="@drawable/product_detail_bg"
+                        app:layout_constraintDimensionRatio="16:13"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/shopNowLayout"
+                        style="@style/Widget.Card.Wrap"
+                        android:layout_marginHorizontal="@dimen/margin_medium"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            style="@style/Widget.Card.Wrap"
+                            android:letterSpacing="0.05"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="Discover More"/>
+
+                        <TextView
+                            style="@style/Widget.Card.Wrap"
+                            android:textSize="34sp"
+                            android:letterSpacing="0.05"
+                            android:textColor="@color/white"
+                            android:text="Similar"/>
+
+                        <TextView
+                            style="@style/Widget.Card.Wrap"
+                            android:textSize="34sp"
+                            android:letterSpacing="0.05"
+                            android:textColor="@color/white"
+                            android:text="Products"/>
+
+                        <TextView
+                            android:id="@+id/shopNowBtn"
+                            style="@style/Widget.Card.Wrap"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:textStyle="bold"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:paddingVertical="@dimen/padding_medium"
+                            android:paddingHorizontal="@dimen/padding_large"
+                            android:textSize="16sp"
+                            android:letterSpacing="0.05"
+                            android:textColor="@color/white"
+                            android:background="@drawable/bg_continue_shopping"
+                            android:text="SHOP NOW"/>
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSimilarProduct"
+                        style="@style/Widget.Card.Wrap"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginHorizontal="@dimen/margin_medium"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/shopNowLayout"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

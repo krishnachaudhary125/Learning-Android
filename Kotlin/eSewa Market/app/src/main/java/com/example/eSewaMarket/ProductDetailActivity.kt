@@ -9,6 +9,7 @@ import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,6 +25,7 @@ import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.ProductCountRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
+import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
@@ -36,6 +39,7 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var imageGalleryAdapter: ProductImageAdapter
+    private lateinit var similarProductAdapter: ProductAdapter
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(
@@ -73,6 +77,18 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
 
+        val width = (resources.displayMetrics.widthPixels * 0.45).toInt()
+
+        similarProductAdapter = ProductAdapter(
+            productCountViewModel,
+            width
+        ) { product ->
+            startActivity(
+                Intent(this, ProductDetailActivity::class.java)
+                    .putExtra("product_id", product.id)
+            )
+        }
+
         val productId = intent.getIntExtra("product_id", -1)
         if(productId == -1){
             finish()
@@ -82,8 +98,10 @@ class ProductDetailActivity : AppCompatActivity() {
         setupImageGallery()
         setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
+        setupSimilarProductRecyclerView()
 
         viewModel.loadProduct(productId)
+        viewModel.loadSimilarProducts()
         observeCartQuantity()
         observeFavouriteQuantity()
 
@@ -98,6 +116,10 @@ class ProductDetailActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        viewModel.similarProducts.observe(this) { products ->
+            similarProductAdapter.submitList(products.take(5))
         }
     }
 
@@ -119,6 +141,14 @@ class ProductDetailActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         optionAdapters[optionName] = adapter
+    }
+
+    private fun setupSimilarProductRecyclerView() {
+
+        binding.rvSimilarProduct.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.rvSimilarProduct.adapter = similarProductAdapter
     }
 
     private fun observeProduct(){

@@ -4,6 +4,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="@color/popular_category_background"
-    android:text="Category"
     android:background="@drawable/popular_catgeories"
-    android:layout_margin="4dp"/>
+    android:layout_margin="8dp"/>
