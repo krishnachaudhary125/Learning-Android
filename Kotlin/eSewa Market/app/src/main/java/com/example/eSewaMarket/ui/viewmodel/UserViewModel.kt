@@ -1,7 +1,6 @@
 package com.example.eSewaMarket.ui.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -65,17 +64,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     _user.value = user
                 } else {
                     val error = response.errorBody()?.string()
-
-                    Log.e(
-                        "USER_ME",
-                        "Code: ${response.code()} Error: $error"
-                    )
-
                     _error.value = "Code: ${response.code()}\n$error"
                 }
 
             } catch (e: Exception) {
-                Log.e("USER_ME", "Exception", e)
                 _error.value = e.localizedMessage ?: "Unknown error"
             } finally {
                 _loading.value = false
