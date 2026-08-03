@@ -9,16 +9,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.eSewaMarket.data.models.UserSyncRequest
+import androidx.lifecycle.lifecycleScope
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityLoginBinding
 import com.example.eSewaMarket.ui.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var userViewModel: UserViewModel
+    private lateinit var userSessionRepository: UserSessionRepository
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userSessionRepository = UserSessionRepository(this)
 
         userViewModel = ViewModelProvider(this)
             .get(UserViewModel::class.java)
@@ -45,9 +50,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         userViewModel.user.observe(this) { user ->
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+
+            lifecycleScope.launch {
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+                Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
 
         userViewModel.error.observe(this) { error ->
@@ -130,17 +139,8 @@ class LoginActivity : AppCompatActivity() {
         auth.currentUser
             ?.getIdToken(true)
             ?.addOnSuccessListener { result ->
-
-                val token = result.token
-                token?.let {
-                    val firebaseUser = auth.currentUser
-
-                    val request = UserSyncRequest(
-                            fullName = firebaseUser?.displayName,
-                            email = firebaseUser?.email,
-                            phone = firebaseUser?.phoneNumber
-                        )
-                    userViewModel.syncUser(it, request)
+                result.token?.let {
+                    userViewModel.getCurrentUser(it)
                 }
             }
     }

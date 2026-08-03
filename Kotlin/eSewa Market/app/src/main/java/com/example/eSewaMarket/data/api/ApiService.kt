@@ -39,4 +39,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body request: UserSyncRequest
     ): Response<UserResponse>
+
+    @GET("users/me")
+    suspend fun getCurrentUser(
+        @Header("Authorization") token: String
+    ): Response<UserResponse>
 }
