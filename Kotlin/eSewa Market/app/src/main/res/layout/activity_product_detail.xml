@@ -101,11 +101,11 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/originalPrice"
                             android:visibility="invisible"
                             style="@style/Widget.Card.Wrap"
                             android:letterSpacing="0.05"
                             android:paddingVertical="4dp"
-                            android:text="Rs.5000.00"
                             android:textColor="@color/text_dark"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -307,7 +307,6 @@
                                     android:paddingVertical="2dp"
                                     android:textSize="34sp"
                                     android:letterSpacing="0.05"
-                                    android:text="4.0"
                                     app:layout_constraintStart_toStartOf="@id/ratingBox"
                                     app:layout_constraintTop_toTopOf="@id/ratingBox"/>
 
@@ -335,7 +334,6 @@
                                     android:textStyle="bold"
                                     android:textSize="12sp"
                                     android:textColor="@color/text_dark"
-                                    android:text="23"
                                     app:layout_constraintTop_toBottomOf="@id/avgRating"
                                     app:layout_constraintStart_toEndOf="@id/basedOn"/>
                                 <TextView
@@ -395,6 +393,7 @@
         <Space style="@style/Widget.Card.layout_weight"/>
 
         <LinearLayout
+            android:id="@+id/addToCartBG"
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"

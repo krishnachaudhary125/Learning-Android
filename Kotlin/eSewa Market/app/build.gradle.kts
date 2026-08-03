@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -20,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.atry"
+        applicationId = "com.example.eSewaMarket"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -55,6 +57,10 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.firebase.auth)
+    implementation(libs.googleid)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -84,4 +90,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

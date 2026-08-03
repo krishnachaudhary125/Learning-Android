@@ -11,5 +11,6 @@ data class Product(
     val images: List<String>,
     val options: Map<String, List<String>>,
     val rating: Double,
-    val reviewCount: Int
+    val reviewCount: Int,
+    val discountPercentage: Double ? = null
 )

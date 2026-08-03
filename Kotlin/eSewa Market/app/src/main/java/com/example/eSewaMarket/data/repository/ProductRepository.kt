@@ -17,7 +17,7 @@ class ProductRepository {
 
     suspend fun fetchProducts() {
         try {
-            val response = RetrofitInstance.productApi.getProduct()
+            val response = RetrofitInstance.api.getProduct()
             _products.postValue(response)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
@@ -26,14 +26,14 @@ class ProductRepository {
 
     suspend fun fetchProductById(id: Int){
         try {
-            val response = RetrofitInstance.productApi.getProductById(id)
+            val response = RetrofitInstance.api.getProductById(id)
             _selectedProduct.postValue(response)
         } catch (e: Exception){
             android.util.Log.e("API_ERROR", e.toString(), e)
         }
     }
 
-    suspend fun fetchRecommendedProducts(page: Int, size: Int): PageResponse<ProductResponse> {
-        return RetrofitInstance.productApi.getRecommendedProducts(page, size)
+    suspend fun fetchRecommendedProducts(page: Int): PageResponse<ProductResponse> {
+        return RetrofitInstance.api.getRecommendedProducts(page)
     }
 }

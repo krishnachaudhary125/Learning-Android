@@ -12,7 +12,7 @@ class HotDealCategoryRepository {
 
     suspend fun fetchHotDealCategories() {
         try {
-            val categories = RetrofitInstance.productApi.getHotDealCategories()
+            val categories = RetrofitInstance.api.getHotDealCategories()
             _hotDealCategories.postValue(categories.take(7))
         } catch (e: Exception) {
             e.printStackTrace()

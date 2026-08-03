@@ -1,8 +1,10 @@
 package com.example.eSewaMarket.ui.adapters
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -73,10 +75,37 @@ class ProductAdapter(
             productTitle.text = product.title
             brand.text = product.category.name
             price.text = product.price.toString()
+            if(product.stock != 0){
+                soldOut.visibility = View.GONE
+                addCartBtn.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(root.context, R.color.green)
+                )
+                plusProduct.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(root.context, R.color.white)
+                )
+                plusProduct.isEnabled = true
+            }else{
+                soldOut.visibility = View.VISIBLE
+                addCartBtn.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(root.context, R.color.addToCartSoldOut)
+                )
+                plusProduct.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(root.context, R.color.text_dark)
+                )
+                plusProduct.isEnabled = false
+            }
 
             Glide.with(productImage.context)
                 .load(product.thumbnail)
                 .into(productImage)
+
+            if (product.discountPercentage != null){
+                val dis = product.discountPercentage.toInt()
+                discount.text = "${dis}% OFF"
+                discount.visibility = View.VISIBLE
+            }else{
+                discount.visibility = View.GONE
+            }
 
             imageContainer.setOnClickListener {
                 onClick(product)
