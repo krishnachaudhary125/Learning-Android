@@ -329,10 +329,12 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvSimilarProduct"
                         style="@style/Widget.Card.Wrap"
+                        android:layout_width="0dp"
                         android:layout_marginTop="@dimen/margin_medium"
                         android:layout_marginHorizontal="@dimen/margin_medium"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/shopNowLayout"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -348,7 +350,7 @@
 
                         <androidx.cardview.widget.CardView
                             style="@style/Widget.Card.MatchWrap"
-                            app:cardBackgroundColor="#E2E0E0"
+                            app:cardBackgroundColor="#F9F9F9"
                             app:cardCornerRadius="16dp"
                             android:minWidth="136dp"
                             android:minHeight="84dp">
@@ -385,6 +387,7 @@
                                     android:text="Based on "
                                     app:layout_constraintTop_toBottomOf="@id/avgRating"
                                     app:layout_constraintStart_toStartOf="@id/ratingBox"/>
+
                                 <TextView
                                     android:id="@+id/totalReviews"
                                     style="@style/Widget.Card.Wrap"
@@ -393,6 +396,7 @@
                                     android:textColor="@color/text_dark"
                                     app:layout_constraintTop_toBottomOf="@id/avgRating"
                                     app:layout_constraintStart_toEndOf="@id/basedOn"/>
+
                                 <TextView
                                     style="@style/Widget.Card.Wrap"
                                     android:text=" reviews"
@@ -401,6 +405,15 @@
                                     android:textColor="@color/text_dark"
                                     app:layout_constraintTop_toBottomOf="@id/avgRating"
                                     app:layout_constraintStart_toEndOf="@id/totalReviews"/>
+
+                                <include
+                                    android:id="@+id/ratingStar"
+                                    layout="@layout/custom_rating_bar"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_small"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/basedOn"/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 

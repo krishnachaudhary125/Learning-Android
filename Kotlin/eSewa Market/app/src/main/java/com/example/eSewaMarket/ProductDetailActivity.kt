@@ -34,6 +34,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
@@ -77,7 +78,11 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
 
-        val width = (resources.displayMetrics.widthPixels * 0.45).toInt()
+        val screenWidth = resources.displayMetrics.widthPixels
+        val desiredWidth = (screenWidth * 0.45f).toInt()
+
+        val maxWidth = (180 * resources.displayMetrics.density).toInt()
+        val width = minOf(desiredWidth, maxWidth)
 
         similarProductAdapter = ProductAdapter(
             productCountViewModel,
@@ -182,6 +187,7 @@ class ProductDetailActivity : AppCompatActivity() {
                 binding.bottomAddToCartBtn.isEnabled = false
             }
             binding.productDescription.text = product.description
+            setRating(product.rating.toFloat())
             imageGalleryAdapter.submitList(product.images)
 
             binding.vpProductImage.adapter = imageGalleryAdapter
@@ -302,6 +308,30 @@ class ProductDetailActivity : AppCompatActivity() {
                         R.drawable.ic_fav
                 )
             }
+        }
+    }
+
+    private fun setRating(rating: Float){
+        val rounded = (rating * 2).roundToInt() / 2f
+
+        val stars = listOf(
+            binding.ratingStar.star1,
+            binding.ratingStar.star2,
+            binding.ratingStar.star3,
+            binding.ratingStar.star4,
+            binding.ratingStar.star5
+        )
+        
+        stars.forEachIndexed { index, view ->
+            val value = rounded -  index
+
+            view.setImageResource(
+                when{
+                    value >= 1f -> R.drawable.ic_star_filled
+                    value >= 0.5f -> R.drawable.ic_star_half
+                    else -> R.drawable.ic_star_empty
+                }
+            )
         }
     }
 }
