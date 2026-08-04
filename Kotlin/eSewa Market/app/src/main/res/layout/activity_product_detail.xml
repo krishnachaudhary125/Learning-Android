@@ -305,7 +305,8 @@
                             app:cardBackgroundColor="#F9F9F9"
                             app:cardCornerRadius="16dp"
                             android:minWidth="136dp"
-                            android:minHeight="84dp">
+                            android:minHeight="84dp"
+                            android:elevation="0dp">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/ratingBox"
@@ -363,9 +364,18 @@
                                     layout="@layout/custom_rating_bar"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/margin_small"
+                                    android:layout_marginTop="@dimen/margin_medium"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/basedOn"/>
+
+                                <include
+                                    android:id="@+id/ratingProgressBar"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    layout="@layout/progress_bar_rating"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
