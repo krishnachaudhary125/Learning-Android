@@ -27,6 +27,7 @@ import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
 import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
+import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
@@ -40,7 +41,7 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var imageGalleryAdapter: ProductImageAdapter
-    private lateinit var similarProductAdapter: ProductAdapter
+    private lateinit var similarProductAdapter: SimilarProductAdapter
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(
@@ -84,7 +85,7 @@ class ProductDetailActivity : AppCompatActivity() {
         val maxWidth = (180 * resources.displayMetrics.density).toInt()
         val width = minOf(desiredWidth, maxWidth)
 
-        similarProductAdapter = ProductAdapter(
+        similarProductAdapter = SimilarProductAdapter(
             productCountViewModel,
             width
         ) { product ->
@@ -125,6 +126,9 @@ class ProductDetailActivity : AppCompatActivity() {
 
         viewModel.similarProducts.observe(this) { products ->
             similarProductAdapter.submitList(products.take(5))
+            binding.rvSimilarProduct.post {
+                binding.rvSimilarProduct.scrollToPosition(0)
+            }
         }
     }
 
