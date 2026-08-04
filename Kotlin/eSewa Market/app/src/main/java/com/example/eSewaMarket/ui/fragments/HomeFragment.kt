@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -19,6 +20,7 @@ import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentHomeBinding
 import com.example.eSewaMarket.ui.adapters.BannerPagerAdapter
 import com.example.eSewaMarket.ui.adapters.CategoryAdapter
@@ -32,6 +34,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class HomeFragment : Fragment() {
@@ -49,6 +52,7 @@ class HomeFragment : Fragment() {
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
     private lateinit var recommendedAdapter: RecommendedProductAdapter
+    private lateinit var userSessionRepository: UserSessionRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +60,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        userSessionRepository = UserSessionRepository(requireContext())
         ViewCompat.setOnApplyWindowInsetsListener(binding.homeAppBar.appBar) { view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
@@ -119,6 +124,21 @@ class HomeFragment : Fragment() {
         binding.floatingSellButton.setOnClickListener {
             val intent = Intent(requireContext(), PostProductActivity::class.java)
             startActivity(intent)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userSessionRepository.isLoggedIn.collect { isLoggedIn ->
+
+                if (isLoggedIn) {
+                    userSessionRepository.user.collect { user ->
+                        binding.homeAppBar.userName.text = "${user.name},"
+                    }
+                } else {
+                    userSessionRepository.user.collect { user ->
+                        binding.homeAppBar.userName.text = "User,"
+                    }
+                }
+            }
         }
     }
 
