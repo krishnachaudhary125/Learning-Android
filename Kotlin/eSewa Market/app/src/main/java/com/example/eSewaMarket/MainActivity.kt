@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentToOpen = intent.getStringExtra("open_fragment")
         when (fragmentToOpen) {
             "cart" -> loadFragment(CartFragment())
+            "favourite" -> loadFragment(FavouriteFragment())
         }
 
         val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)

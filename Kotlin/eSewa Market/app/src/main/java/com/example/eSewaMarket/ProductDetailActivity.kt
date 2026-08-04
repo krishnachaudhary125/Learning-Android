@@ -31,6 +31,8 @@ import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
+import com.example.eSewaMarket.utils.SnackBarUtil
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -236,6 +238,16 @@ class ProductDetailActivity : AppCompatActivity() {
 
             binding.bottomAddToCartBtn.setOnClickListener {
                 productCountViewModel.addToCart(id.toString())
+                SnackBarUtil.show(
+                    view = binding.root,
+                    context = this,
+                    text = "Added to cart successfully.",
+                    anchorView = binding.productDetailBottomNav,
+                    actionText = "GO TO CART"){
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("open_fragment", "cart")
+                    startActivity(intent)
+                }
             }
 
             binding.plusProductBtn.setOnClickListener {
@@ -251,10 +263,21 @@ class ProductDetailActivity : AppCompatActivity() {
                     val isFav = productCountViewModel.isFavourite(id.toString()).first()
 
                     if (isFav) {
-
                         productCountViewModel.removeFromFavourites(id.toString())
                     } else {
                         productCountViewModel.addToFavourites(id.toString())
+
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Added to favourite successfully.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO FAVOURITE"
+                        ){
+                            val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
+                            intent.putExtra("open_fragment", "favourite")
+                            startActivity(intent)
+                        }
                     }
                 }
             }
