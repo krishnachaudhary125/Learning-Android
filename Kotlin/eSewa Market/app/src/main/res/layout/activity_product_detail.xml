@@ -386,6 +386,11 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    style="@style/Widget.Card.MatchWrap">
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -150,10 +150,8 @@ class RecommendedProductAdapter(
         }
         when (holder) {
             is LoadingViewHolder -> {
-                Glide.with(holder.binding.root)
-                    .asGif()
-                    .load(R.drawable.loading)
-                    .into(holder.binding.loading)
+                holder.binding.loading
+                holder.binding.loadingText
             }
         }
     }

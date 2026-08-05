@@ -240,9 +240,7 @@
                 android:id="@+id/spacingForLoading"
                 style="@style/Widget.Card.Wrap"
                 android:layout_marginBottom="78dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:orientation="vertical"/>
 
         </LinearLayout>
 
