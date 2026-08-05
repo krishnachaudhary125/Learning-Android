@@ -50,66 +50,38 @@ class MainActivity : AppCompatActivity() {
             loadFragment(HomeFragment())
         }
 
-        val fragmentToOpen = intent.getStringExtra("open_fragment")
-        when (fragmentToOpen) {
-            "cart" -> loadFragment(CartFragment())
-            "favourite" -> loadFragment(FavouriteFragment())
-        }
-
         val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
         val cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
         val favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
         val more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
 
+        val fragmentToOpen = intent.getStringExtra("open_fragment")
+        when (fragmentToOpen) {
+            "cart" -> openFragment(CartFragment(), cart, shop, favourite, more, 2)
+            "favourite" -> openFragment(FavouriteFragment(), favourite, shop, cart, more, 3)
+        }
+
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
-                loadFragment(HomeFragment())
-
-                onSelect(shop)
-                onDeselect(cart)
-                onDeselect(favourite)
-                onDeselect(more)
-
-                selectedTab = 1
+                openFragment(HomeFragment() ,shop, cart, favourite, more, 1)
             }
         }
 
         binding.bottomNav.cartButton.setOnClickListener {
             if (selectedTab != 2) {
-                loadFragment(CartFragment())
-
-                onSelect(cart)
-                onDeselect(shop)
-                onDeselect(favourite)
-                onDeselect(more)
-
-                selectedTab = 2
+                openFragment(CartFragment(), cart, shop, favourite, more, 2)
             }
         }
 
         binding.bottomNav.favouriteButton.setOnClickListener {
             if (selectedTab != 3) {
-                loadFragment(FavouriteFragment())
-
-                onSelect(favourite)
-                onDeselect(shop)
-                onDeselect(cart)
-                onDeselect(more)
-
-                selectedTab = 3
+                openFragment(FavouriteFragment(), favourite, shop, cart, more, 3)
             }
         }
 
         binding.bottomNav.moreButon.setOnClickListener {
             if (selectedTab != 4) {
-                loadFragment(MoreFragment())
-
-                onSelect(more)
-                onDeselect(shop)
-                onDeselect(cart)
-                onDeselect(favourite)
-
-                selectedTab = 4
+                openFragment(MoreFragment(), more, shop, cart, favourite, 4)
             }
         }
 
@@ -168,5 +140,16 @@ class MainActivity : AppCompatActivity() {
         item.icon.imageTintList =
             ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
         item.button.setBackgroundResource(android.R.color.transparent)
+    }
+
+    fun openFragment(fragment: Fragment, select: NavItem, deselect1: NavItem, deselect2: NavItem, deselect3: NavItem, selectedTabValue: Int){
+        loadFragment(fragment)
+
+        onSelect(select)
+        onDeselect(deselect1)
+        onDeselect(deselect2)
+        onDeselect(deselect3)
+
+        selectedTab = selectedTabValue
     }
 }
