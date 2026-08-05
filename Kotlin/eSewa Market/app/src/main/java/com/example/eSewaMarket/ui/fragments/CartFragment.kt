@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.eSewaMarket.LoginActivity
+import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.repository.ProductCountRepository
@@ -65,6 +66,11 @@ class CartFragment : Fragment() {
         binding.toolbarCart.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarCart.toolbarIcon.backgroundTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.esewa_bg_light))
+
+        binding.continueShoppingBtn.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+        }
 
         return binding.root
     }
