@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
             activeFragment = homeFragment
-
             onSelect(shop)
         }
 
@@ -123,7 +122,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var activeFragment: Fragment = homeFragment
-
     private fun switchFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
 
