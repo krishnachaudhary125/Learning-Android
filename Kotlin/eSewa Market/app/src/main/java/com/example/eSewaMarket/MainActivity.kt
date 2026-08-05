@@ -47,18 +47,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (savedInstanceState == null) {
-            switchFragment(HomeFragment())
-        }
-
-        if(intent.getBooleanExtra("openHome", false)){
-            switchFragment(HomeFragment())
-        }
-
         val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
         val cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
         val favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
         val more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.mainFrame, homeFragment)
+                .commit()
+
+            activeFragment = homeFragment
+
+            onSelect(shop)
+        }
+
+        if(intent.getBooleanExtra("openHome", false)){
+            switchFragment(homeFragment)
+        }
 
         val fragmentToOpen = intent.getStringExtra("open_fragment")
         when (fragmentToOpen) {
