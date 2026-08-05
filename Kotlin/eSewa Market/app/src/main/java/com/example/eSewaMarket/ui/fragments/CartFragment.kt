@@ -12,7 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
@@ -23,7 +25,6 @@ import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentCartBinding
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
-import com.example.eSewaMarket.ui.viewmodel.HomeViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.utils.AuthNavigator
@@ -88,6 +89,19 @@ class CartFragment : Fragment() {
                     cartViewModel.loadMoreRecommended()
                 }
             })
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                productCountViewModel.cartCount.collect { count ->
+                    if (count > 0) {
+                        binding.toolbarCart.numOfProductInCart.text = count.toString()
+                        binding.toolbarCart.numOfProductInCart.visibility = View.VISIBLE
+                    } else {
+                        binding.toolbarCart.numOfProductInCart.visibility = View.GONE
+                    }
+                }
+            }
+        }
     }
 
     private fun initAdapters() {
@@ -126,10 +140,6 @@ class CartFragment : Fragment() {
             resources.configuration.screenWidthDp >= 600 -> 3
             else -> 2
         }
-    }
-
-    private fun getItemsToShow(rows: Int): Int {
-        return rows * getProductSpanCount()
     }
 
     private fun createRecommendedProductAdapter(): RecommendedProductAdapter{
