@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private val homeFragment = HomeFragment()
+    private val cartFragment = CartFragment()
+    private val favouriteFragment = FavouriteFragment()
+    private val moreFragment = MoreFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Thread.sleep(1000)
@@ -43,11 +48,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            loadFragment(HomeFragment())
+            switchFragment(HomeFragment())
         }
 
         if(intent.getBooleanExtra("openHome", false)){
-            loadFragment(HomeFragment())
+            switchFragment(HomeFragment())
         }
 
         val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
@@ -57,31 +62,31 @@ class MainActivity : AppCompatActivity() {
 
         val fragmentToOpen = intent.getStringExtra("open_fragment")
         when (fragmentToOpen) {
-            "cart" -> openFragment(CartFragment(), cart, shop, favourite, more, 2)
-            "favourite" -> openFragment(FavouriteFragment(), favourite, shop, cart, more, 3)
+            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
+            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
         }
 
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
-                openFragment(HomeFragment() ,shop, cart, favourite, more, 1)
+                openFragment(homeFragment ,shop, cart, favourite, more, 1)
             }
         }
 
         binding.bottomNav.cartButton.setOnClickListener {
             if (selectedTab != 2) {
-                openFragment(CartFragment(), cart, shop, favourite, more, 2)
+                openFragment(cartFragment, cart, shop, favourite, more, 2)
             }
         }
 
         binding.bottomNav.favouriteButton.setOnClickListener {
             if (selectedTab != 3) {
-                openFragment(FavouriteFragment(), favourite, shop, cart, more, 3)
+                openFragment(favouriteFragment, favourite, shop, cart, more, 3)
             }
         }
 
         binding.bottomNav.moreButon.setOnClickListener {
             if (selectedTab != 4) {
-                openFragment(MoreFragment(), more, shop, cart, favourite, 4)
+                openFragment(moreFragment, more, shop, cart, favourite, 4)
             }
         }
 
@@ -111,12 +116,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrame, fragment)
-            .commit()
-    }
+    private var activeFragment: Fragment = homeFragment
 
+    private fun switchFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+
+        if (!fragment.isAdded) {
+            transaction.hide(activeFragment)
+                .add(R.id.mainFrame, fragment)
+        } else {
+            transaction.hide(activeFragment)
+                .show(fragment)
+        }
+
+        transaction.commit()
+        activeFragment = fragment
+    }
 
     private fun onSelect(item: NavItem) {
         item.label.visibility = View.VISIBLE
@@ -143,7 +158,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openFragment(fragment: Fragment, select: NavItem, deselect1: NavItem, deselect2: NavItem, deselect3: NavItem, selectedTabValue: Int){
-        loadFragment(fragment)
+        switchFragment(fragment)
 
         onSelect(select)
         onDeselect(deselect1)
