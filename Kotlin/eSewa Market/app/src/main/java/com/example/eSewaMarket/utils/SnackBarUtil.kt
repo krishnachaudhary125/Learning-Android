@@ -17,26 +17,26 @@ object SnackBarUtil {
         actionText: String? = null,
         action: (() -> Unit)? = null
     ) {
-        val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+        val snackBar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
 
-        anchorView?.let { snackbar.setAnchorView(it) }
+        anchorView?.let { snackBar.setAnchorView(it) }
 
-        snackbar.setBackgroundTint(ContextCompat.getColor(context, R.color.black))
-        snackbar.setTextColor(ContextCompat.getColor(context, R.color.white))
-        snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.green))
-        snackbar.view.setPadding(
-            snackbar.view.paddingStart,
+        snackBar.setBackgroundTint(ContextCompat.getColor(context, R.color.black))
+        snackBar.setTextColor(ContextCompat.getColor(context, R.color.white))
+        snackBar.setActionTextColor(ContextCompat.getColor(context, R.color.green))
+        snackBar.view.setPadding(
+            snackBar.view.paddingStart,
             8,
-            snackbar.view.paddingEnd,
+            snackBar.view.paddingEnd,
             8
         )
 
         if (actionText != null && action != null) {
-            snackbar.setAction(actionText) {
+            snackBar.setAction(actionText) {
                 action()
             }
         }
 
-        snackbar.show()
+        snackBar.show()
     }
 }

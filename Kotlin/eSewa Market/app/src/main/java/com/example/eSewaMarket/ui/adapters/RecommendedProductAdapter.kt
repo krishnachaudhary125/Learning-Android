@@ -21,12 +21,13 @@ import kotlinx.coroutines.launch
 
 private const val TYPE_ITEM = 0
 private const val TYPE_LOADING = 1
-var numProduct = 0
-var isFavourite = false
 
 class RecommendedProductAdapter(
     private val viewModel: ProductCountViewModel,
-    private val onClick: (ProductResponse) -> Unit
+    private val onClick: (ProductResponse) -> Unit,
+    private val onAddToCartClick: (String) -> Unit,
+    private val onRemoveOneFromCartClick: (String) -> Unit,
+    private val onFavouriteClick: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<ProductResponse>()
@@ -106,14 +107,16 @@ class RecommendedProductAdapter(
                     discount.visibility = View.GONE
                 }
 
-                imageContainer.setOnClickListener { onClick(product) }
+                imageContainer.setOnClickListener {
+                    onClick(product)
+                }
 
                 plusProduct.setOnClickListener {
-                    viewModel.addToCart(productId)
+                    onAddToCartClick(productId)
                 }
 
                 minusProduct.setOnClickListener {
-                    viewModel.removeOneFromCart(productId)
+                    onRemoveOneFromCartClick(productId)
                 }
 
                 holder.quantityJob?.cancel()
@@ -129,7 +132,7 @@ class RecommendedProductAdapter(
                 }
 
                 holder.favouriteJob?.cancel()
-                holder.scope.launch {
+                holder.favouriteJob = holder.scope.launch {
                     viewModel.isFavourite(productId).collect { isFav ->
                         favourite.setImageResource(
                             if (isFav)
@@ -141,15 +144,7 @@ class RecommendedProductAdapter(
                 }
 
                 favourite.setOnClickListener {
-                    holder.scope.launch {
-                        val isFav = viewModel.isFavourite(productId).first()
-
-                        if (isFav) {
-                            viewModel.removeFromFavourites(productId)
-                        } else {
-                            viewModel.addToFavourites(productId)
-                        }
-                    }
+                    onFavouriteClick(productId)
                 }
             }
         }

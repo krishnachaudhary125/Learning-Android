@@ -9,7 +9,6 @@ import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -17,22 +16,21 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
-import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
+import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -44,6 +42,8 @@ class ProductDetailActivity : AppCompatActivity() {
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var imageGalleryAdapter: ProductImageAdapter
     private lateinit var similarProductAdapter: SimilarProductAdapter
+    private lateinit var authNavigator: AuthNavigator
+    private lateinit var userSessionRepository: UserSessionRepository
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(
@@ -80,6 +80,9 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
+
+        userSessionRepository = UserSessionRepository(applicationContext)
+        authNavigator = AuthNavigator(userSessionRepository)
 
         val screenWidth = resources.displayMetrics.widthPixels
         val desiredWidth = (screenWidth * 0.45f).toInt()
@@ -237,16 +240,32 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.bottomAddToCartBtn.setOnClickListener {
-                productCountViewModel.addToCart(id.toString())
-                SnackBarUtil.show(
-                    view = binding.root,
-                    context = this,
-                    text = "Added to cart successfully.",
-                    anchorView = binding.productDetailBottomNav,
-                    actionText = "GO TO CART"){
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("open_fragment", "cart")
-                    startActivity(intent)
+                lifecycleScope.launch {
+                    if(authNavigator.isLoggedIn()){
+                        productCountViewModel.addToCart(id.toString())
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Added to cart successfully.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO CART"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
+                            intent.putExtra("open_fragment", "cart")
+                            startActivity(intent)
+                        }
+                    }else{
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Login to continue.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
                 }
             }
 
@@ -259,23 +278,36 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.favBtn.setOnClickListener {
-                favouriteJob = lifecycleScope.launch {
-                    val isFav = productCountViewModel.isFavourite(id.toString()).first()
+                lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        val isFav = productCountViewModel.isFavourite(id.toString()).first()
 
-                    if (isFav) {
-                        productCountViewModel.removeFromFavourites(id.toString())
-                    } else {
-                        productCountViewModel.addToFavourites(id.toString())
+                        if (isFav) {
+                            productCountViewModel.removeFromFavourites(id.toString())
+                        } else {
+                            productCountViewModel.addToFavourites(id.toString())
 
+                            SnackBarUtil.show(
+                                view = binding.root,
+                                context = this@ProductDetailActivity,
+                                text = "Added to favourite successfully.",
+                                anchorView = binding.productDetailBottomNav,
+                                actionText = "GO TO FAVOURITE"
+                            ) {
+                                val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
+                                intent.putExtra("open_fragment", "favourite")
+                                startActivity(intent)
+                            }
+                        }
+                    }else{
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
-                            text = "Added to favourite successfully.",
+                            text = "Login to continue.",
                             anchorView = binding.productDetailBottomNav,
-                            actionText = "GO TO FAVOURITE"
-                        ){
-                            val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
-                            intent.putExtra("open_fragment", "favourite")
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, LoginActivity::class.java)
                             startActivity(intent)
                         }
                     }

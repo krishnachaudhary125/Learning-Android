@@ -14,11 +14,13 @@ import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
 
 class ProductAdapter(
     private val viewModel: ProductCountViewModel,
-    private val onClick: (Product) -> Unit
+    private val onClick: (Product) -> Unit,
+    private val onAddToCartClick: (String) -> Unit,
+    private val onRemoveOneFromCartClick: (String) -> Unit,
+    private val onFavouriteClick: (String) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(val binding: ItemProductBinding) :
@@ -112,11 +114,11 @@ class ProductAdapter(
             }
 
             plusProduct.setOnClickListener {
-                viewModel.addToCart(productId)
+                onAddToCartClick(productId)
             }
 
             minusProduct.setOnClickListener {
-                viewModel.removeOneFromCart(productId)
+                onRemoveOneFromCartClick(productId)
             }
 
             holder.quantityJob?.cancel()
@@ -132,7 +134,7 @@ class ProductAdapter(
             }
 
             holder.favouriteJob?.cancel()
-            holder.scope.launch {
+            holder.favouriteJob = holder.scope.launch {
                 viewModel.isFavourite(productId).collect { isFav ->
                     favourite.setImageResource(
                         if (isFav)
@@ -144,15 +146,7 @@ class ProductAdapter(
             }
 
             favourite.setOnClickListener {
-                holder.scope.launch {
-                    val isFav = viewModel.isFavourite(productId).first()
-
-                    if (isFav) {
-                        viewModel.removeFromFavourites(productId)
-                    } else {
-                        viewModel.addToFavourites(productId)
-                    }
-                }
+                onFavouriteClick(productId)
             }
         }
     }
