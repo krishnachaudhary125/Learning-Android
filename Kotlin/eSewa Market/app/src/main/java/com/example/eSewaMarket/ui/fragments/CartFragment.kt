@@ -96,6 +96,20 @@ class CartFragment : Fragment() {
             startActivity(intent)
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartViewModel.cartCount().collect { count ->
+                    binding.itemCount.text = "(${count})"
+
+                    if(count>0){
+                        binding.emptyCartLayout.visibility = View.GONE
+                    }
+                    else{
+                        binding.emptyCartLayout.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
         return binding.root
     }
 

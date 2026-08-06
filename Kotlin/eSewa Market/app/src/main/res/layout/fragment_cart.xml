@@ -38,12 +38,12 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:textColor="@color/text_dark_300"
                     android:textSize="14sp"
-                    android:letterSpacing="0.05"
-                    android:text="(1)"/>
+                    android:letterSpacing="0.05"/>
 
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
                 android:id="@+id/emptyCartLayout"
                 style="@style/Widget.Card.MatchWrap"
                 app:cardCornerRadius="16dp"
@@ -93,6 +93,11 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCartProduct"
+               style="@style/Widget.Card.MatchWrap"
+                android:layout_marginHorizontal="@dimen/margin_medium"/>
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"

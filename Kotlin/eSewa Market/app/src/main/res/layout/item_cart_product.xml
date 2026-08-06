@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Widget.Card.MatchWrap">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageLayout"
+            style="@style/Widget.Card.Wrap"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="@dimen/margin_medium"
+            app:cardCornerRadius="16dp">
+
+            <ImageView
+                android:id="@+id/productImage"
+                style="@style/Widget.Card.Wrap"
+                android:minWidth="90dp"
+                android:minHeight="90dp"
+                android:background="@color/cart_image_bg"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            style="@style/Widget.Card.Wrap"
+            android:layout_margin="@dimen/margin_medium"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@id/imageLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/productName"
+                style="@style/Widget.Card.Wrap"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:letterSpacing="0.05"
+                android:paddingVertical="@dimen/padding_small"/>
+
+            <TextView
+                android:id="@+id/productBrand"
+                style="@style/Widget.Card.Wrap"
+                android:textSize="10sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/text_dark_200"/>
+
+            <LinearLayout
+                style="@style/Widget.Card.Wrap"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Widget.Card.Wrap"
+                    android:textColor="@color/green"
+                    android:textSize="14sp"
+                    android:text="Rs. "/>
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    style="@style/Widget.Card.Wrap"
+                    android:textColor="@color/green"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:paddingVertical="@dimen/padding_small"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/addCartBtn"
+            android:layout_width="wrap_content"
+            android:minWidth="36dp"
+            android:layout_height="wrap_content"
+            android:minHeight="42dp"
+            android:background="@drawable/add_cart_green_button"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/minusProduct"
+                android:visibility="gone"
+                android:paddingVertical="@dimen/margin_medium"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="16dp"
+                android:minHeight="16dp"
+                android:src="@drawable/ic_minus"
+                android:background="@null"/>
+
+            <TextView
+                android:id="@+id/numOfProduct"
+                android:visibility="gone"
+                style="@style/Widget.Card.Wrap"
+                android:paddingVertical="@dimen/padding_small"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="00"
+                android:textColor="@color/white"/>
+
+            <ImageButton
+                android:id="@+id/plusProduct"
+                android:paddingVertical="@dimen/margin_medium"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="16dp"
+                android:minHeight="16dp"
+                android:src="@drawable/ic_plus"
+                android:background="@null"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
