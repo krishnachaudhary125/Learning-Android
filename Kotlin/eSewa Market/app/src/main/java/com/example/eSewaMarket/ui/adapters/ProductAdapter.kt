@@ -12,15 +12,15 @@ import com.bumptech.glide.Glide
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemProductBinding
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import kotlinx.coroutines.*
 
 class ProductAdapter(
-    private val viewModel: ProductCountViewModel,
+    private val cartViewModel: CartViewModel,
     private val onClick: (Product) -> Unit,
-    private val onAddToCartClick: (String) -> Unit,
-    private val onRemoveOneFromCartClick: (String) -> Unit,
-    private val onFavouriteClick: (String) -> Unit
+    private val onAddToCartClick: (Long) -> Unit,
+    private val onRemoveOneFromCartClick: (Long) -> Unit
+//    private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(val binding: ItemProductBinding) :
@@ -70,7 +70,7 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
         val product = productList[position]
-        val productId = product.id.toString()
+        val productId = product.id.toLong()
 
         holder.binding.apply {
 
@@ -123,7 +123,7 @@ class ProductAdapter(
 
             holder.quantityJob?.cancel()
             holder.quantityJob = holder.scope.launch {
-                viewModel.quantityOf(productId).collect { qty ->
+                cartViewModel.productQuantity(productId).collect { qty ->
 
                     numOfProduct.text = qty.toString()
 
@@ -133,21 +133,21 @@ class ProductAdapter(
                 }
             }
 
-            holder.favouriteJob?.cancel()
-            holder.favouriteJob = holder.scope.launch {
-                viewModel.isFavourite(productId).collect { isFav ->
-                    favourite.setImageResource(
-                        if (isFav)
-                            R.drawable.ic_fav_filled
-                        else
-                            R.drawable.ic_fav
-                    )
-                }
-            }
-
-            favourite.setOnClickListener {
-                onFavouriteClick(productId)
-            }
+//            holder.favouriteJob?.cancel()
+//            holder.favouriteJob = holder.scope.launch {
+//                viewModel.isFavourite(productId).collect { isFav ->
+//                    favourite.setImageResource(
+//                        if (isFav)
+//                            R.drawable.ic_fav_filled
+//                        else
+//                            R.drawable.ic_fav
+//                    )
+//                }
+//            }
+//
+//            favourite.setOnClickListener {
+//                onFavouriteClick(productId)
+//            }
         }
     }
 

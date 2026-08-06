@@ -11,23 +11,22 @@ import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.databinding.ItemLoadingBinding
 import com.example.eSewaMarket.databinding.ItemProductBinding
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 private const val TYPE_ITEM = 0
 private const val TYPE_LOADING = 1
 
 class RecommendedProductAdapter(
-    private val viewModel: ProductCountViewModel,
+    private val cartViewModel: CartViewModel,
     private val onClick: (ProductResponse) -> Unit,
-    private val onAddToCartClick: (String) -> Unit,
-    private val onRemoveOneFromCartClick: (String) -> Unit,
-    private val onFavouriteClick: (String) -> Unit
+    private val onAddToCartClick: (Long) -> Unit,
+    private val onRemoveOneFromCartClick: (Long) -> Unit
+//    private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<ProductResponse>()
@@ -70,7 +69,7 @@ class RecommendedProductAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ProductViewHolder) {
             val product = items[position]
-            val productId = product.id.toString()
+            val productId = product.id
             holder.binding.apply {
                 productTitle.text = product.title
                 brand.text = product.category.name
@@ -121,7 +120,7 @@ class RecommendedProductAdapter(
 
                 holder.quantityJob?.cancel()
                 holder.quantityJob = holder.scope.launch {
-                    viewModel.quantityOf(productId).collect { qty ->
+                    cartViewModel.productQuantity(productId).collect { qty ->
 
                         numOfProduct.text = qty.toString()
 
@@ -131,21 +130,21 @@ class RecommendedProductAdapter(
                     }
                 }
 
-                holder.favouriteJob?.cancel()
-                holder.favouriteJob = holder.scope.launch {
-                    viewModel.isFavourite(productId).collect { isFav ->
-                        favourite.setImageResource(
-                            if (isFav)
-                                R.drawable.ic_fav_filled
-                            else
-                                R.drawable.ic_fav
-                        )
-                    }
-                }
-
-                favourite.setOnClickListener {
-                    onFavouriteClick(productId)
-                }
+//                holder.favouriteJob?.cancel()
+//                holder.favouriteJob = holder.scope.launch {
+//                    cartViewModel.isFavourite(productId).collect { isFav ->
+//                        favourite.setImageResource(
+//                            if (isFav)
+//                                R.drawable.ic_fav_filled
+//                            else
+//                                R.drawable.ic_fav
+//                        )
+//                    }
+//                }
+//
+//                favourite.setOnClickListener {
+//                    onFavouriteClick(productId)
+//                }
             }
         }
         when (holder) {

@@ -1,59 +1,28 @@
 package com.example.eSewaMarket.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eSewaMarket.data.models.ProductResponse
-import com.example.eSewaMarket.data.repository.ProductRepository
-import kotlinx.coroutines.delay
+import com.example.eSewaMarket.data.repository.CartRepository
 import kotlinx.coroutines.launch
 
-class CartViewModel : ViewModel() {
-    private val productRepository = ProductRepository()
-    private val _recommendedProducts = MutableLiveData<List<ProductResponse>>(emptyList())
-    val recommendedProducts: LiveData<List<ProductResponse>> = _recommendedProducts
-    private val _recommendedLoading = MutableLiveData(false)
-    val recommendedLoading: LiveData<Boolean> = _recommendedLoading
-    private var recommendedPage = 0
-    private var isLoadingRecommended = false
-    private var isLastRecommendedPage = false
+class CartViewModel(
+    private val repository: CartRepository
+) : ViewModel() {
 
-    init {
-        loadAllData()
-    }
+    fun cartCount() = repository.totalQuantity()
 
-    private fun loadAllData() {
-        loadMoreRecommended()
-    }
-
-    fun loadMoreRecommended() {
-        if (isLoadingRecommended || isLastRecommendedPage) return
-
-        isLoadingRecommended = true
-        _recommendedLoading.value = true
-
+    fun addToCart(productId: Long) {
         viewModelScope.launch {
-            try {
-                val response = productRepository.fetchRecommendedProducts(
-                    page = recommendedPage
-                )
-
-                delay(1000)
-
-                val current = _recommendedProducts.value.orEmpty()
-                _recommendedProducts.value = current + response.content
-
-                isLastRecommendedPage = response.last
-                recommendedPage++
-
-            } catch (e: Exception) {
-                Log.e("API_ERROR", "loadMoreRecommended failed", e)
-            } finally {
-                isLoadingRecommended = false
-                _recommendedLoading.value = false
-            }
+            repository.addToCart(productId)
         }
     }
+
+    fun removeOneFromCart(productId: Long) {
+        viewModelScope.launch {
+            repository.removeOneFromCart(productId)
+        }
+    }
+
+    fun productQuantity(productId: Long) =
+        repository.productQuantity(productId)
 }

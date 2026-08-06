@@ -9,27 +9,37 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.databinding.ActivityMainBinding
 import com.example.eSewaMarket.data.models.NavItem
+import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
+import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.fragments.CartFragment
 import com.example.eSewaMarket.ui.fragments.FavouriteFragment
 import com.example.eSewaMarket.ui.fragments.HomeFragment
 import com.example.eSewaMarket.ui.fragments.MoreFragment
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
 
-    private val productCountViewModel: ProductCountViewModel by viewModels {
-        ProductCountViewModelFactory(
-            ProductCountRepository(applicationContext)
+    private val cartViewModel: CartViewModel by viewModels {
+        CartViewModelFactory(
+            CartRepository(
+                AppDatabase.getDatabase(this).cartDao(),
+                UserSessionRepository(this.applicationContext)
+            )
         )
     }
 
@@ -97,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productCountViewModel.cartCount.collect { count ->
+                cartViewModel.cartCount().collect { count ->
                     if (count > 0){
                         binding.bottomNav.numOfProductInCart.text = count.toString()
                         binding.bottomNav.numOfProductInCart.visibility = View.VISIBLE
@@ -108,17 +118,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productCountViewModel.favouriteCount.collect { count ->
-
-                    binding.bottomNav.numOfProductInFavourite.visibility =
-                        if (count > 0) View.VISIBLE else View.GONE
-
-                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                productCountViewModel.favouriteCount.collect { count ->
+//
+//                    binding.bottomNav.numOfProductInFavourite.visibility =
+//                        if (count > 0) View.VISIBLE else View.GONE
+//
+//                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
+//                }
+//            }
+//        }
     }
 
     private var activeFragment: Fragment = homeFragment
