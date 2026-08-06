@@ -20,12 +20,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.data.models.Product
+import com.example.eSewaMarket.data.repository.CartRepository
+import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.ProductCountRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
+import com.example.eSewaMarket.ui.factory.CartViewModelFactory
+import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
@@ -45,9 +51,24 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var authNavigator: AuthNavigator
     private lateinit var userSessionRepository: UserSessionRepository
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
-    private val productCountViewModel: ProductCountViewModel by viewModels {
-        ProductCountViewModelFactory(
-            ProductCountRepository(applicationContext)
+    private val cartViewModel: CartViewModel by viewModels {
+        val app = this.application as EsewaMarketApplication
+
+        CartViewModelFactory(
+            CartRepository(
+                app.database.cartDao(),
+                UserSessionRepository(app.applicationContext)
+            )
+        )
+    }
+    private val favouriteViewModel: FavouriteViewModel by viewModels {
+        val app = this.application as EsewaMarketApplication
+
+        FavouriteViewModelFactory(
+            FavouriteRepository(
+                app.database.favouriteDao(),
+                UserSessionRepository(app.applicationContext)
+            )
         )
     }
     private var id = -1
@@ -90,15 +111,15 @@ class ProductDetailActivity : AppCompatActivity() {
         val maxWidth = (180 * resources.displayMetrics.density).toInt()
         val width = minOf(desiredWidth, maxWidth)
 
-        similarProductAdapter = SimilarProductAdapter(
-            productCountViewModel,
-            width
-        ) { product ->
-            startActivity(
-                Intent(this, ProductDetailActivity::class.java)
-                    .putExtra("product_id", product.id)
-            )
-        }
+//        similarProductAdapter = SimilarProductAdapter(
+//            productCountViewModel,
+//            width
+//        ) { product ->
+//            startActivity(
+//                Intent(this, ProductDetailActivity::class.java)
+//                    .putExtra("product_id", product.id)
+//            )
+//        }
 
         val productId = intent.getIntExtra("product_id", -1)
         if(productId == -1){
@@ -109,16 +130,16 @@ class ProductDetailActivity : AppCompatActivity() {
         setupImageGallery()
         setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
-        setupSimilarProductRecyclerView()
+//        setupSimilarProductRecyclerView()
 
         viewModel.loadProduct(productId)
-        viewModel.loadSimilarProducts()
+//        viewModel.loadSimilarProducts()
         observeCartQuantity()
         observeFavouriteQuantity()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productCountViewModel.cartCount.collect { count ->
+                cartViewModel.cartCount().collect { count ->
                     if (count > 0){
                         binding.toolbarProductDetail.numOfProductInCart.text = count.toString()
                         binding.toolbarProductDetail.numOfProductInCart.visibility = View.VISIBLE
@@ -129,12 +150,12 @@ class ProductDetailActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.similarProducts.observe(this) { products ->
-            similarProductAdapter.submitList(products.take(5))
-            binding.rvSimilarProduct.post {
-                binding.rvSimilarProduct.scrollToPosition(0)
-            }
-        }
+//        viewModel.similarProducts.observe(this) { products ->
+//            similarProductAdapter.submitList(products.take(5))
+//            binding.rvSimilarProduct.post {
+//                binding.rvSimilarProduct.scrollToPosition(0)
+//            }
+//        }
     }
 
     private fun setupImageGallery(){
@@ -157,13 +178,13 @@ class ProductDetailActivity : AppCompatActivity() {
         optionAdapters[optionName] = adapter
     }
 
-    private fun setupSimilarProductRecyclerView() {
-
-        binding.rvSimilarProduct.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        binding.rvSimilarProduct.adapter = similarProductAdapter
-    }
+//    private fun setupSimilarProductRecyclerView() {
+//
+//        binding.rvSimilarProduct.layoutManager =
+//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//
+//        binding.rvSimilarProduct.adapter = similarProductAdapter
+//    }
 
     private fun observeProduct(){
         viewModel.selectedProduct.observe(this){ product ->
@@ -242,7 +263,7 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.bottomAddToCartBtn.setOnClickListener {
                 lifecycleScope.launch {
                     if(authNavigator.isLoggedIn()){
-                        productCountViewModel.addToCart(id.toString())
+                        cartViewModel.addToCart(id.toLong())
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
@@ -270,36 +291,37 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.plusProductBtn.setOnClickListener {
-                productCountViewModel.addToCart(id.toString())
+                cartViewModel.addToCart(id.toLong())
             }
 
             binding.minusProductBtn.setOnClickListener {
-                productCountViewModel.removeOneFromCart(id.toString())
+                cartViewModel.removeOneFromCart(id.toLong())
             }
 
             binding.favBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    if (authNavigator.isLoggedIn()){
-                        val isFav = productCountViewModel.isFavourite(id.toString()).first()
+                    if (authNavigator.isLoggedIn()) {
 
-                        if (isFav) {
-                            productCountViewModel.removeFromFavourites(id.toString())
-                        } else {
-                            productCountViewModel.addToFavourites(id.toString())
+                        val wasFavourite = favouriteViewModel.isFavourite(id.toLong()).first()
+                        favouriteViewModel.toggleFavourite(id.toLong())
 
-                            SnackBarUtil.show(
-                                view = binding.root,
-                                context = this@ProductDetailActivity,
-                                text = "Added to favourite successfully.",
-                                anchorView = binding.productDetailBottomNav,
-                                actionText = "GO TO FAVOURITE"
-                            ) {
-                                val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
-                                intent.putExtra("open_fragment", "favourite")
-                                startActivity(intent)
-                            }
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = if (wasFavourite)
+                                "Removed from favourites."
+                            else
+                                "Added to favourites.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = if (wasFavourite) null else "GO TO FAVOURITE"
+                        ) {
+                            startActivity(
+                                Intent(this@ProductDetailActivity, MainActivity::class.java)
+                                    .putExtra("open_fragment", "favourite")
+                            )
                         }
-                    }else{
+
+                    } else {
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
@@ -307,8 +329,9 @@ class ProductDetailActivity : AppCompatActivity() {
                             anchorView = binding.productDetailBottomNav,
                             actionText = "GO TO LOGIN"
                         ) {
-                            val intent = Intent(this@ProductDetailActivity, LoginActivity::class.java)
-                            startActivity(intent)
+                            startActivity(
+                                Intent(this@ProductDetailActivity, LoginActivity::class.java)
+                            )
                         }
                     }
                 }
@@ -339,7 +362,7 @@ class ProductDetailActivity : AppCompatActivity() {
         quantityJob?.cancel()
 
         quantityJob = lifecycleScope.launch {
-            productCountViewModel.quantityOf(id.toString()).collect { qty ->
+            cartViewModel.productQuantity(id.toLong()).collect { qty ->
 
                 binding.tvCartCount.text = qty.toString()
 
@@ -359,7 +382,7 @@ class ProductDetailActivity : AppCompatActivity() {
         favouriteJob?.cancel()
 
         favouriteJob = lifecycleScope.launch {
-            productCountViewModel.isFavourite(id.toString()).collect { isFav ->
+            favouriteViewModel.isFavourite(id.toLong()).collect { isFav ->
                 binding.favBtn.setImageResource(
                     if (isFav)
                         R.drawable.ic_fav_filled_white

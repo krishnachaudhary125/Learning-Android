@@ -3,11 +3,10 @@ package com.example.eSewaMarket.data.local.entity
 import androidx.room3.Entity
 
 @Entity(
-    tableName = "cart",
+    tableName = "favourite",
     primaryKeys = ["userId", "productId"]
 )
-data class CartEntity(
+data class FavouriteEntity (
     val userId: Long,
-    val productId: Long,
-    val quantity: Int
+    val productId: Long
 )

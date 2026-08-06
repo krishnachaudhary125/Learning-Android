@@ -13,7 +13,6 @@ import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.databinding.ItemSimilarHeaderBinding
-import com.example.eSewaMarket.ui.adapters.ProductAdapter.ProductViewHolder
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

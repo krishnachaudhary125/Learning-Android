@@ -13,14 +13,16 @@ import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import kotlinx.coroutines.*
 
 class ProductAdapter(
     private val cartViewModel: CartViewModel,
+    private val favouriteViewModel: FavouriteViewModel,
     private val onClick: (Product) -> Unit,
     private val onAddToCartClick: (Long) -> Unit,
-    private val onRemoveOneFromCartClick: (Long) -> Unit
-//    private val onFavouriteClick: (Long) -> Unit
+    private val onRemoveOneFromCartClick: (Long) -> Unit,
+    private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(val binding: ItemProductBinding) :
@@ -133,21 +135,21 @@ class ProductAdapter(
                 }
             }
 
-//            holder.favouriteJob?.cancel()
-//            holder.favouriteJob = holder.scope.launch {
-//                viewModel.isFavourite(productId).collect { isFav ->
-//                    favourite.setImageResource(
-//                        if (isFav)
-//                            R.drawable.ic_fav_filled
-//                        else
-//                            R.drawable.ic_fav
-//                    )
-//                }
-//            }
-//
-//            favourite.setOnClickListener {
-//                onFavouriteClick(productId)
-//            }
+            holder.favouriteJob?.cancel()
+            holder.favouriteJob = holder.scope.launch {
+                favouriteViewModel.isFavourite(productId).collect { isFav ->
+                    favourite.setImageResource(
+                        if (isFav)
+                            R.drawable.ic_fav_filled
+                        else
+                            R.drawable.ic_fav
+                    )
+                }
+            }
+
+            favourite.setOnClickListener {
+                onFavouriteClick(productId)
+            }
         }
     }
 
