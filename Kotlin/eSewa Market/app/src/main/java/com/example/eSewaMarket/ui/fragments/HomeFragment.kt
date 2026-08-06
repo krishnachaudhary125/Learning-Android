@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.LoginActivity
-import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
@@ -33,6 +32,7 @@ import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.HomeViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.RecommendedProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import com.google.android.flexbox.FlexDirection
@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(ProductCountRepository(requireContext().applicationContext))
     }
@@ -124,7 +125,7 @@ class HomeFragment : Fragment() {
 
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight - 200) {
-                    homeViewModel.loadMoreRecommended()
+                    recommendedProductViewModel.loadMoreRecommended()
                 }
             }
         )
@@ -249,11 +250,11 @@ class HomeFragment : Fragment() {
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
         }
 
-        homeViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
+        recommendedProductViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
             recommendedAdapter.submitFullList(recommended)
         }
 
-        homeViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
+        recommendedProductViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
             recommendedAdapter.setLoading(isLoading)
         }
     }

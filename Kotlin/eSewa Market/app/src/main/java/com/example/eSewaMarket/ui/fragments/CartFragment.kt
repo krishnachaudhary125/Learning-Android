@@ -27,6 +27,7 @@ import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.RecommendedProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import kotlinx.coroutines.flow.first
@@ -35,7 +36,7 @@ import kotlin.getValue
 
 class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
-    private val cartViewModel: CartViewModel by viewModels()
+    private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(ProductCountRepository(requireContext().applicationContext))
     }
@@ -86,7 +87,7 @@ class CartFragment : Fragment() {
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight - 200) {
-                    cartViewModel.loadMoreRecommended()
+                    recommendedProductViewModel.loadMoreRecommended()
                 }
             })
 
@@ -125,11 +126,11 @@ class CartFragment : Fragment() {
     }
 
     private fun observeData() {
-        cartViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
+        recommendedProductViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
             recommendedAdapter.submitFullList(recommended)
         }
 
-        cartViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
+        recommendedProductViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
             recommendedAdapter.setLoading(isLoading)
         }
     }
