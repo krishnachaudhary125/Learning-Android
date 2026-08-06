@@ -2,23 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminateTint="@color/green"
+        android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
+        android:id="@+id/loadingText"
         style="@style/Widget.Card.Wrap"
-        android:textSize="10sp"
         android:text="@string/loading"
+        android:paddingVertical="@dimen/padding_small"
+        android:paddingHorizontal="@dimen/padding_large"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/loading"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loading"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

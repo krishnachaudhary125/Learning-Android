@@ -7,6 +7,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 
     id("com.google.gms.google-services")
+
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -93,4 +95,8 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    val room_version = "3.0.1"
+    implementation("androidx.room3:room3-runtime:$room_version")
+    ksp("androidx.room3:room3-compiler:$room_version")
 }

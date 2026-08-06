@@ -3,9 +3,11 @@ package com.example.eSewaMarket.data.models
 data class UserResponse(
     val id: Long,
     val firebaseUid: String,
-    val fullName: String,
-    val phone: String,
+    val name: String,
+    val phone: String?,
     val email: String,
-    val photo: String?,
-    val emailVerified: Boolean
+    val photoUrl: String?,
+    val role: String,
+    val createdAt: String,
+    val updatedAt: String
 )

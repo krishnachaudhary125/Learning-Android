@@ -12,4 +12,10 @@ class UserRepository {
         "Bearer $token",
         request
     )
+
+    suspend fun getCurrentUser(
+        token: String
+    ) = RetrofitInstance.api.getCurrentUser(
+        "Bearer $token"
+    )
 }

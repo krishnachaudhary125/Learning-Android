@@ -21,21 +21,29 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
+import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
+import com.example.eSewaMarket.utils.AuthNavigator
+import com.example.eSewaMarket.utils.SnackBarUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductDetailBinding
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var imageGalleryAdapter: ProductImageAdapter
+    private lateinit var similarProductAdapter: SimilarProductAdapter
+    private lateinit var authNavigator: AuthNavigator
+    private lateinit var userSessionRepository: UserSessionRepository
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val productCountViewModel: ProductCountViewModel by viewModels {
         ProductCountViewModelFactory(
@@ -73,6 +81,25 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
 
+        userSessionRepository = UserSessionRepository(applicationContext)
+        authNavigator = AuthNavigator(userSessionRepository)
+
+        val screenWidth = resources.displayMetrics.widthPixels
+        val desiredWidth = (screenWidth * 0.45f).toInt()
+
+        val maxWidth = (180 * resources.displayMetrics.density).toInt()
+        val width = minOf(desiredWidth, maxWidth)
+
+        similarProductAdapter = SimilarProductAdapter(
+            productCountViewModel,
+            width
+        ) { product ->
+            startActivity(
+                Intent(this, ProductDetailActivity::class.java)
+                    .putExtra("product_id", product.id)
+            )
+        }
+
         val productId = intent.getIntExtra("product_id", -1)
         if(productId == -1){
             finish()
@@ -82,8 +109,10 @@ class ProductDetailActivity : AppCompatActivity() {
         setupImageGallery()
         setupOptionRecyclerView("Size", binding.rvSizeOption)
         observeProduct()
+        setupSimilarProductRecyclerView()
 
         viewModel.loadProduct(productId)
+        viewModel.loadSimilarProducts()
         observeCartQuantity()
         observeFavouriteQuantity()
 
@@ -97,6 +126,13 @@ class ProductDetailActivity : AppCompatActivity() {
                         binding.toolbarProductDetail.numOfProductInCart.visibility = View.GONE
                     }
                 }
+            }
+        }
+
+        viewModel.similarProducts.observe(this) { products ->
+            similarProductAdapter.submitList(products.take(5))
+            binding.rvSimilarProduct.post {
+                binding.rvSimilarProduct.scrollToPosition(0)
             }
         }
     }
@@ -119,6 +155,14 @@ class ProductDetailActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         optionAdapters[optionName] = adapter
+    }
+
+    private fun setupSimilarProductRecyclerView() {
+
+        binding.rvSimilarProduct.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.rvSimilarProduct.adapter = similarProductAdapter
     }
 
     private fun observeProduct(){
@@ -152,6 +196,7 @@ class ProductDetailActivity : AppCompatActivity() {
                 binding.bottomAddToCartBtn.isEnabled = false
             }
             binding.productDescription.text = product.description
+            setRating(product.rating.toFloat())
             imageGalleryAdapter.submitList(product.images)
 
             binding.vpProductImage.adapter = imageGalleryAdapter
@@ -195,7 +240,33 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.bottomAddToCartBtn.setOnClickListener {
-                productCountViewModel.addToCart(id.toString())
+                lifecycleScope.launch {
+                    if(authNavigator.isLoggedIn()){
+                        productCountViewModel.addToCart(id.toString())
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Added to cart successfully.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO CART"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
+                            intent.putExtra("open_fragment", "cart")
+                            startActivity(intent)
+                        }
+                    }else{
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Login to continue.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
 
             binding.plusProductBtn.setOnClickListener {
@@ -207,14 +278,38 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.favBtn.setOnClickListener {
-                favouriteJob = lifecycleScope.launch {
-                    val isFav = productCountViewModel.isFavourite(id.toString()).first()
+                lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        val isFav = productCountViewModel.isFavourite(id.toString()).first()
 
-                    if (isFav) {
+                        if (isFav) {
+                            productCountViewModel.removeFromFavourites(id.toString())
+                        } else {
+                            productCountViewModel.addToFavourites(id.toString())
 
-                        productCountViewModel.removeFromFavourites(id.toString())
-                    } else {
-                        productCountViewModel.addToFavourites(id.toString())
+                            SnackBarUtil.show(
+                                view = binding.root,
+                                context = this@ProductDetailActivity,
+                                text = "Added to favourite successfully.",
+                                anchorView = binding.productDetailBottomNav,
+                                actionText = "GO TO FAVOURITE"
+                            ) {
+                                val intent = Intent(this@ProductDetailActivity, MainActivity::class.java)
+                                intent.putExtra("open_fragment", "favourite")
+                                startActivity(intent)
+                            }
+                        }
+                    }else{
+                        SnackBarUtil.show(
+                            view = binding.root,
+                            context = this@ProductDetailActivity,
+                            text = "Login to continue.",
+                            anchorView = binding.productDetailBottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(this@ProductDetailActivity, LoginActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 }
             }
@@ -272,6 +367,30 @@ class ProductDetailActivity : AppCompatActivity() {
                         R.drawable.ic_fav
                 )
             }
+        }
+    }
+
+    private fun setRating(rating: Float){
+        val rounded = (rating * 2).roundToInt() / 2f
+
+        val stars = listOf(
+            binding.ratingStar.star1,
+            binding.ratingStar.star2,
+            binding.ratingStar.star3,
+            binding.ratingStar.star4,
+            binding.ratingStar.star5
+        )
+        
+        stars.forEachIndexed { index, view ->
+            val value = rounded -  index
+
+            view.setImageResource(
+                when{
+                    value >= 1f -> R.drawable.ic_star_filled
+                    value >= 0.5f -> R.drawable.ic_star_half
+                    else -> R.drawable.ic_star_empty
+                }
+            )
         }
     }
 }

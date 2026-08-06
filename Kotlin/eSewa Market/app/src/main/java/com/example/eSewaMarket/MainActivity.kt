@@ -9,29 +9,44 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.databinding.ActivityMainBinding
 import com.example.eSewaMarket.data.models.NavItem
+import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
+import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.fragments.CartFragment
 import com.example.eSewaMarket.ui.fragments.FavouriteFragment
 import com.example.eSewaMarket.ui.fragments.HomeFragment
 import com.example.eSewaMarket.ui.fragments.MoreFragment
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
 
-    private val productCountViewModel: ProductCountViewModel by viewModels {
-        ProductCountViewModelFactory(
-            ProductCountRepository(applicationContext)
+    private val cartViewModel: CartViewModel by viewModels {
+        CartViewModelFactory(
+            CartRepository(
+                AppDatabase.getDatabase(this).cartDao(),
+                UserSessionRepository(this.applicationContext)
+            )
         )
     }
+
+    private val homeFragment = HomeFragment()
+    private val cartFragment = CartFragment()
+    private val favouriteFragment = FavouriteFragment()
+    private val moreFragment = MoreFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,79 +57,57 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (savedInstanceState == null) {
-            loadFragment(HomeFragment())
-        }
-
-        if(intent.getBooleanExtra("openHome", false)){
-            loadFragment(HomeFragment())
-        }
-
-        val fragmentToOpen = intent.getStringExtra("open_fragment")
-        when (fragmentToOpen) {
-            "cart" -> loadFragment(CartFragment())
-        }
-
         val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
         val cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
         val favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
         val more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.mainFrame, homeFragment)
+                .commit()
+
+            activeFragment = homeFragment
+            onSelect(shop)
+        }
+
+        if(intent.getBooleanExtra("openHome", false)){
+            switchFragment(homeFragment)
+        }
+
+        val fragmentToOpen = intent.getStringExtra("open_fragment")
+        when (fragmentToOpen) {
+            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
+            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+        }
+
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
-                loadFragment(HomeFragment())
-
-                onSelect(shop)
-                onDeselect(cart)
-                onDeselect(favourite)
-                onDeselect(more)
-
-                selectedTab = 1
+                openFragment(homeFragment ,shop, cart, favourite, more, 1)
             }
         }
 
         binding.bottomNav.cartButton.setOnClickListener {
             if (selectedTab != 2) {
-                loadFragment(CartFragment())
-
-                onSelect(cart)
-                onDeselect(shop)
-                onDeselect(favourite)
-                onDeselect(more)
-
-                selectedTab = 2
+                openFragment(cartFragment, cart, shop, favourite, more, 2)
             }
         }
 
         binding.bottomNav.favouriteButton.setOnClickListener {
             if (selectedTab != 3) {
-                loadFragment(FavouriteFragment())
-
-                onSelect(favourite)
-                onDeselect(shop)
-                onDeselect(cart)
-                onDeselect(more)
-
-                selectedTab = 3
+                openFragment(favouriteFragment, favourite, shop, cart, more, 3)
             }
         }
 
         binding.bottomNav.moreButon.setOnClickListener {
             if (selectedTab != 4) {
-                loadFragment(MoreFragment())
-
-                onSelect(more)
-                onDeselect(shop)
-                onDeselect(cart)
-                onDeselect(favourite)
-
-                selectedTab = 4
+                openFragment(moreFragment, more, shop, cart, favourite, 4)
             }
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productCountViewModel.cartCount.collect { count ->
+                cartViewModel.cartCount().collect { count ->
                     if (count > 0){
                         binding.bottomNav.numOfProductInCart.text = count.toString()
                         binding.bottomNav.numOfProductInCart.visibility = View.VISIBLE
@@ -125,25 +118,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productCountViewModel.favouriteCount.collect { count ->
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                productCountViewModel.favouriteCount.collect { count ->
+//
+//                    binding.bottomNav.numOfProductInFavourite.visibility =
+//                        if (count > 0) View.VISIBLE else View.GONE
+//
+//                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
+//                }
+//            }
+//        }
+    }
 
-                    binding.bottomNav.numOfProductInFavourite.visibility =
-                        if (count > 0) View.VISIBLE else View.GONE
+    private var activeFragment: Fragment = homeFragment
+    private fun switchFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
 
-                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
-                }
-            }
+        if (!fragment.isAdded) {
+            transaction.hide(activeFragment)
+                .add(R.id.mainFrame, fragment)
+        } else {
+            transaction.hide(activeFragment)
+                .show(fragment)
         }
-    }
 
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrame, fragment)
-            .commit()
+        transaction.commit()
+        activeFragment = fragment
     }
-
 
     private fun onSelect(item: NavItem) {
         item.label.visibility = View.VISIBLE
@@ -167,5 +169,16 @@ class MainActivity : AppCompatActivity() {
         item.icon.imageTintList =
             ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
         item.button.setBackgroundResource(android.R.color.transparent)
+    }
+
+    fun openFragment(fragment: Fragment, select: NavItem, deselect1: NavItem, deselect2: NavItem, deselect3: NavItem, selectedTabValue: Int){
+        switchFragment(fragment)
+
+        onSelect(select)
+        onDeselect(deselect1)
+        onDeselect(deselect2)
+        onDeselect(deselect3)
+
+        selectedTab = selectedTabValue
     }
 }

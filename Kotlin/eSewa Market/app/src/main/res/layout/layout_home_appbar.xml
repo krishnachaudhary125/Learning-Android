@@ -68,12 +68,12 @@
             android:text="@string/greet" />
 
         <TextView
+            android:id="@+id/userName"
             style="@style/Widget.Card.Wrap"
             android:textStyle="bold"
             android:layout_marginHorizontal="2dp"
             android:textSize="10sp"
-            android:letterSpacing="0.04"
-            android:text="@string/name" />
+            android:letterSpacing="0.04" />
 
         <TextView
             style="@style/Widget.Card.Wrap"

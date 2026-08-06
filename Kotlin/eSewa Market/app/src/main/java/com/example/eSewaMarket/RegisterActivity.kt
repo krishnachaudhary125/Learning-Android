@@ -62,11 +62,7 @@ class RegisterActivity : AppCompatActivity() {
 
         userViewModel.user.observe(this) {
 
-            Toast.makeText(
-                this,
-                "Registration successful",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -76,11 +72,7 @@ class RegisterActivity : AppCompatActivity() {
         userViewModel.error.observe(this) { error ->
             binding.loadingOverlay.visibility = View.GONE
 
-            Toast.makeText(
-                this,
-                error,
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
 
         binding.registerBtn.setOnClickListener {
@@ -155,54 +147,24 @@ class RegisterActivity : AppCompatActivity() {
                         .addOnCompleteListener { task ->
 
                             if (task.isSuccessful) {
-
                                 val firebaseUser = auth.currentUser
 
                                 firebaseUser?.sendEmailVerification()
-
                                 firebaseUser?.getIdToken(true)
                                     ?.addOnSuccessListener { result ->
-
-                                        val token = "Bearer ${result.token}"
-
-                                        val request = UserSyncRequest(
-                                            fullName = fullName,
-                                            email = email,
-                                            phone = phone
-                                        )
-
-                                        userViewModel.syncUser(
-                                            token,
-                                            request
-                                        )
+                                        val token = result.token ?: return@addOnSuccessListener
+                                        val request = UserSyncRequest(fullName = fullName, email = email, phone = phone)
+                                        userViewModel.syncUser(token, request)
                                     }
                                     ?.addOnFailureListener { e ->
-
                                         binding.loadingOverlay.visibility = View.GONE
-
-                                        Toast.makeText(
-                                            this,
-                                            e.localizedMessage,
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
                                     }
 
                             } else {
-
                                 binding.loadingOverlay.visibility = View.GONE
-
-                                Log.e(
-                                    "FirebaseRegister",
-                                    "Registration failed",
-                                    task.exception
-                                )
-
-                                Toast.makeText(
-                                    this,
-                                    task.exception?.localizedMessage
-                                        ?: "Registration failed",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Log.e("FirebaseRegister", "Registration failed", task.exception)
+                                Toast.makeText(this, task.exception?.localizedMessage ?: "Registration failed", Toast.LENGTH_LONG).show()
                             }
                         }
                 }

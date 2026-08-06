@@ -11,10 +11,18 @@ class ProductDetailViewModel: ViewModel() {
     private val productRepository = ProductRepository()
 
     val selectedProduct: LiveData<Product> = productRepository.selectedProduct
+    val similarProducts = productRepository.products
+
 
     fun loadProduct(id: Int) {
         viewModelScope.launch {
             productRepository.fetchProductById(id)
+        }
+    }
+
+    fun loadSimilarProducts(){
+        viewModelScope.launch {
+            productRepository.fetchProducts()
         }
     }
 }

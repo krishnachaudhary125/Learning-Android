@@ -11,27 +11,41 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
+import com.example.eSewaMarket.R
+import com.example.eSewaMarket.data.local.AppDatabase
+import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentHomeBinding
 import com.example.eSewaMarket.ui.adapters.BannerPagerAdapter
 import com.example.eSewaMarket.ui.adapters.CategoryAdapter
 import com.example.eSewaMarket.ui.adapters.HotDealCategoryAdapter
 import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
+import com.example.eSewaMarket.ui.factory.CartViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.HomeViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.RecommendedProductViewModel
+import com.example.eSewaMarket.utils.AuthNavigator
+import com.example.eSewaMarket.utils.SnackBarUtil
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class HomeFragment : Fragment() {
@@ -39,8 +53,14 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private val productCountViewModel: ProductCountViewModel by viewModels {
-        ProductCountViewModelFactory(ProductCountRepository(requireContext().applicationContext))
+    private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
+    private val cartViewModel: CartViewModel by activityViewModels {
+        CartViewModelFactory(
+            CartRepository(
+                AppDatabase.getDatabase(requireContext()).cartDao(),
+                UserSessionRepository(requireContext().applicationContext)
+            )
+        )
     }
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
@@ -49,6 +69,8 @@ class HomeFragment : Fragment() {
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
     private lateinit var recommendedAdapter: RecommendedProductAdapter
+    private lateinit var userSessionRepository: UserSessionRepository
+    private lateinit var authNavigator: AuthNavigator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +78,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        userSessionRepository = UserSessionRepository(requireContext())
+        authNavigator = AuthNavigator(userSessionRepository)
         ViewCompat.setOnApplyWindowInsetsListener(binding.homeAppBar.appBar) { view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
@@ -111,7 +135,7 @@ class HomeFragment : Fragment() {
 
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight - 200) {
-                    homeViewModel.loadMoreRecommended()
+                    recommendedProductViewModel.loadMoreRecommended()
                 }
             }
         )
@@ -119,6 +143,21 @@ class HomeFragment : Fragment() {
         binding.floatingSellButton.setOnClickListener {
             val intent = Intent(requireContext(), PostProductActivity::class.java)
             startActivity(intent)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userSessionRepository.isLoggedIn.collect { isLoggedIn ->
+
+                if (isLoggedIn) {
+                    userSessionRepository.user.collect { user ->
+                        binding.homeAppBar.userName.text = "${user.name},"
+                    }
+                } else {
+                    userSessionRepository.user.collect { user ->
+                        binding.homeAppBar.userName.text = "User,"
+                    }
+                }
+            }
         }
     }
 
@@ -135,29 +174,13 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        productAdapter = ProductAdapter(productCountViewModel) { product ->
-            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-            intent.putExtra("product_id", product.id)
-            startActivity(intent)
-        }
+        productAdapter = createProductAdapter()
 
-        featuredProductAdapter = ProductAdapter(productCountViewModel) { product ->
-            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-            intent.putExtra("product_id", product.id)
-            startActivity(intent)
-        }
+        featuredProductAdapter = createProductAdapter()
 
-        hotDealProductAdapter = ProductAdapter(productCountViewModel) { product ->
-            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-            intent.putExtra("product_id", product.id)
-            startActivity(intent)
-        }
+        hotDealProductAdapter = createProductAdapter()
 
-        recommendedAdapter = RecommendedProductAdapter(productCountViewModel) { product ->
-            val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-            intent.putExtra("product_id", product.id.toInt())
-            startActivity(intent)
-        }
+        recommendedAdapter = createRecommendedProductAdapter()
     }
 
     private fun setupBannerViewPager() {
@@ -237,11 +260,11 @@ class HomeFragment : Fragment() {
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
         }
 
-        homeViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
+        recommendedProductViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
             recommendedAdapter.submitFullList(recommended)
         }
 
-        homeViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
+        recommendedProductViewModel.recommendedLoading.observe(viewLifecycleOwner) { isLoading ->
             recommendedAdapter.setLoading(isLoading)
         }
     }
@@ -270,5 +293,139 @@ class HomeFragment : Fragment() {
 
     private fun getItemsToShow(rows: Int): Int {
         return rows * getProductSpanCount()
+    }
+
+    private fun createProductAdapter(): ProductAdapter{
+        return ProductAdapter(
+            cartViewModel = cartViewModel,
+            onClick = { product ->
+                val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+                intent.putExtra("product_id", product.id)
+                startActivity(intent)
+            },
+            onAddToCartClick = { productId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        cartViewModel.addToCart(productId.toLong())
+                    }else{
+                        val coordinator = requireActivity().findViewById<View>(R.id.main)
+                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+
+                        SnackBarUtil.show(
+                            view = coordinator,
+                            context = requireContext(),
+                            text = "Login to continue.",
+                            anchorView = bottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            },
+            onRemoveOneFromCartClick = { productId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        cartViewModel.removeOneFromCart(productId.toLong())
+                    }
+                }
+            }
+//            ,
+//            onFavouriteClick = { productId ->
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    if(authNavigator.isLoggedIn()){
+//                        val isFav = cartViewModel.isFavourite(productId).first()
+//
+//                        if (isFav)
+//                            cartViewModel.removeFromFavourites(productId.toLong())
+//                        else
+//                            cartViewModel.addToFavourites(productId.toLong())
+//                    }
+//                    else{
+//                        val coordinator = requireActivity().findViewById<View>(R.id.main)
+//                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+//
+//                        SnackBarUtil.show(
+//                            view = coordinator,
+//                            context = requireContext(),
+//                            text = "Login to continue.",
+//                            anchorView = bottomNav,
+//                            actionText = "GO TO LOGIN"
+//                        ) {
+//                            val intent = Intent(requireContext(), LoginActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                    }
+//                }
+//            }
+        )
+    }
+
+    private fun createRecommendedProductAdapter(): RecommendedProductAdapter{
+        return RecommendedProductAdapter(
+            cartViewModel = cartViewModel,
+            onClick = { product ->
+                val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+                intent.putExtra("product_id", product.id.toInt())
+                startActivity(intent)
+            },
+            onAddToCartClick = { productId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        cartViewModel.addToCart(productId)
+                    }else{
+                        val coordinator = requireActivity().findViewById<View>(R.id.main)
+                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+
+                        SnackBarUtil.show(
+                            view = coordinator,
+                            context = requireContext(),
+                            text = "Login to continue.",
+                            anchorView = bottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            },
+            onRemoveOneFromCartClick = { productId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()){
+                        cartViewModel.removeOneFromCart(productId)
+                    }
+                }
+            }
+//            ,
+//            onFavouriteClick = { productId ->
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    if(authNavigator.isLoggedIn()){
+//                        val isFav = cartViewModel.isFavourite(productId).first()
+//
+//                        if (isFav)
+//                            cartViewModel.removeFromFavourites(productId)
+//                        else
+//                            cartViewModel.addToFavourites(productId)
+//                    }
+//                    else{
+//                        val coordinator = requireActivity().findViewById<View>(R.id.main)
+//                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+//
+//                        SnackBarUtil.show(
+//                            view = coordinator,
+//                            context = requireContext(),
+//                            text = "Login to continue.",
+//                            anchorView = bottomNav,
+//                            actionText = "GO TO LOGIN"
+//                        ) {
+//                            val intent = Intent(requireContext(), LoginActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                    }
+//                }
+//            }
+        )
     }
 }
