@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.eSewaMarket.FaqActivity
 import com.example.eSewaMarket.LoginActivity
+import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.MyReturnActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.RegisterActivity
@@ -130,7 +131,11 @@ class MoreFragment : Fragment() {
                 try {
                     userSessionRepository.logout()
 
-                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        putExtra("login_success", true)
+                    }
+                    startActivity(intent)
                     requireActivity().finish()
                 } finally {
                     binding.loadingOverlay.visibility = View.GONE

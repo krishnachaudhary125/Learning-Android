@@ -1,48 +1,64 @@
 package com.example.eSewaMarket
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.eSewaMarket.data.local.AppDatabase
+import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.databinding.ActivityMainBinding
 import com.example.eSewaMarket.data.models.NavItem
 import com.example.eSewaMarket.data.repository.CartRepository
-import com.example.eSewaMarket.data.repository.ProductCountRepository
+import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
+import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.fragments.CartFragment
 import com.example.eSewaMarket.ui.fragments.FavouriteFragment
 import com.example.eSewaMarket.ui.fragments.HomeFragment
 import com.example.eSewaMarket.ui.fragments.MoreFragment
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
-
+    private lateinit var shop: NavItem
+    private lateinit var cart: NavItem
+    private lateinit var favourite: NavItem
+    private lateinit var more: NavItem
     private val cartViewModel: CartViewModel by viewModels {
+        val app = this.application as EsewaMarketApplication
+
         CartViewModelFactory(
             CartRepository(
-                AppDatabase.getDatabase(this).cartDao(),
-                UserSessionRepository(this.applicationContext)
+                app.database.cartDao(),
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }
+    private val favouriteViewModel: FavouriteViewModel by viewModels {
+        val app = this.application as EsewaMarketApplication
 
+        FavouriteViewModelFactory(
+            FavouriteRepository(
+                app.database.favouriteDao(),
+                UserSessionRepository(app.applicationContext)
+            )
+        )
+    }
     private val homeFragment = HomeFragment()
     private val cartFragment = CartFragment()
     private val favouriteFragment = FavouriteFragment()
@@ -57,10 +73,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
-        val cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
-        val favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
-        val more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
+        shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
+        cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
+        favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
+        more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -75,11 +91,11 @@ class MainActivity : AppCompatActivity() {
             switchFragment(homeFragment)
         }
 
-        val fragmentToOpen = intent.getStringExtra("open_fragment")
-        when (fragmentToOpen) {
-            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
-            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+        if (intent.getBooleanExtra("login_success", false)) {
+            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
         }
+
+        handleIntent(intent)
 
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
@@ -118,17 +134,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                productCountViewModel.favouriteCount.collect { count ->
-//
-//                    binding.bottomNav.numOfProductInFavourite.visibility =
-//                        if (count > 0) View.VISIBLE else View.GONE
-//
-//                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
-//                }
-//            }
-//        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favouriteViewModel.favouriteCount().collect { count ->
+
+                    binding.bottomNav.numOfProductInFavourite.visibility =
+                        if (count > 0) View.VISIBLE else View.GONE
+
+                    binding.bottomNav.numOfProductInFavourite.text = count.toString()
+                }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
     }
 
     private var activeFragment: Fragment = homeFragment
@@ -180,5 +202,13 @@ class MainActivity : AppCompatActivity() {
         onDeselect(deselect3)
 
         selectedTab = selectedTabValue
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        when (intent?.getStringExtra("open_fragment")) {
+            "home" -> openFragment(homeFragment, shop, cart, favourite, more, 1)
+            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
+            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+        }
     }
 }

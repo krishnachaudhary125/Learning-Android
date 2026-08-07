@@ -12,10 +12,12 @@ import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.databinding.ItemLoadingBinding
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 private const val TYPE_ITEM = 0
@@ -23,10 +25,11 @@ private const val TYPE_LOADING = 1
 
 class RecommendedProductAdapter(
     private val cartViewModel: CartViewModel,
+    private val favouriteViewModel: FavouriteViewModel,
     private val onClick: (ProductResponse) -> Unit,
     private val onAddToCartClick: (Long) -> Unit,
-    private val onRemoveOneFromCartClick: (Long) -> Unit
-//    private val onFavouriteClick: (Long) -> Unit
+    private val onRemoveOneFromCartClick: (Long) -> Unit,
+    private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<ProductResponse>()
@@ -130,21 +133,22 @@ class RecommendedProductAdapter(
                     }
                 }
 
-//                holder.favouriteJob?.cancel()
-//                holder.favouriteJob = holder.scope.launch {
-//                    cartViewModel.isFavourite(productId).collect { isFav ->
-//                        favourite.setImageResource(
-//                            if (isFav)
-//                                R.drawable.ic_fav_filled
-//                            else
-//                                R.drawable.ic_fav
-//                        )
-//                    }
-//                }
-//
-//                favourite.setOnClickListener {
-//                    onFavouriteClick(productId)
-//                }
+                holder.favouriteJob?.cancel()
+                holder.favouriteJob = holder.scope.launch {
+                    val isFav = favouriteViewModel.isFavourite(productId).first()
+
+                    favourite.setImageResource(
+                        if (isFav) {
+                            R.drawable.ic_fav_filled
+                        } else {
+                            R.drawable.ic_fav
+                        }
+                    )
+                }
+
+                favourite.setOnClickListener {
+                    onFavouriteClick(productId)
+                }
             }
         }
         when (holder) {

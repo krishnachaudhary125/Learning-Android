@@ -1,5 +1,7 @@
 package com.example.eSewaMarket.data.api
 
+import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.CartItemResponse
 import com.example.eSewaMarket.data.models.HotDeal
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
@@ -44,4 +46,15 @@ interface ApiService {
     suspend fun getCurrentUser(
         @Header("Authorization") token: String
     ): Response<UserResponse>
+
+    @POST("cart")
+    suspend fun addToCart(
+        @Header("Authorization") token: String,
+        @Body request: AddToCartRequest
+    )
+
+    @GET("cart")
+    suspend fun getCart(
+        @Header("Authorization") token: String
+    ): List<CartItemResponse>
 }

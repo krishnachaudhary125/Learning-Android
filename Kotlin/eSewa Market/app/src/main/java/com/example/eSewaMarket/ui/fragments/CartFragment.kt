@@ -17,17 +17,22 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
+import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.data.repository.CartRepository
+import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentCartBinding
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
+import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.RecommendedProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
@@ -39,10 +44,23 @@ class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
     private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
     private val cartViewModel: CartViewModel by activityViewModels {
+        val app = requireActivity().application as EsewaMarketApplication
+
         CartViewModelFactory(
             CartRepository(
-                AppDatabase.getDatabase(requireContext()).cartDao(),
-                UserSessionRepository(requireContext().applicationContext)
+                app.database.cartDao(),
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
+            )
+        )
+    }
+    private val favouriteViewModel: FavouriteViewModel by activityViewModels {
+        val app = requireActivity().application as EsewaMarketApplication
+
+        FavouriteViewModelFactory(
+            FavouriteRepository(
+                app.database.favouriteDao(),
+                UserSessionRepository(app.applicationContext)
             )
         )
     }
@@ -80,6 +98,20 @@ class CartFragment : Fragment() {
             startActivity(intent)
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartViewModel.cartCount().collect { count ->
+                    binding.itemCount.text = "(${count})"
+
+                    if(count>0){
+                        binding.emptyCartLayout.visibility = View.GONE
+                    }
+                    else{
+                        binding.emptyCartLayout.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
         return binding.root
     }
 
@@ -152,6 +184,7 @@ class CartFragment : Fragment() {
     private fun createRecommendedProductAdapter(): RecommendedProductAdapter{
         return RecommendedProductAdapter(
             cartViewModel = cartViewModel,
+            favouriteViewModel = favouriteViewModel,
             onClick = { product ->
                 val intent = Intent(requireContext(), ProductDetailActivity::class.java)
                 intent.putExtra("product_id", product.id.toInt())
@@ -184,35 +217,27 @@ class CartFragment : Fragment() {
                         cartViewModel.removeOneFromCart(productId)
                     }
                 }
+            },
+            onFavouriteClick = { productId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (authNavigator.isLoggedIn()) {
+                        favouriteViewModel.toggleFavourite(productId)
+                    } else {
+                        val coordinator = requireActivity().findViewById<View>(R.id.main)
+                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+
+                        SnackBarUtil.show(
+                            view = coordinator,
+                            context = requireContext(),
+                            text = "Login to continue.",
+                            anchorView = bottomNav,
+                            actionText = "GO TO LOGIN"
+                        ) {
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
+                        }
+                    }
+                }
             }
-//            ,
-//            onFavouriteClick = { productId ->
-//                viewLifecycleOwner.lifecycleScope.launch {
-//                    if(authNavigator.isLoggedIn()){
-//                        val isFav = productCountViewModel.isFavourite(productId).first()
-//
-//                        if (isFav)
-//                            productCountViewModel.removeFromFavourites(productId)
-//                        else
-//                            productCountViewModel.addToFavourites(productId)
-//                    }
-//                    else{
-//                        val coordinator = requireActivity().findViewById<View>(R.id.main)
-//                        val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
-//
-//                        SnackBarUtil.show(
-//                            view = coordinator,
-//                            context = requireContext(),
-//                            text = "Login to continue.",
-//                            anchorView = bottomNav,
-//                            actionText = "GO TO LOGIN"
-//                        ) {
-//                            val intent = Intent(requireContext(), LoginActivity::class.java)
-//                            startActivity(intent)
-//                        }
-//                    }
-//                }
-//            }
         )
     }
 }

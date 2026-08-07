@@ -12,4 +12,5 @@
     <color name="text_dark_300">#555770</color>
     <color name="esewa_yellow">#FFC107</color>
     <color name="esewa_bg_light">#F8F8FA</color>
+    <color name="cart_image_bg">#ebebeb</color>
 </resources>

@@ -53,8 +53,8 @@ class LoginActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                intent.putExtra("login_success", true)
                 startActivity(intent)
-                Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
