@@ -49,8 +49,7 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="4dp">
+        android:orientation="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/Widget.Card.Wrap">
@@ -87,8 +86,8 @@
             android:id="@+id/cartLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:text="Cart"
+            android:layout_marginEnd="6dp"
             android:textColor="@color/green"
             android:visibility="gone" />
     </LinearLayout>
@@ -139,8 +138,8 @@
             android:id="@+id/favouriteLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:text="Favourite"
+            android:layout_marginEnd="6dp"
             android:textColor="@color/green"
             android:visibility="gone" />
     </LinearLayout>
