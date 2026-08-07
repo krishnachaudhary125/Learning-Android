@@ -4,8 +4,10 @@ import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.CartDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.tasks.await
 
 class CartRepository(
     private val cartDao: CartDao,
@@ -37,7 +39,15 @@ class CartRepository(
         }
 
         try {
+            val token = FirebaseAuth.getInstance()
+                .currentUser
+                ?.getIdToken(false)
+                ?.await()
+                ?.token
+                ?: throw IllegalStateException("User is not authenticated")
+
             apiService.addToCart(
+                "Bearer $token",
                 AddToCartRequest(productId = productId)
             )
         }catch (e: Exception){

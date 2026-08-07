@@ -11,11 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.eSewaMarket.data.local.AppDatabase
+import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.databinding.ActivityMainBinding
 import com.example.eSewaMarket.data.models.NavItem
 import com.example.eSewaMarket.data.repository.CartRepository
@@ -45,7 +44,8 @@ class MainActivity : AppCompatActivity() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }

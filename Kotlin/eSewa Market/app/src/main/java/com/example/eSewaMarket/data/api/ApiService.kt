@@ -49,9 +49,12 @@ interface ApiService {
 
     @POST("cart")
     suspend fun addToCart(
+        @Header("Authorization") token: String,
         @Body request: AddToCartRequest
-    ): CartItemResponse
+    )
 
     @GET("cart")
-    suspend fun getCart(): List<CartItemResponse>
+    suspend fun getCart(
+        @Header("Authorization") token: String
+    ): List<CartItemResponse>
 }

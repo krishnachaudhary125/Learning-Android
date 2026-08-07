@@ -23,6 +23,7 @@ import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
+import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
@@ -60,7 +61,8 @@ class HomeFragment : Fragment() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }
