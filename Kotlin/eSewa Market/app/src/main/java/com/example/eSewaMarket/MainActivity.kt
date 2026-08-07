@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -88,6 +89,10 @@ class MainActivity : AppCompatActivity() {
 
         if(intent.getBooleanExtra("openHome", false)){
             switchFragment(homeFragment)
+        }
+
+        if (intent.getBooleanExtra("login_success", false)) {
+            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
         }
 
         handleIntent(intent)
