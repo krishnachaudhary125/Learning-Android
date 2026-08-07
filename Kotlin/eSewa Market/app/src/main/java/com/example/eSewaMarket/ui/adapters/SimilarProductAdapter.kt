@@ -1,5 +1,6 @@
 package com.example.eSewaMarket.ui.adapters
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
@@ -9,22 +10,27 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.databinding.ItemSimilarHeaderBinding
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
+import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SimilarProductAdapter(
-    private val viewModel: ProductCountViewModel,
+    private val cartViewModel: CartViewModel,
+    private val favouriteViewModel: FavouriteViewModel,
     private val itemWidth: Int? = null,
-    private val onClick: (Product) -> Unit
+    private val onClick: (Product) -> Unit,
+    private val onAddToCartClick: (Long) -> Unit,
+    private val onRemoveOneFromCartClick: (Long) -> Unit,
+    private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -94,7 +100,13 @@ class SimilarProductAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is HeaderViewHolder -> {
-//                shop now click listener
+                holder.binding.shopNowBtn.setOnClickListener {
+                    val intent = Intent(holder.itemView.context, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        putExtra("open_fragment", "home")
+                    }
+                    holder.itemView.context.startActivity(intent)
+                }
             }
 
             is SimilarProductViewHolder -> {
@@ -103,14 +115,14 @@ class SimilarProductAdapter(
                 }
 
                 val product = productList[position - 1]
-                val productId = product.id.toString()
+                val productId = product.id.toLong()
 
                 holder.binding.apply {
 
                     productTitle.text = product.title
                     brand.text = product.category.name
                     price.text = product.price.toString()
-                    if(product.stock != 0){
+                    if (product.stock != 0) {
                         soldOut.visibility = View.GONE
                         addCartBtn.backgroundTintList = ColorStateList.valueOf(
                             ContextCompat.getColor(root.context, R.color.green)
@@ -119,7 +131,7 @@ class SimilarProductAdapter(
                             ContextCompat.getColor(root.context, R.color.white)
                         )
                         plusProduct.isEnabled = true
-                    }else{
+                    } else {
                         soldOut.visibility = View.VISIBLE
                         addCartBtn.backgroundTintList = ColorStateList.valueOf(
                             ContextCompat.getColor(root.context, R.color.addToCartSoldOut)
@@ -134,11 +146,11 @@ class SimilarProductAdapter(
                         .load(product.thumbnail)
                         .into(productImage)
 
-                    if (product.discountPercentage != null){
+                    if (product.discountPercentage != null) {
                         val dis = product.discountPercentage.toInt()
                         discount.text = "${dis}% OFF"
                         discount.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         discount.visibility = View.GONE
                     }
 
@@ -147,16 +159,16 @@ class SimilarProductAdapter(
                     }
 
                     plusProduct.setOnClickListener {
-                        viewModel.addToCart(productId)
+                        onAddToCartClick(productId)
                     }
 
                     minusProduct.setOnClickListener {
-                        viewModel.removeOneFromCart(productId)
+                        onRemoveOneFromCartClick(productId)
                     }
 
                     holder.quantityJob?.cancel()
                     holder.quantityJob = holder.scope.launch {
-                        viewModel.quantityOf(productId).collect { qty ->
+                        cartViewModel.productQuantity(productId).collect { qty ->
 
                             numOfProduct.text = qty.toString()
 
@@ -167,8 +179,8 @@ class SimilarProductAdapter(
                     }
 
                     holder.favouriteJob?.cancel()
-                    holder.scope.launch {
-                        viewModel.isFavourite(productId).collect { isFav ->
+                    holder.favouriteJob = holder.scope.launch {
+                        favouriteViewModel.isFavourite(productId).collect { isFav ->
                             favourite.setImageResource(
                                 if (isFav)
                                     R.drawable.ic_fav_filled
@@ -179,15 +191,7 @@ class SimilarProductAdapter(
                     }
 
                     favourite.setOnClickListener {
-                        holder.scope.launch {
-                            val isFav = viewModel.isFavourite(productId).first()
-
-                            if (isFav) {
-                                viewModel.removeFromFavourites(productId)
-                            } else {
-                                viewModel.addToFavourites(productId)
-                            }
-                        }
+                        onFavouriteClick(productId)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.eSewaMarket
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -33,6 +34,10 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
+    private lateinit var shop: NavItem
+    private lateinit var cart: NavItem
+    private lateinit var favourite: NavItem
+    private lateinit var more: NavItem
     private val cartViewModel: CartViewModel by viewModels {
         val app = this.application as EsewaMarketApplication
 
@@ -67,10 +72,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
-        val cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
-        val favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
-        val more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
+        shop = NavItem(binding.bottomNav.shopButton, binding.bottomNav.shopLabel, binding.bottomNav.shopIcon)
+        cart = NavItem(binding.bottomNav.cartButton, binding.bottomNav.cartLabel, binding.bottomNav.cartIcon)
+        favourite = NavItem(binding.bottomNav.favouriteButton, binding.bottomNav.favouriteLabel, binding.bottomNav.favouriteIcon)
+        more = NavItem(binding.bottomNav.moreButon, binding.bottomNav.moreLabel, binding.bottomNav.moreIcon)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -85,11 +90,7 @@ class MainActivity : AppCompatActivity() {
             switchFragment(homeFragment)
         }
 
-        val fragmentToOpen = intent.getStringExtra("open_fragment")
-        when (fragmentToOpen) {
-            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
-            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
-        }
+        handleIntent(intent)
 
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
@@ -141,6 +142,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
     private var activeFragment: Fragment = homeFragment
     private fun switchFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -190,5 +197,13 @@ class MainActivity : AppCompatActivity() {
         onDeselect(deselect3)
 
         selectedTab = selectedTabValue
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        when (intent?.getStringExtra("open_fragment")) {
+            "home" -> openFragment(homeFragment, shop, cart, favourite, more, 1)
+            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
+            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+        }
     }
 }
