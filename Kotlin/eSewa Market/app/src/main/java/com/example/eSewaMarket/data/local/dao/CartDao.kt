@@ -42,4 +42,10 @@ interface CartDao {
     """
     )
     fun getTotalQuantity(userId: Long): Flow<Int>
+
+    @Query("""
+        DELETE FROM cart WHERE userId = :userId
+    """
+    )
+    fun clearCart(userId: Long)
 }
