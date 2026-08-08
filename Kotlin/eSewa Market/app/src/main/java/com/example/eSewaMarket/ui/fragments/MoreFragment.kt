@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.FaqActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
@@ -17,14 +20,42 @@ import com.example.eSewaMarket.MyReturnActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.RegisterActivity
 import com.example.eSewaMarket.ShippingAddressActivity
+import com.example.eSewaMarket.data.api.RetrofitInstance
+import com.example.eSewaMarket.data.local.AppDatabase
+import com.example.eSewaMarket.data.repository.AuthRepository
+import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentMoreBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.eSewaMarket.ui.factory.AuthViewModelFactory
+import com.example.eSewaMarket.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment() {
     private lateinit var binding: FragmentMoreBinding
     private lateinit var userSessionRepository: UserSessionRepository
+    private val authViewModel: AuthViewModel by viewModels {
+
+        val context = requireContext().applicationContext
+
+        val userSessionRepository =
+            UserSessionRepository(context)
+
+        val database =
+            (context as EsewaMarketApplication).database
+
+        val cartRepository = CartRepository(
+            cartDao = database.cartDao(),
+            userRepository = userSessionRepository,
+            apiService = RetrofitInstance.api
+        )
+
+        AuthViewModelFactory(
+            AuthRepository(
+                userSessionRepository = userSessionRepository,
+                cartRepository = cartRepository
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,11 +156,9 @@ class MoreFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             binding.logoutBtn.isEnabled = false
 
-            FirebaseAuth.getInstance().signOut()
-
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
-                    userSessionRepository.logout()
+                    authViewModel.logout()
 
                     val intent = Intent(requireContext(), MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -137,7 +166,10 @@ class MoreFragment : Fragment() {
                     }
                     startActivity(intent)
                     requireActivity().finish()
-                } finally {
+                }catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+                finally {
                     binding.loadingOverlay.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.logoutBtn.isEnabled = true

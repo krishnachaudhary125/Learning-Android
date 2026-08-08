@@ -5,9 +5,11 @@ import com.example.eSewaMarket.data.local.dao.CartDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class CartRepository(
     private val cartDao: CartDao,
@@ -85,5 +87,11 @@ class CartRepository(
 
     fun productQuantity(productId: Long) = userRepository.user.flatMapLatest { user ->
         cartDao.getProductQuantity(user.id, productId)
+    }
+
+    suspend fun clearCart(userId: Long) {
+        withContext(Dispatchers.IO) {
+            cartDao.clearCart(userId)
+        }
     }
 }
