@@ -12,6 +12,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -53,10 +54,10 @@ interface ApiService {
         @Body request: AddToCartRequest
     )
 
-    @POST("cart/product/{id}/decrease")
+    @PATCH("cart/product/{productId}/decrease")
     suspend fun removeOneFromCart(
         @Header("Authorization") token: String,
-        @Body request: AddToCartRequest
+        @Path("productId") productId: Long
     )
 
     @GET("cart")
