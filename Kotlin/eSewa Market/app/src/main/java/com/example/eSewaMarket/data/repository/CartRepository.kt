@@ -28,15 +28,10 @@ class CartRepository(
 
         if (item == null) {
             cartDao.insert(
-                CartEntity(userId = userId,
-                    productId = productId,
-                    quantity = 1
-                )
+                CartEntity(userId, productId, quantity = 1)
             )
         } else {
-            cartDao.updateQuantity(userId = userId,
-                productId = productId,
-                quantity = item.quantity + 1
+            cartDao.updateQuantity(userId, productId, item.quantity + 1
             )
         }
 
@@ -54,16 +49,9 @@ class CartRepository(
             )
         }catch (e: Exception){
             if (oldQuantity == 0){
-                cartDao.removeFromCart(
-                    userId = userId,
-                    productId = productId
-                )
+                cartDao.removeFromCart(userId, productId)
             }else{
-                cartDao.updateQuantity(
-                    userId = userId,
-                    productId = productId,
-                    quantity = oldQuantity
-                )
+                cartDao.updateQuantity(userId, productId, oldQuantity)
             }
             throw e
         }
@@ -73,11 +61,33 @@ class CartRepository(
 
         val userId = currentUserId()
         val item = cartDao.getCartItem(userId, productId) ?: return
+        val oldQuantity = item?.quantity?:0
 
         if (item.quantity == 1) {
             cartDao.removeFromCart(userId, productId)
         } else {
             cartDao.updateQuantity(userId, productId, item.quantity - 1)
+        }
+
+        try {
+            val token = FirebaseAuth.getInstance()
+                .currentUser
+                ?.getIdToken(false)
+                ?.await()
+                ?.token
+                ?: throw IllegalStateException("User is not authenticated")
+
+            apiService.removeOneFromCart(
+                "Bearer $token",
+                productId
+            )
+        }catch (e: Exception){
+            if (oldQuantity == 1){
+                cartDao.removeFromCart(userId, productId)
+            }else{
+                cartDao.updateQuantity(userId, productId, oldQuantity)
+            }
+            throw e
         }
     }
 
