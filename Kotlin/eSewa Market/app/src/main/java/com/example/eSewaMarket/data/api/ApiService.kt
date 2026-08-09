@@ -53,6 +53,12 @@ interface ApiService {
         @Body request: AddToCartRequest
     )
 
+    @POST("cart/product/{id}/decrease")
+    suspend fun removeOneFromCart(
+        @Header("Authorization") token: String,
+        @Body request: AddToCartRequest
+    )
+
     @GET("cart")
     suspend fun getCart(
         @Header("Authorization") token: String
