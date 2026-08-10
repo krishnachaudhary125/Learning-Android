@@ -9,6 +9,7 @@ data class Product(
     val thumbnail: String,
     val stock: Int,
     val images: List<String>,
+    val brand: String,
     val options: Map<String, List<String>>,
     val rating: Double,
     val reviewCount: Int,

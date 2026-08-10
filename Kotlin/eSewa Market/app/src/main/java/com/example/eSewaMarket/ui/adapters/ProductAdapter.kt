@@ -77,7 +77,7 @@ class ProductAdapter(
         holder.binding.apply {
 
             productTitle.text = product.title
-            brand.text = product.category.name
+            brand.text = product.brand
             price.text = product.price.toString()
             if(product.stock != 0){
                 soldOut.visibility = View.GONE
