@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
-import com.example.eSewaMarket.data.models.ProductResponse
 
 class ProductRepository {
 
@@ -21,19 +20,21 @@ class ProductRepository {
             _products.postValue(response)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
         }
     }
 
-    suspend fun fetchProductById(id: Int){
+    suspend fun fetchProductById(id: Long){
         try {
             val response = RetrofitInstance.api.getProductById(id)
             _selectedProduct.postValue(response)
         } catch (e: Exception){
             android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
         }
     }
 
-    suspend fun fetchRecommendedProducts(page: Int): PageResponse<ProductResponse> {
+    suspend fun fetchRecommendedProducts(page: Int): PageResponse<Product> {
         return RetrofitInstance.api.getRecommendedProducts(page)
     }
 }

@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.models.ProductResponse
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemLoadingBinding
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
@@ -26,13 +26,13 @@ private const val TYPE_LOADING = 1
 class RecommendedProductAdapter(
     private val cartViewModel: CartViewModel,
     private val favouriteViewModel: FavouriteViewModel,
-    private val onClick: (ProductResponse) -> Unit,
+    private val onClick: (Product) -> Unit,
     private val onAddToCartClick: (Long) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
     private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = mutableListOf<ProductResponse>()
+    private val items = mutableListOf<Product>()
     private var showLoadingFooter = false
 
     class ProductViewHolder(val binding: ItemProductBinding) :
@@ -72,10 +72,10 @@ class RecommendedProductAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ProductViewHolder) {
             val product = items[position]
-            val productId = product.id
+
             holder.binding.apply {
                 productTitle.text = product.title
-                brand.text = product.category.name
+                brand.text = product.brand
                 price.text = product.price.toString()
                 if(product.stock != 0){
                     soldOut.visibility = View.GONE
@@ -114,16 +114,16 @@ class RecommendedProductAdapter(
                 }
 
                 plusProduct.setOnClickListener {
-                    onAddToCartClick(productId)
+                    onAddToCartClick(product.id)
                 }
 
                 minusProduct.setOnClickListener {
-                    onRemoveOneFromCartClick(productId)
+                    onRemoveOneFromCartClick(product.id)
                 }
 
                 holder.quantityJob?.cancel()
                 holder.quantityJob = holder.scope.launch {
-                    cartViewModel.productQuantity(productId).collect { qty ->
+                    cartViewModel.productQuantity(product.id).collect { qty ->
 
                         numOfProduct.text = qty.toString()
 
@@ -135,7 +135,7 @@ class RecommendedProductAdapter(
 
                 holder.favouriteJob?.cancel()
                 holder.favouriteJob = holder.scope.launch {
-                    val isFav = favouriteViewModel.isFavourite(productId).first()
+                    val isFav = favouriteViewModel.isFavourite(product.id).first()
 
                     favourite.setImageResource(
                         if (isFav) {
@@ -147,7 +147,7 @@ class RecommendedProductAdapter(
                 }
 
                 favourite.setOnClickListener {
-                    onFavouriteClick(productId)
+                    onFavouriteClick(product.id)
                 }
             }
         }
@@ -158,7 +158,7 @@ class RecommendedProductAdapter(
             }
         }
     }
-    fun submitFullList(newItems: List<ProductResponse>) {
+    fun submitFullList(newItems: List<Product>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eSewaMarket.data.models.ProductResponse
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.ProductRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,8 +14,8 @@ import kotlin.collections.plus
 
 class RecommendedProductViewModel : ViewModel() {
     private val productRepository = ProductRepository()
-    private val _recommendedProducts = MutableLiveData<List<ProductResponse>>(emptyList())
-    val recommendedProducts: LiveData<List<ProductResponse>> = _recommendedProducts
+    private val _recommendedProducts = MutableLiveData<List<Product>>(emptyList())
+    val recommendedProducts: LiveData<List<Product>> = _recommendedProducts
     private val _recommendedLoading = MutableLiveData(false)
     val recommendedLoading: LiveData<Boolean> = _recommendedLoading
     private var recommendedPage = 0

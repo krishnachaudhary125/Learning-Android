@@ -13,7 +13,9 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -45,6 +47,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -275,6 +278,26 @@ class HomeFragment : Fragment() {
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.homeError.collect { hasError ->
+                    val visible = if (hasError) View.VISIBLE else View.GONE
+                    binding.featuredTryAgain.tryAgainLayout.visibility = visible
+                    binding.hotDealsTryAgain.tryAgainLayout.visibility = visible
+                    binding.mostPopularTryAgain.tryAgainLayout.visibility = visible
+                    binding.popularBrandTryAgain.tryAgainLayout.visibility = visible
+                    binding.recommendedTryAgain.tryAgainLayout.visibility = visible
+
+                    val gone = if (hasError) View.GONE else View.VISIBLE
+                    binding.rvFeaturedProduct.visibility = gone
+                    binding.rvHotDealProduct.visibility = gone
+                    binding.rvPopularBrand.visibility = gone
+                    binding.hotDealCategoriesRecyclerView.visibility = gone
+                    binding.rvRecommended.visibility = gone
+                }
+            }
+        }
+
         recommendedProductViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
             recommendedAdapter.submitFullList(recommended)
         }
@@ -322,7 +345,7 @@ class HomeFragment : Fragment() {
             onAddToCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(productId.toLong())
+                        cartViewModel.addToCart(productId)
                     }else{
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
@@ -343,7 +366,7 @@ class HomeFragment : Fragment() {
             onRemoveOneFromCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.removeOneFromCart(productId.toLong())
+                        cartViewModel.removeOneFromCart(productId)
                     }
                 }
             },
@@ -376,7 +399,7 @@ class HomeFragment : Fragment() {
             favouriteViewModel = favouriteViewModel,
             onClick = { product ->
                 val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-                intent.putExtra("product_id", product.id.toInt())
+                intent.putExtra("product_id", product.id)
                 startActivity(intent)
             },
             onAddToCartClick = { productId ->

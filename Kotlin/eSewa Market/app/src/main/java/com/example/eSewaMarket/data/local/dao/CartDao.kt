@@ -47,5 +47,5 @@ interface CartDao {
         DELETE FROM cart WHERE userId = :userId
     """
     )
-    fun clearCart(userId: Long)
+    suspend fun clearCart(userId: Long)
 }

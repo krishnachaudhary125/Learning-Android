@@ -117,6 +117,11 @@
 
             </LinearLayout>
 
+            <include
+                android:id="@+id/featuredTryAgain"
+                android:visibility="gone"
+                layout="@layout/layout_retry"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFeaturedProduct"
                 android:layout_marginStart="@dimen/margin_medium"
@@ -146,6 +151,11 @@
 
             </LinearLayout>
 
+            <include
+                android:id="@+id/hotDealsTryAgain"
+                android:visibility="gone"
+                layout="@layout/layout_retry"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHotDealProduct"
                 android:layout_marginStart="@dimen/margin_medium"
@@ -171,6 +181,11 @@
                     android:text="Most Popular"/>
 
             </LinearLayout>
+
+            <include
+                android:id="@+id/mostPopularTryAgain"
+                android:visibility="gone"
+                layout="@layout/layout_retry"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hotDealCategoriesRecyclerView"
@@ -201,6 +216,11 @@
 
             </LinearLayout>
 
+            <include
+                android:id="@+id/popularBrandTryAgain"
+                android:visibility="gone"
+                layout="@layout/layout_retry"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPopularBrand"
                 android:layout_marginStart="@dimen/margin_medium"
@@ -229,6 +249,11 @@
                     android:background="@drawable/transparent_background"/>
 
             </LinearLayout>
+
+            <include
+                android:id="@+id/recommendedTryAgain"
+                android:visibility="gone"
+                layout="@layout/layout_retry"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecommended"

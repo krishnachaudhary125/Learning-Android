@@ -11,6 +11,9 @@ import com.example.eSewaMarket.data.repository.BannerRepository
 import com.example.eSewaMarket.data.repository.CategoryRepository
 import com.example.eSewaMarket.data.repository.HotDealCategoryRepository
 import com.example.eSewaMarket.data.repository.ProductRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
@@ -25,11 +28,15 @@ class HomeViewModel : ViewModel() {
     val hotDealCategories: LiveData<List<HotDeal>> = hotDealCategoryRepository.hotDealCategories
     val products: LiveData<List<Product>> = productRepository.products
 
+    private val _homeError = MutableStateFlow(false)
+    val homeError: StateFlow<Boolean> = _homeError.asStateFlow()
+
     init {
         loadAllData()
     }
 
     private fun loadAllData() {
+        _homeError.value = false
         loadBanners()
         loadCategory()
         loadHotDealCategories()
@@ -38,25 +45,49 @@ class HomeViewModel : ViewModel() {
 
     fun loadBanners() {
         viewModelScope.launch {
-            bannerRepository.fetchBanners()
+            try {
+                bannerRepository.fetchBanners()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
         }
     }
 
     fun loadCategory() {
         viewModelScope.launch {
-            categoryRepository.fetchCategory()
+            try {
+                categoryRepository.fetchCategory()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
         }
     }
 
     fun loadHotDealCategories() {
         viewModelScope.launch {
-            hotDealCategoryRepository.fetchHotDealCategories()
+            try {
+                hotDealCategoryRepository.fetchHotDealCategories()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
         }
     }
 
     fun loadProduct() {
         viewModelScope.launch {
-            productRepository.fetchProducts()
+            try {
+                productRepository.fetchProducts()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
         }
+    }
+
+    fun retry(){
+        loadAllData()
     }
 }

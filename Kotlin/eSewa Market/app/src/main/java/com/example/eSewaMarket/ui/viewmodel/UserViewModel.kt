@@ -5,8 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.eSewaMarket.EsewaMarketApplication
+import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.UserResponse
 import com.example.eSewaMarket.data.models.UserSyncRequest
+import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.UserRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import kotlinx.coroutines.launch
@@ -14,6 +17,14 @@ import kotlinx.coroutines.launch
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = UserRepository()
     private val sessionRepository = UserSessionRepository(application)
+    private val database =
+        (application as EsewaMarketApplication).database
+
+    private val cartRepository = CartRepository(
+        cartDao = database.cartDao(),
+        userRepository = sessionRepository,
+        apiService = RetrofitInstance.api
+    )
     private val _user = MutableLiveData<UserResponse>()
     val user: LiveData<UserResponse> = _user
 
@@ -61,6 +72,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
                     sessionRepository.saveUser(user)
+                    cartRepository.syncCartWithServer()
                     _user.value = user
                 } else {
                     val error = response.errorBody()?.string()

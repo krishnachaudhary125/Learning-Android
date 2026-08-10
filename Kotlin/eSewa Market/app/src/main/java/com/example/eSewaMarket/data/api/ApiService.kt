@@ -5,7 +5,6 @@ import com.example.eSewaMarket.data.models.CartItemResponse
 import com.example.eSewaMarket.data.models.HotDeal
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
-import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.models.UserResponse
 import com.example.eSewaMarket.data.models.UserSyncRequest
 import retrofit2.Response
@@ -27,7 +26,7 @@ interface ApiService {
     suspend fun getProduct(): List<Product>
 
     @GET("products/{id}")
-    suspend fun getProductById(@Path("id") id: Int): Product
+    suspend fun getProductById(@Path("id") id: Long): Product
 
     @GET("products/page")
     suspend fun getRecommendedProducts(
@@ -35,7 +34,7 @@ interface ApiService {
         @Query("size") size: Int = 6,
         @Query("sortBy") sortBy: String = "id",
         @Query("direction") direction: String = "asc"
-    ): PageResponse<ProductResponse>
+    ): PageResponse<Product>
 
     @POST("users/sync")
     suspend fun syncUser(

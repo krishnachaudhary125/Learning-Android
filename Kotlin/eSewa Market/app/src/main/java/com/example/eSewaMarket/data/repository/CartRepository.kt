@@ -61,7 +61,7 @@ class CartRepository(
 
         val userId = currentUserId()
         val item = cartDao.getCartItem(userId, productId) ?: return
-        val oldQuantity = item?.quantity?:0
+        val oldQuantity = item.quantity?:0
 
         if (item.quantity == 1) {
             cartDao.removeFromCart(userId, productId)
@@ -102,6 +102,31 @@ class CartRepository(
     suspend fun clearCart(userId: Long) {
         withContext(Dispatchers.IO) {
             cartDao.clearCart(userId)
+        }
+    }
+
+    suspend fun syncCartWithServer(){
+        val userId = currentUserId()
+
+        val token = FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?:throw IllegalStateException("User is not authenticated")
+
+        val cartItems = apiService.getCart("Bearer $token")
+
+        withContext(Dispatchers.IO){
+            cartItems.forEach { item ->
+                cartDao.insert(
+                    CartEntity(
+                        userId = userId,
+                        productId = item.productId,
+                        quantity = item.quantity
+                    )
+                )
+            }
         }
     }
 }

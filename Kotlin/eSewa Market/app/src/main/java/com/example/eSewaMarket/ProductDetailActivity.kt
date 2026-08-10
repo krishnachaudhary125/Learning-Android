@@ -23,19 +23,15 @@ import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.FavouriteRepository
-import com.example.eSewaMarket.data.repository.ProductCountRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
-import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModel
-import com.example.eSewaMarket.ui.viewmodel.ProductCountViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
@@ -74,7 +70,7 @@ class ProductDetailActivity : AppCompatActivity() {
             )
         )
     }
-    private var id = -1
+    private var id = -1L
     private var width = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +93,7 @@ class ProductDetailActivity : AppCompatActivity() {
             insets
         }
 
-        id = intent.getIntExtra("product_id", -1)
+        id = intent.getLongExtra("product_id", -1L)
 
         binding.toolbarProductDetail.backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -117,8 +113,8 @@ class ProductDetailActivity : AppCompatActivity() {
 
         similarProductAdapter = createProductAdapter()
 
-        val productId = intent.getIntExtra("product_id", -1)
-        if(productId == -1){
+        val productId = intent.getLongExtra("product_id", -1)
+        if(productId == -1L){
             finish()
             return
         }
@@ -259,7 +255,7 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.bottomAddToCartBtn.setOnClickListener {
                 lifecycleScope.launch {
                     if(authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(id.toLong())
+                        cartViewModel.addToCart(id)
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
@@ -287,19 +283,19 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.plusProductBtn.setOnClickListener {
-                cartViewModel.addToCart(id.toLong())
+                cartViewModel.addToCart(id)
             }
 
             binding.minusProductBtn.setOnClickListener {
-                cartViewModel.removeOneFromCart(id.toLong())
+                cartViewModel.removeOneFromCart(id)
             }
 
             binding.favBtn.setOnClickListener {
                 lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()) {
 
-                        val wasFavourite = favouriteViewModel.isFavourite(id.toLong()).first()
-                        favouriteViewModel.toggleFavourite(id.toLong())
+                        val wasFavourite = favouriteViewModel.isFavourite(id).first()
+                        favouriteViewModel.toggleFavourite(id)
 
                         SnackBarUtil.show(
                             view = binding.root,
@@ -358,7 +354,7 @@ class ProductDetailActivity : AppCompatActivity() {
         quantityJob?.cancel()
 
         quantityJob = lifecycleScope.launch {
-            cartViewModel.productQuantity(id.toLong()).collect { qty ->
+            cartViewModel.productQuantity(id).collect { qty ->
 
                 binding.tvCartCount.text = qty.toString()
 
@@ -378,7 +374,7 @@ class ProductDetailActivity : AppCompatActivity() {
         favouriteJob?.cancel()
 
         favouriteJob = lifecycleScope.launch {
-            favouriteViewModel.isFavourite(id.toLong()).collect { isFav ->
+            favouriteViewModel.isFavourite(id).collect { isFav ->
                 binding.favBtn.setImageResource(
                     if (isFav)
                         R.drawable.ic_fav_filled_white
