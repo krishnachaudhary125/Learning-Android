@@ -25,4 +25,10 @@ class CartViewModel(
 
     fun productQuantity(productId: Long) =
         repository.productQuantity(productId)
+
+    fun syncCartWithServer(){
+        viewModelScope.launch {
+            repository.syncCartWithServer()
+        }
+    }
 }

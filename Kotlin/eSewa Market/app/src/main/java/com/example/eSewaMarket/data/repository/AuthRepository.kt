@@ -10,7 +10,7 @@ class AuthRepository(
     suspend fun logout(){
         val userId = userSessionRepository.user.first().id
         FirebaseAuth.getInstance().signOut()
-        userSessionRepository.logout()
         cartRepository.clearCart(userId)
+        userSessionRepository.logout()
     }
 }
