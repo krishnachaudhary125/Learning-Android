@@ -14,7 +14,7 @@ class ProductDetailViewModel: ViewModel() {
     val similarProducts = productRepository.products
 
 
-    fun loadProduct(id: Int) {
+    fun loadProduct(id: Long) {
         viewModelScope.launch {
             productRepository.fetchProductById(id)
         }

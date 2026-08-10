@@ -72,7 +72,6 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
         val product = productList[position]
-        val productId = product.id.toLong()
 
         holder.binding.apply {
 
@@ -116,16 +115,16 @@ class ProductAdapter(
             }
 
             plusProduct.setOnClickListener {
-                onAddToCartClick(productId)
+                onAddToCartClick(product.id)
             }
 
             minusProduct.setOnClickListener {
-                onRemoveOneFromCartClick(productId)
+                onRemoveOneFromCartClick(product.id)
             }
 
             holder.quantityJob?.cancel()
             holder.quantityJob = holder.scope.launch {
-                cartViewModel.productQuantity(productId).collect { qty ->
+                cartViewModel.productQuantity(product.id).collect { qty ->
 
                     numOfProduct.text = qty.toString()
 
@@ -137,7 +136,7 @@ class ProductAdapter(
 
             holder.favouriteJob?.cancel()
             holder.favouriteJob = holder.scope.launch {
-                favouriteViewModel.isFavourite(productId).collect { isFav ->
+                favouriteViewModel.isFavourite(product.id).collect { isFav ->
                     favourite.setImageResource(
                         if (isFav)
                             R.drawable.ic_fav_filled
@@ -148,7 +147,7 @@ class ProductAdapter(
             }
 
             favourite.setOnClickListener {
-                onFavouriteClick(productId)
+                onFavouriteClick(product.id)
             }
         }
     }

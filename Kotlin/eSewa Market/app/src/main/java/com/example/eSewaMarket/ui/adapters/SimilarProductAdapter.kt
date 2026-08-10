@@ -115,7 +115,6 @@ class SimilarProductAdapter(
                 }
 
                 val product = productList[position - 1]
-                val productId = product.id.toLong()
 
                 holder.binding.apply {
 
@@ -159,16 +158,16 @@ class SimilarProductAdapter(
                     }
 
                     plusProduct.setOnClickListener {
-                        onAddToCartClick(productId)
+                        onAddToCartClick(product.id)
                     }
 
                     minusProduct.setOnClickListener {
-                        onRemoveOneFromCartClick(productId)
+                        onRemoveOneFromCartClick(product.id)
                     }
 
                     holder.quantityJob?.cancel()
                     holder.quantityJob = holder.scope.launch {
-                        cartViewModel.productQuantity(productId).collect { qty ->
+                        cartViewModel.productQuantity(product.id).collect { qty ->
 
                             numOfProduct.text = qty.toString()
 
@@ -180,7 +179,7 @@ class SimilarProductAdapter(
 
                     holder.favouriteJob?.cancel()
                     holder.favouriteJob = holder.scope.launch {
-                        favouriteViewModel.isFavourite(productId).collect { isFav ->
+                        favouriteViewModel.isFavourite(product.id).collect { isFav ->
                             favourite.setImageResource(
                                 if (isFav)
                                     R.drawable.ic_fav_filled
@@ -191,7 +190,7 @@ class SimilarProductAdapter(
                     }
 
                     favourite.setOnClickListener {
-                        onFavouriteClick(productId)
+                        onFavouriteClick(product.id)
                     }
                 }
             }

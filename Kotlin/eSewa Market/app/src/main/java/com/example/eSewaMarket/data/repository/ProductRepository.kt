@@ -24,7 +24,7 @@ class ProductRepository {
         }
     }
 
-    suspend fun fetchProductById(id: Int){
+    suspend fun fetchProductById(id: Long){
         try {
             val response = RetrofitInstance.api.getProductById(id)
             _selectedProduct.postValue(response)

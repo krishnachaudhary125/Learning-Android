@@ -345,7 +345,7 @@ class HomeFragment : Fragment() {
             onAddToCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(productId.toLong())
+                        cartViewModel.addToCart(productId)
                     }else{
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
@@ -366,7 +366,7 @@ class HomeFragment : Fragment() {
             onRemoveOneFromCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.removeOneFromCart(productId.toLong())
+                        cartViewModel.removeOneFromCart(productId)
                     }
                 }
             },
@@ -399,7 +399,7 @@ class HomeFragment : Fragment() {
             favouriteViewModel = favouriteViewModel,
             onClick = { product ->
                 val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-                intent.putExtra("product_id", product.id.toInt())
+                intent.putExtra("product_id", product.id)
                 startActivity(intent)
             },
             onAddToCartClick = { productId ->

@@ -72,7 +72,7 @@ class RecommendedProductAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ProductViewHolder) {
             val product = items[position]
-            val productId = product.id
+
             holder.binding.apply {
                 productTitle.text = product.title
                 brand.text = product.brand
@@ -114,16 +114,16 @@ class RecommendedProductAdapter(
                 }
 
                 plusProduct.setOnClickListener {
-                    onAddToCartClick(productId)
+                    onAddToCartClick(product.id)
                 }
 
                 minusProduct.setOnClickListener {
-                    onRemoveOneFromCartClick(productId)
+                    onRemoveOneFromCartClick(product.id)
                 }
 
                 holder.quantityJob?.cancel()
                 holder.quantityJob = holder.scope.launch {
-                    cartViewModel.productQuantity(productId).collect { qty ->
+                    cartViewModel.productQuantity(product.id).collect { qty ->
 
                         numOfProduct.text = qty.toString()
 
@@ -135,7 +135,7 @@ class RecommendedProductAdapter(
 
                 holder.favouriteJob?.cancel()
                 holder.favouriteJob = holder.scope.launch {
-                    val isFav = favouriteViewModel.isFavourite(productId).first()
+                    val isFav = favouriteViewModel.isFavourite(product.id).first()
 
                     favourite.setImageResource(
                         if (isFav) {
@@ -147,7 +147,7 @@ class RecommendedProductAdapter(
                 }
 
                 favourite.setOnClickListener {
-                    onFavouriteClick(productId)
+                    onFavouriteClick(product.id)
                 }
             }
         }

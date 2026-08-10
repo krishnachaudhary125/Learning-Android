@@ -46,7 +46,8 @@ class HomeViewModel : ViewModel() {
     fun loadBanners() {
         viewModelScope.launch {
             try {
-            bannerRepository.fetchBanners()
+                bannerRepository.fetchBanners()
+                _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true
             }
@@ -56,7 +57,8 @@ class HomeViewModel : ViewModel() {
     fun loadCategory() {
         viewModelScope.launch {
             try {
-            categoryRepository.fetchCategory()
+                categoryRepository.fetchCategory()
+                _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true
             }
@@ -66,7 +68,8 @@ class HomeViewModel : ViewModel() {
     fun loadHotDealCategories() {
         viewModelScope.launch {
             try {
-            hotDealCategoryRepository.fetchHotDealCategories()
+                hotDealCategoryRepository.fetchHotDealCategories()
+                _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true
             }
@@ -76,7 +79,8 @@ class HomeViewModel : ViewModel() {
     fun loadProduct() {
         viewModelScope.launch {
             try {
-            productRepository.fetchProducts()
+                productRepository.fetchProducts()
+                _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true
             }
