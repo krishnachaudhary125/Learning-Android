@@ -20,6 +20,7 @@ class ProductRepository {
             _products.postValue(response)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
         }
     }
 
@@ -29,6 +30,7 @@ class ProductRepository {
             _selectedProduct.postValue(response)
         } catch (e: Exception){
             android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
         }
     }
 
