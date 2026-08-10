@@ -13,4 +13,5 @@
     <color name="esewa_yellow">#FFC107</color>
     <color name="esewa_bg_light">#F8F8FA</color>
     <color name="cart_image_bg">#ebebeb</color>
+    <color name="below_welcome">#8E90A6</color>
 </resources>
