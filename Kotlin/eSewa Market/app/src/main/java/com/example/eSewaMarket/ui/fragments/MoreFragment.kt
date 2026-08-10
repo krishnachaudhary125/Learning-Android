@@ -160,12 +160,12 @@ class MoreFragment : Fragment() {
                 try {
                     authViewModel.logout()
 
-                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        putExtra("login_success", true)
+                    val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }
                     startActivity(intent)
-                    requireActivity().finish()
+                    Toast.makeText(requireContext(), "Logout successfully", Toast.LENGTH_SHORT).show()
                 }catch (e: Exception) {
                     Toast.makeText(requireContext(), "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
                 }
