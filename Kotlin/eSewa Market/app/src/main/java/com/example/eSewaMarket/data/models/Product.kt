@@ -1,7 +1,7 @@
 package com.example.eSewaMarket.data.models
 
 data class Product(
-    val id: Int,
+    val id: Long,
     val title: String,
     val description: String,
     val price: Double,

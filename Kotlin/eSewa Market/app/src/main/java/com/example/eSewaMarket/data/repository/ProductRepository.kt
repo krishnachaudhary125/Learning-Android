@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
-import com.example.eSewaMarket.data.models.ProductResponse
 
 class ProductRepository {
 
@@ -33,7 +32,7 @@ class ProductRepository {
         }
     }
 
-    suspend fun fetchRecommendedProducts(page: Int): PageResponse<ProductResponse> {
+    suspend fun fetchRecommendedProducts(page: Int): PageResponse<Product> {
         return RetrofitInstance.api.getRecommendedProducts(page)
     }
 }

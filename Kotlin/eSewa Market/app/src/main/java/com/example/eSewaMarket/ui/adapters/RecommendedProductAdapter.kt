@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.models.ProductResponse
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.databinding.ItemLoadingBinding
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
@@ -26,13 +26,13 @@ private const val TYPE_LOADING = 1
 class RecommendedProductAdapter(
     private val cartViewModel: CartViewModel,
     private val favouriteViewModel: FavouriteViewModel,
-    private val onClick: (ProductResponse) -> Unit,
+    private val onClick: (Product) -> Unit,
     private val onAddToCartClick: (Long) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
     private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = mutableListOf<ProductResponse>()
+    private val items = mutableListOf<Product>()
     private var showLoadingFooter = false
 
     class ProductViewHolder(val binding: ItemProductBinding) :
@@ -158,7 +158,7 @@ class RecommendedProductAdapter(
             }
         }
     }
-    fun submitFullList(newItems: List<ProductResponse>) {
+    fun submitFullList(newItems: List<Product>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
