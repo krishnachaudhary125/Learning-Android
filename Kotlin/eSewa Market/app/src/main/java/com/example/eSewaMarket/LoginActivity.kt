@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(
-            binding.loginToolbar.toolbarBackTitle
+            binding.esewaLogo
         ) { view, insets ->
 
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
@@ -78,12 +78,6 @@ class LoginActivity : AppCompatActivity() {
             )
             insets
         }
-
-        binding.loginToolbar.backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        binding.loginToolbar.toolbarTitle.text = "Login"
 
         binding.redirectToRegister.setOnClickListener {
 

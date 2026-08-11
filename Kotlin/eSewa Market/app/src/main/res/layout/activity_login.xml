@@ -8,6 +8,7 @@
     <ImageView
         android:id="@+id/esewaLogo"
         style="@style/Widget.Card.Wrap"
+        android:layout_marginTop="@dimen/margin_large"
         android:paddingVertical="@dimen/padding_medium"
         android:src="@drawable/logo_esewa_tm"
         app:layout_constraintTop_toTopOf="parent"
@@ -50,7 +51,7 @@
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
-            android:layout_margin="@dimen/margin_medium"
+            android:layout_margin="@dimen/margin_large"
             android:orientation="vertical">
 
             <LinearLayout
@@ -126,7 +127,7 @@
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:orientation="horizontal">
 
                 <Space style="@style/Widget.Card.layout_weight"/>
