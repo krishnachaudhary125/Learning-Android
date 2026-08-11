@@ -353,19 +353,19 @@
                                     style="@style/Widget.Card.Wrap"
                                     android:layout_marginTop="@dimen/margin_medium"
                                     android:orientation="horizontal"
-                                    android:background="@drawable/bg_cart"
+                                    android:background="@drawable/bg_sign_in_with_google"
                                     android:gravity="center"
                                     android:layout_gravity="center">
 
                                     <ImageView
                                         style="@style/Widget.Card.Wrap"
-                                        android:paddingVertical="@dimen/padding_medium"
+                                        android:padding="@dimen/padding_medium"
                                         android:src="@drawable/ic_google"/>
 
                                     <TextView
                                         style="@style/Widget.Card.Wrap"
                                         android:textSize="16sp"
-                                        android:padding="@dimen/padding_medium"
+                                        android:paddingEnd="@dimen/padding_medium"
                                         android:textStyle="bold"
                                         android:textColor="@color/text_dark_200"
                                         android:text="Sign in with Google"/>
