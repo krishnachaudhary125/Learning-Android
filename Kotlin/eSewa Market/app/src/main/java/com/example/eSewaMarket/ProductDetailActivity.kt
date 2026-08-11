@@ -66,7 +66,8 @@ class ProductDetailActivity : AppCompatActivity() {
         FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }
