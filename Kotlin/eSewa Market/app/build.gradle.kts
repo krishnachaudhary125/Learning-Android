@@ -9,6 +9,7 @@ plugins {
     id("com.google.gms.google-services")
 
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -62,6 +63,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.googleid)
     implementation(libs.material)
     implementation(libs.androidx.activity)

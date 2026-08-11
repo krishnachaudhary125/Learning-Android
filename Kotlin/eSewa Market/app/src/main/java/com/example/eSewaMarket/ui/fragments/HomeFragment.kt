@@ -160,8 +160,9 @@ class HomeFragment : Fragment() {
         )
 
         binding.floatingSellButton.setOnClickListener {
-            val intent = Intent(requireContext(), PostProductActivity::class.java)
-            startActivity(intent)
+            throw RuntimeException("Test Crash")
+//            val intent = Intent(requireContext(), PostProductActivity::class.java)
+//            startActivity(intent)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
