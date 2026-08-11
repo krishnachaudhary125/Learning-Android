@@ -160,19 +160,27 @@ class MoreFragment : Fragment() {
                 try {
                     authViewModel.logout()
 
-                    val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        putExtra("open_fragment", "shop")
                     }
                     startActivity(intent)
+
+                    val loginIntent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(loginIntent)
+
                     Toast.makeText(requireContext(), "Logout successfully", Toast.LENGTH_SHORT).show()
                 }catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
-                }
+                    if (isAdded) {
+                        Toast.makeText(requireContext(), "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
+                    }                }
                 finally {
-                    binding.loadingOverlay.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
-                    binding.logoutBtn.isEnabled = true
+                    if(isAdded){
+                        binding.loadingOverlay.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.logoutBtn.isEnabled = true
+                    }
                 }
             }
         }
