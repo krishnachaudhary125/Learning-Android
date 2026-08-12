@@ -1,6 +1,6 @@
 package com.example.eSewaMarket.data.models
 
-data class CartItemResponse(
+data class ProductResponse(
     val productId: Long,
     val title: String,
     val thumbnail: String,
