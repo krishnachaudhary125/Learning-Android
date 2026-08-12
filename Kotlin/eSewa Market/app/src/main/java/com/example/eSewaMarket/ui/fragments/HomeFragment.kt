@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
+                app.database.productDao(),
                 UserSessionRepository(app.applicationContext),
                 RetrofitInstance.api
             )
@@ -76,7 +77,8 @@ class HomeFragment : Fragment() {
         FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }

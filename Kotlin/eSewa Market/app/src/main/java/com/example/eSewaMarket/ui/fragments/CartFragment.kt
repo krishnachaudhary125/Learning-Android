@@ -17,17 +17,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentCartBinding
+import com.example.eSewaMarket.ui.adapters.CartProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
@@ -36,12 +37,12 @@ import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.RecommendedProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
+    private lateinit var cartProductAdapter: CartProductAdapter
     private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
     private val cartViewModel: CartViewModel by activityViewModels {
         val app = requireActivity().application as EsewaMarketApplication
@@ -49,6 +50,7 @@ class CartFragment : Fragment() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
+                app.database.productDao(),
                 UserSessionRepository(app.applicationContext),
                 RetrofitInstance.api
             )
@@ -60,7 +62,8 @@ class CartFragment : Fragment() {
         FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }
@@ -97,29 +100,45 @@ class CartFragment : Fragment() {
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                cartViewModel.cartCount().collect { count ->
-                    binding.itemCount.text = "(${count})"
-
-                    if(count>0){
-                        binding.emptyCartLayout.visibility = View.GONE
-                    }
-                    else{
-                        binding.emptyCartLayout.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapters()
+        setupCartRecyclerView()
         setupRecommendedRecyclerView()
         observeData()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                cartViewModel.cartCount().collect { count ->
+
+                    binding.itemCount.text = "($count)"
+
+                    if (count > 0) {
+                        binding.emptyCartLayout.visibility = View.GONE
+                        binding.rvCartProduct.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyCartLayout.visibility = View.VISIBLE
+                        binding.rvCartProduct.visibility = View.GONE
+                    }
+
+                    if (count > 0) {
+                        binding.toolbarCart.numOfProductInCart.text =
+                            count.toString()
+
+                        binding.toolbarCart.numOfProductInCart.visibility =
+                            View.VISIBLE
+                    } else {
+                        binding.toolbarCart.numOfProductInCart.visibility =
+                            View.GONE
+                    }
+                }
+            }
+        }
 
         binding.cartScrollLayer.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
@@ -144,7 +163,33 @@ class CartFragment : Fragment() {
     }
 
     private fun initAdapters() {
+        cartProductAdapter = CartProductAdapter(
+            onClick = { product ->
+                val intent = Intent(
+                    requireContext(),
+                    ProductDetailActivity::class.java
+                )
+                intent.putExtra("product_id", product.productId)
+                startActivity(intent)
+            },
+
+            onAddToCartClick = { productId ->
+                cartViewModel.addToCart(productId)
+            },
+
+            onRemoveOneFromCartClick = { productId ->
+                cartViewModel.removeOneFromCart(productId)
+            }
+        )
+
         recommendedAdapter = createRecommendedProductAdapter()
+    }
+
+    private fun setupCartRecyclerView() {
+        binding.rvCartProduct.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvCartProduct.adapter = cartProductAdapter
+        binding.rvCartProduct.isNestedScrollingEnabled = false
     }
 
     private fun setupRecommendedRecyclerView() {
@@ -164,6 +209,16 @@ class CartFragment : Fragment() {
     }
 
     private fun observeData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                cartViewModel.cartProducts().collect { products ->
+                    cartProductAdapter.submitList(products)
+                }
+            }
+        }
+
         recommendedProductViewModel.recommendedProducts.observe(viewLifecycleOwner) { recommended ->
             recommendedAdapter.submitFullList(recommended)
         }

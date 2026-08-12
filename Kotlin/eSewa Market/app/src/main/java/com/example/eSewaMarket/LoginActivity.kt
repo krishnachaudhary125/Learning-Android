@@ -9,12 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityLoginBinding
 import com.example.eSewaMarket.ui.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -50,13 +48,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         userViewModel.user.observe(this) { user ->
-
-            lifecycleScope.launch {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.putExtra("login_success", true)
-                startActivity(intent)
-                finish()
-            }
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            intent.putExtra("login_success", true)
+            startActivity(intent)
+            finish()
         }
 
         userViewModel.error.observe(this) { error ->
@@ -65,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(
-            binding.loginToolbar.toolbarBackTitle
+            binding.esewaLogo
         ) { view, insets ->
 
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
@@ -78,12 +73,6 @@ class LoginActivity : AppCompatActivity() {
             )
             insets
         }
-
-        binding.loginToolbar.backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        binding.loginToolbar.toolbarTitle.text = "Login"
 
         binding.redirectToRegister.setOnClickListener {
 

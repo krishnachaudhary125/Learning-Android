@@ -31,7 +31,7 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.registerToolbar.toolbarBackTitle) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.esewaLogo) { view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -42,12 +42,6 @@ class RegisterActivity : AppCompatActivity() {
             )
 
             insets
-        }
-
-        binding.registerToolbar.toolbarTitle.text = "Register"
-
-        binding.registerToolbar.backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.redirectToLogin.setOnClickListener {
@@ -81,7 +75,6 @@ class RegisterActivity : AppCompatActivity() {
             val phone = binding.phone.text.toString().trim()
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
-            val confirmPassword = binding.confirmPassword.text.toString().trim()
 
             when {
 
@@ -124,18 +117,6 @@ class RegisterActivity : AppCompatActivity() {
                 password.length < 8 -> {
                     binding.password.error = "Password must be at least 8 characters"
                     binding.password.requestFocus()
-                    return@setOnClickListener
-                }
-
-                confirmPassword.isEmpty() -> {
-                    binding.confirmPassword.error = "Confirm your password"
-                    binding.confirmPassword.requestFocus()
-                    return@setOnClickListener
-                }
-
-                password != confirmPassword -> {
-                    binding.confirmPassword.error = "Passwords do not match"
-                    binding.confirmPassword.requestFocus()
                     return@setOnClickListener
                 }
 

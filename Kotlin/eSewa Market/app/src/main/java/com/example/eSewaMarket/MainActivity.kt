@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -34,6 +35,7 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var selectedTab = 1
+    private val tabHistory = ArrayDeque<Int>()
     private lateinit var shop: NavItem
     private lateinit var cart: NavItem
     private lateinit var favourite: NavItem
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
+                app.database.productDao(),
                 UserSessionRepository(app.applicationContext),
                 RetrofitInstance.api
             )
@@ -55,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }
@@ -99,25 +103,44 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.shopButton.setOnClickListener {
             if (selectedTab != 1) {
-                openFragment(homeFragment ,shop, cart, favourite, more, 1)
+                navigateToTab(homeFragment ,shop, cart, favourite, more, 1)
             }
         }
 
         binding.bottomNav.cartButton.setOnClickListener {
             if (selectedTab != 2) {
-                openFragment(cartFragment, cart, shop, favourite, more, 2)
+                navigateToTab(cartFragment, cart, shop, favourite, more, 2)
             }
         }
 
         binding.bottomNav.favouriteButton.setOnClickListener {
             if (selectedTab != 3) {
-                openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+                navigateToTab(favouriteFragment, favourite, shop, cart, more, 3)
             }
         }
 
         binding.bottomNav.moreButon.setOnClickListener {
             if (selectedTab != 4) {
-                openFragment(moreFragment, more, shop, cart, favourite, 4)
+                navigateToTab(moreFragment, more, shop, cart, favourite, 4)
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+
+            if (tabHistory.isNotEmpty()) {
+
+                when (tabHistory.removeLast()) {
+                    1 -> showTab(homeFragment, shop, cart, favourite, more, 1)
+
+                    2 -> showTab(cartFragment, cart, shop, favourite, more, 2)
+
+                    3 -> showTab(favouriteFragment, favourite, shop, cart, more, 3)
+
+                    4 -> showTab(moreFragment, more, shop, cart, favourite, 4)
+                }
+
+            } else {
+                finish()
             }
         }
 
@@ -193,7 +216,30 @@ class MainActivity : AppCompatActivity() {
         item.button.setBackgroundResource(android.R.color.transparent)
     }
 
-    fun openFragment(fragment: Fragment, select: NavItem, deselect1: NavItem, deselect2: NavItem, deselect3: NavItem, selectedTabValue: Int){
+    private fun navigateToTab(
+        fragment: Fragment,
+        select: NavItem,
+        deselect1: NavItem,
+        deselect2: NavItem,
+        deselect3: NavItem,
+        selectedTabValue: Int
+    ) {
+        if (selectedTab != selectedTabValue) {
+            tabHistory.addLast(selectedTab)
+        }
+
+        showTab(fragment, select, deselect1, deselect2, deselect3, selectedTabValue
+        )
+    }
+
+    private fun showTab(
+        fragment: Fragment,
+        select: NavItem,
+        deselect1: NavItem,
+        deselect2: NavItem,
+        deselect3: NavItem,
+        selectedTabValue: Int
+    ) {
         switchFragment(fragment)
 
         onSelect(select)
@@ -206,9 +252,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleIntent(intent: Intent?) {
         when (intent?.getStringExtra("open_fragment")) {
-            "home" -> openFragment(homeFragment, shop, cart, favourite, more, 1)
-            "cart" -> openFragment(cartFragment, cart, shop, favourite, more, 2)
-            "favourite" -> openFragment(favouriteFragment, favourite, shop, cart, more, 3)
+            "home" -> navigateToTab(homeFragment, shop, cart, favourite, more, 1)
+            "cart" -> navigateToTab(cartFragment, cart, shop, favourite, more, 2)
+            "favourite" -> navigateToTab(favouriteFragment, favourite, shop, cart, more, 3)
         }
     }
 }

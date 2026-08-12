@@ -55,6 +55,7 @@ class ProductDetailActivity : AppCompatActivity() {
         CartViewModelFactory(
             CartRepository(
                 app.database.cartDao(),
+                app.database.productDao(),
                 UserSessionRepository(app.applicationContext),
                 RetrofitInstance.api
             )
@@ -66,7 +67,8 @@ class ProductDetailActivity : AppCompatActivity() {
         FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext)
+                UserSessionRepository(app.applicationContext),
+                RetrofitInstance.api
             )
         )
     }

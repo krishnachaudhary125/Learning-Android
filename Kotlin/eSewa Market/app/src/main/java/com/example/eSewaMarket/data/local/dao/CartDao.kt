@@ -5,6 +5,7 @@ import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import com.example.eSewaMarket.data.local.entity.CartEntity
+import com.example.eSewaMarket.data.models.ProductResponse
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -43,9 +44,46 @@ interface CartDao {
     )
     fun getTotalQuantity(userId: Long): Flow<Int>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(cartItems: List<CartEntity>)
+
+    @Query("""
+        DELETE FROM cart WHERE userId = :userId AND productId NOT IN (:serverProductIds)
+    """
+    )
+    suspend fun deleteNotInServer(userId: Long, serverProductIds: List<Long>)
+
     @Query("""
         DELETE FROM cart WHERE userId = :userId
     """
     )
     suspend fun clearCart(userId: Long)
+
+    suspend fun syncCart(
+        userId: Long,
+        serverCart: List<CartEntity>
+    ) {
+
+        if (serverCart.isEmpty()) {
+            clearCart(userId)
+            return
+        }
+
+        val serverProductIds =
+            serverCart.map { it.productId }
+
+        deleteNotInServer(userId = userId, serverProductIds = serverProductIds)
+
+        insertAll(serverCart)
+    }
+
+    @Query("""
+        SELECT p.productId, p.title, p.brand, p.price, p.thumbnail, c.quantity
+        FROM cart AS c
+        INNER JOIN products AS p
+            ON c.productId = p.productId
+        WHERE c.userId = :userId
+    """
+    )
+    fun getCartProducts(userId: Long): Flow<List<ProductResponse>>
 }

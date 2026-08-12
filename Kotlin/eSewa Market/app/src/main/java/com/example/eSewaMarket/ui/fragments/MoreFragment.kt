@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -15,19 +17,18 @@ import com.bumptech.glide.Glide
 import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.FaqActivity
 import com.example.eSewaMarket.LoginActivity
-import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.MyReturnActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.RegisterActivity
 import com.example.eSewaMarket.ShippingAddressActivity
 import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.data.repository.AuthRepository
 import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentMoreBinding
 import com.example.eSewaMarket.ui.factory.AuthViewModelFactory
 import com.example.eSewaMarket.ui.viewmodel.AuthViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment() {
@@ -45,14 +46,14 @@ class MoreFragment : Fragment() {
 
         val cartRepository = CartRepository(
             cartDao = database.cartDao(),
+            productDao = database.productDao(),
             userRepository = userSessionRepository,
             apiService = RetrofitInstance.api
         )
 
         AuthViewModelFactory(
             AuthRepository(
-                userSessionRepository = userSessionRepository,
-                cartRepository = cartRepository
+                userSessionRepository = userSessionRepository
             )
         )
     }
@@ -151,32 +152,56 @@ class MoreFragment : Fragment() {
         }
 
         binding.logoutBtn.setOnClickListener {
-
-            binding.loadingOverlay.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.VISIBLE
-            binding.logoutBtn.isEnabled = false
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                try {
-                    authViewModel.logout()
-
-                    val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    startActivity(intent)
-                    Toast.makeText(requireContext(), "Logout successfully", Toast.LENGTH_SHORT).show()
-                }catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
-                }
-                finally {
-                    binding.loadingOverlay.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
-                    binding.logoutBtn.isEnabled = true
-                }
-            }
+            logoutAlertDialog()
         }
 
         return binding.root
+    }
+
+    fun logoutAlertDialog() {
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Logout")
+            .setMessage("Do you want to logout?")
+            .setNegativeButton("No", null)
+            .setPositiveButton("Yes") { _, _ ->
+
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.logoutBtn.isEnabled = false
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        authViewModel.logout()
+
+                        val loginIntent = Intent(requireContext(), LoginActivity::class.java)
+                        startActivity(loginIntent)
+
+                        Toast.makeText(requireContext(), "Logout successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } catch (e: Exception) {
+                        if (isAdded) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Logout failed. Please try again.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } finally {
+                        if (isAdded) {
+                            binding.loadingOverlay.visibility = View.GONE
+                            binding.progressBar.visibility = View.GONE
+                            binding.logoutBtn.isEnabled = true
+                        }
+                    }
+                }
+            }.create()
+
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
     }
 }

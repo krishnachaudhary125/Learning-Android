@@ -2,7 +2,9 @@ package com.example.eSewaMarket.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.CartRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class CartViewModel(
@@ -26,9 +28,7 @@ class CartViewModel(
     fun productQuantity(productId: Long) =
         repository.productQuantity(productId)
 
-    fun syncCartWithServer(){
-        viewModelScope.launch {
-            repository.syncCartWithServer()
-        }
+    fun cartProducts() : Flow<List<ProductResponse>>{
+        return repository.cartProducts()
     }
 }

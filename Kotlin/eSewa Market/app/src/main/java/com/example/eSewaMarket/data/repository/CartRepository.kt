@@ -2,23 +2,40 @@ package com.example.eSewaMarket.data.repository
 
 import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.CartDao
+import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
+import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlin.collections.map
 
 class CartRepository(
     private val cartDao: CartDao,
+    private val productDao: ProductDao,
     private val userRepository: UserSessionRepository,
     private val apiService: ApiService
 ) {
     private suspend fun currentUserId(): Long {
         return userRepository.user.first().id
     }
+
+    private suspend fun getAuthToken(): String {
+        return FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?.let { "Bearer $it" }
+            ?: throw IllegalStateException("User is not authenticated")
+    }
+
     suspend fun addToCart(productId: Long) {
 
         val userId = currentUserId()
@@ -36,15 +53,8 @@ class CartRepository(
         }
 
         try {
-            val token = FirebaseAuth.getInstance()
-                .currentUser
-                ?.getIdToken(false)
-                ?.await()
-                ?.token
-                ?: throw IllegalStateException("User is not authenticated")
-
             apiService.addToCart(
-                "Bearer $token",
+                getAuthToken(),
                 AddToCartRequest(productId = productId)
             )
         }catch (e: Exception){
@@ -70,15 +80,8 @@ class CartRepository(
         }
 
         try {
-            val token = FirebaseAuth.getInstance()
-                .currentUser
-                ?.getIdToken(false)
-                ?.await()
-                ?.token
-                ?: throw IllegalStateException("User is not authenticated")
-
             apiService.removeOneFromCart(
-                "Bearer $token",
+                getAuthToken(),
                 productId
             )
         }catch (e: Exception){
@@ -105,28 +108,50 @@ class CartRepository(
         }
     }
 
-    suspend fun syncCartWithServer(){
+    suspend fun syncCartWithServer() {
         val userId = currentUserId()
+        val token = getAuthToken()
+        val response = apiService.getCart(token)
 
-        val token = FirebaseAuth.getInstance()
-            .currentUser
-            ?.getIdToken(false)
-            ?.await()
-            ?.token
-            ?:throw IllegalStateException("User is not authenticated")
+        val cartItems = response.map {
+            CartEntity(
+                userId = userId,
+                productId = it.productId,
+                quantity = it.quantity
+            )
+        }
 
-        val cartItems = apiService.getCart("Bearer $token")
+        val products = response.map {
+            ProductEntity(
+                productId = it.productId,
+                title = it.title,
+                thumbnail = it.thumbnail,
+                price = it.price,
+                brand = it.brand
+            )
+        }
 
-        withContext(Dispatchers.IO){
-            cartItems.forEach { item ->
-                cartDao.insert(
-                    CartEntity(
-                        userId = userId,
-                        productId = item.productId,
-                        quantity = item.quantity
-                    )
-                )
-            }
+        if (products.isNotEmpty()) {
+            productDao.insertIntoProducts(products)
+        }
+
+        if (cartItems.isEmpty()) {
+            cartDao.clearCart(userId)
+        } else {
+            val serverProductIds =
+                cartItems.map { it.productId }
+
+            cartDao.deleteNotInServer(
+                userId = userId,
+                serverProductIds = serverProductIds
+            )
+            cartDao.insertAll(cartItems)
+        }
+    }
+
+    fun cartProducts() : Flow<List<ProductResponse>>{
+        return userRepository.user.flatMapLatest { user ->
+            cartDao.getCartProducts(user.id)
         }
     }
 }
