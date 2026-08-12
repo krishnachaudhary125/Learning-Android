@@ -43,9 +43,36 @@ interface CartDao {
     )
     fun getTotalQuantity(userId: Long): Flow<Int>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(cartItems: List<CartEntity>)
+
+    @Query("""
+        DELETE FROM cart WHERE userId = :userId AND productId NOT IN (:serverProductIds)
+    """
+    )
+    suspend fun deleteNotInServer(userId: Long, serverProductIds: List<Long>)
+
     @Query("""
         DELETE FROM cart WHERE userId = :userId
     """
     )
     suspend fun clearCart(userId: Long)
+
+    suspend fun syncCart(
+        userId: Long,
+        serverCart: List<CartEntity>
+    ) {
+
+        if (serverCart.isEmpty()) {
+            clearCart(userId)
+            return
+        }
+
+        val serverProductIds =
+            serverCart.map { it.productId }
+
+        deleteNotInServer(userId = userId, serverProductIds = serverProductIds)
+
+        insertAll(serverCart)
+    }
 }

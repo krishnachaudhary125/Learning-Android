@@ -10,11 +10,18 @@ import com.example.eSewaMarket.data.local.entity.ProductEntity
 interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertIntoProducts(products: List<ProductEntity>)
-
-    @Query("""
-        DELETE FROM products WHERE productId NOT IN (:serverProductId)
-    """
+    suspend fun insertIntoProducts(
+        products: List<ProductEntity>
     )
-    suspend fun deleteFromProducts(serverProductId: List<Long>)
+
+    @Query("SELECT * FROM products WHERE productId = :productId")
+    suspend fun getProductById(
+        productId: Long
+    ): ProductEntity?
+
+    @Query("SELECT * FROM products")
+    suspend fun getAllProducts(): List<ProductEntity>
+
+    @Query("DELETE FROM products")
+    suspend fun deleteAllFromProduct()
 }
