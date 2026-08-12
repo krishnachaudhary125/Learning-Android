@@ -5,5 +5,6 @@ data class ProductResponse(
     val title: String,
     val thumbnail: String,
     val price: Double,
-    val quantity: Int
+    val quantity: Int,
+    val brand: String
 )
