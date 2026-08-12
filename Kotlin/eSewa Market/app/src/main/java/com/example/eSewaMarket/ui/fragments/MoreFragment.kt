@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -18,13 +17,11 @@ import com.bumptech.glide.Glide
 import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.FaqActivity
 import com.example.eSewaMarket.LoginActivity
-import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.MyReturnActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.RegisterActivity
 import com.example.eSewaMarket.ShippingAddressActivity
 import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.local.AppDatabase
 import com.example.eSewaMarket.data.repository.AuthRepository
 import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
@@ -55,8 +52,7 @@ class MoreFragment : Fragment() {
 
         AuthViewModelFactory(
             AuthRepository(
-                userSessionRepository = userSessionRepository,
-                cartRepository = cartRepository
+                userSessionRepository = userSessionRepository
             )
         )
     }

@@ -50,13 +50,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         userViewModel.user.observe(this) { user ->
-
-            lifecycleScope.launch {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.putExtra("login_success", true)
-                startActivity(intent)
-                finish()
-            }
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            intent.putExtra("login_success", true)
+            startActivity(intent)
+            finish()
         }
 
         userViewModel.error.observe(this) { error ->
