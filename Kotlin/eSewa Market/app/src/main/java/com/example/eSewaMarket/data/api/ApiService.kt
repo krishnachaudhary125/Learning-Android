@@ -1,7 +1,7 @@
 package com.example.eSewaMarket.data.api
 
 import com.example.eSewaMarket.data.models.AddToCartRequest
-import com.example.eSewaMarket.data.models.CartItemResponse
+import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
 import com.example.eSewaMarket.data.models.HotDeal
 import com.example.eSewaMarket.data.models.PageResponse
@@ -63,11 +63,16 @@ interface ApiService {
     @GET("cart")
     suspend fun getCart(
         @Header("Authorization") token: String
-    ): List<CartItemResponse>
+    ): List<ProductResponse>
 
     @POST("favourites")
     suspend fun toggleFavourite(
         @Header("Authorization") token: String,
         @Body request: FavouriteToggles
     )
+
+    @GET("favourite")
+    suspend fun getFavourite(
+        @Header("Authorization") token: String
+    ): List<ProductResponse>
 }
