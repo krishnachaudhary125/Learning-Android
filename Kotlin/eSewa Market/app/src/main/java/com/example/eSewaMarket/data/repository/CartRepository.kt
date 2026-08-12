@@ -2,7 +2,9 @@ package com.example.eSewaMarket.data.repository
 
 import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.CartDao
+import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
+import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -13,12 +15,24 @@ import kotlinx.coroutines.withContext
 
 class CartRepository(
     private val cartDao: CartDao,
+    private val productDao: ProductDao,
     private val userRepository: UserSessionRepository,
     private val apiService: ApiService
 ) {
     private suspend fun currentUserId(): Long {
         return userRepository.user.first().id
     }
+
+    private suspend fun getAuthToken(): String {
+        return FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?.let { "Bearer $it" }
+            ?: throw IllegalStateException("User is not authenticated")
+    }
+
     suspend fun addToCart(productId: Long) {
 
         val userId = currentUserId()
@@ -36,15 +50,8 @@ class CartRepository(
         }
 
         try {
-            val token = FirebaseAuth.getInstance()
-                .currentUser
-                ?.getIdToken(false)
-                ?.await()
-                ?.token
-                ?: throw IllegalStateException("User is not authenticated")
-
             apiService.addToCart(
-                "Bearer $token",
+                getAuthToken(),
                 AddToCartRequest(productId = productId)
             )
         }catch (e: Exception){
@@ -70,15 +77,8 @@ class CartRepository(
         }
 
         try {
-            val token = FirebaseAuth.getInstance()
-                .currentUser
-                ?.getIdToken(false)
-                ?.await()
-                ?.token
-                ?: throw IllegalStateException("User is not authenticated")
-
             apiService.removeOneFromCart(
-                "Bearer $token",
+                getAuthToken(),
                 productId
             )
         }catch (e: Exception){
@@ -127,6 +127,47 @@ class CartRepository(
                     )
                 )
             }
+        }
+    }
+
+    suspend fun syncCart(){
+        val userId = currentUserId()
+        val token = getAuthToken()
+        val response = apiService.getCart(token)
+
+        val cartItems = response.map {
+            CartEntity(
+                userId = userId,
+                productId = it.productId,
+                quantity = it.quantity
+            )
+        }
+
+        val products = response.map{
+            ProductEntity(
+                productId = it.productId,
+                title = it.title,
+                thumbnail = it.thumbnail,
+                price = it.price,
+                brand = it.brand
+            )
+        }
+
+        if(products.isNotEmpty()){
+            productDao.insertIntoProducts(products)
+        }
+
+        if(cartItems.isEmpty()){
+            cartDao.clearCart(userId)
+        }else{
+            val serverProductId = cartItems.map { it.productId }
+
+            cartDao.deleteNotInServer(
+                userId = userId,
+                serverProductIds = serverProductId
+            )
+
+            cartDao.insertAll(cartItems)
         }
     }
 }
