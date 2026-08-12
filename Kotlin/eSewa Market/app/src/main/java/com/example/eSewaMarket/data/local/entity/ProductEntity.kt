@@ -12,5 +12,5 @@ data class ProductEntity (
     val brand: String,
     val price: Double,
     val thumbnail: String,
-    val discountPercentage: Double ? = null
+    val discountPercentage: Double? = null
 )
