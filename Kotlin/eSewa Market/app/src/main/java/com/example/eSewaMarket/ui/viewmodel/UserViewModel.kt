@@ -1,6 +1,7 @@
 package com.example.eSewaMarket.ui.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +23,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val cartRepository = CartRepository(
         cartDao = database.cartDao(),
+        productDao = database.productDao(),
         userRepository = sessionRepository,
         apiService = RetrofitInstance.api
     )
@@ -83,6 +85,18 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _error.value = e.localizedMessage ?: "Unknown error"
             } finally {
                 _loading.value = false
+            }
+        }
+    }
+
+    fun syncUserData(){
+        viewModelScope.launch {
+            launch {
+                try {
+                    cartRepository.syncCart()
+                }catch (e: Exception){
+                    Log.e("SYNC", "Failed to sync cart.", e)
+                }
             }
         }
     }

@@ -46,6 +46,7 @@ class MoreFragment : Fragment() {
 
         val cartRepository = CartRepository(
             cartDao = database.cartDao(),
+            productDao = database.productDao(),
             userRepository = userSessionRepository,
             apiService = RetrofitInstance.api
         )

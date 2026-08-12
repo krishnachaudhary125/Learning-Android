@@ -58,4 +58,24 @@ class FavouriteRepository(
             favouriteDao.isFavourite(user.id, productId)
         }
     }
+
+    suspend fun syncFavourites(
+        userId: Long,
+        serverFavourites: List<FavouriteEntity>
+    ) {
+        if (serverFavourites.isEmpty()) {
+            favouriteDao.clearFavourites(userId)
+            return
+        }
+
+        val serverProductIds =
+            serverFavourites.map { it.productId }
+
+        favouriteDao.deleteNotInServer(
+            userId = userId,
+            serverProductIds = serverProductIds
+        )
+
+        favouriteDao.insertAll(serverFavourites)
+    }
 }
