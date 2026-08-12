@@ -48,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         userViewModel.user.observe(this) { user ->
-            userViewModel.syncUserData()
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             intent.putExtra("login_success", true)
             startActivity(intent)

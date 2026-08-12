@@ -6,12 +6,15 @@ import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
 import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlin.collections.map
 
 class CartRepository(
     private val cartDao: CartDao,
@@ -105,32 +108,7 @@ class CartRepository(
         }
     }
 
-    suspend fun syncCartWithServer(){
-        val userId = currentUserId()
-
-        val token = FirebaseAuth.getInstance()
-            .currentUser
-            ?.getIdToken(false)
-            ?.await()
-            ?.token
-            ?:throw IllegalStateException("User is not authenticated")
-
-        val cartItems = apiService.getCart("Bearer $token")
-
-        withContext(Dispatchers.IO){
-            cartItems.forEach { item ->
-                cartDao.insert(
-                    CartEntity(
-                        userId = userId,
-                        productId = item.productId,
-                        quantity = item.quantity
-                    )
-                )
-            }
-        }
-    }
-
-    suspend fun syncCart(){
+    suspend fun syncCartWithServer() {
         val userId = currentUserId()
         val token = getAuthToken()
         val response = apiService.getCart(token)
@@ -143,7 +121,7 @@ class CartRepository(
             )
         }
 
-        val products = response.map{
+        val products = response.map {
             ProductEntity(
                 productId = it.productId,
                 title = it.title,
@@ -153,21 +131,27 @@ class CartRepository(
             )
         }
 
-        if(products.isNotEmpty()){
+        if (products.isNotEmpty()) {
             productDao.insertIntoProducts(products)
         }
 
-        if(cartItems.isEmpty()){
+        if (cartItems.isEmpty()) {
             cartDao.clearCart(userId)
-        }else{
-            val serverProductId = cartItems.map { it.productId }
+        } else {
+            val serverProductIds =
+                cartItems.map { it.productId }
 
             cartDao.deleteNotInServer(
                 userId = userId,
-                serverProductIds = serverProductId
+                serverProductIds = serverProductIds
             )
-
             cartDao.insertAll(cartItems)
+        }
+    }
+
+    fun cartProducts() : Flow<List<ProductResponse>>{
+        return userRepository.user.flatMapLatest { user ->
+            cartDao.getCartProducts(user.id)
         }
     }
 }

@@ -74,8 +74,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
                     sessionRepository.saveUser(user)
-                    cartRepository.syncCartWithServer()
                     _user.value = user
+                    try {
+                    cartRepository.syncCartWithServer()
+                    }catch (e: Exception){
+                        Log.e("SYNC", "Syncing cart data failed.", e)
+                    }
                 } else {
                     val error = response.errorBody()?.string()
                     _error.value = "Code: ${response.code()}\n$error"
@@ -85,18 +89,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _error.value = e.localizedMessage ?: "Unknown error"
             } finally {
                 _loading.value = false
-            }
-        }
-    }
-
-    fun syncUserData(){
-        viewModelScope.launch {
-            launch {
-                try {
-                    cartRepository.syncCart()
-                }catch (e: Exception){
-                    Log.e("SYNC", "Failed to sync cart.", e)
-                }
             }
         }
     }
