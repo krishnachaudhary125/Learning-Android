@@ -5,6 +5,7 @@ import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import com.example.eSewaMarket.data.local.entity.CartEntity
+import com.example.eSewaMarket.data.models.ProductResponse
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -75,4 +76,14 @@ interface CartDao {
 
         insertAll(serverCart)
     }
+
+    @Query("""
+        SELECT p.productId, p.title, p.brand, p.price, p.thumbnail, c.quantity
+        FROM cart AS c
+        INNER JOIN products AS p
+            ON c.productId = p.productId
+        WHERE c.userId = :userId
+    """
+    )
+    fun getCartProducts(userId: Long): Flow<List<ProductResponse>>
 }
