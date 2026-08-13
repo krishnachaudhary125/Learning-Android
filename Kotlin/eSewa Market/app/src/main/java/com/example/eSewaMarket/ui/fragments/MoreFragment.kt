@@ -44,13 +44,6 @@ class MoreFragment : Fragment() {
         val database =
             (context as EsewaMarketApplication).database
 
-        val cartRepository = CartRepository(
-            cartDao = database.cartDao(),
-            productDao = database.productDao(),
-            userRepository = userSessionRepository,
-            apiService = RetrofitInstance.api
-        )
-
         AuthViewModelFactory(
             AuthRepository(
                 userSessionRepository = userSessionRepository

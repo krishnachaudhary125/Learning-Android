@@ -30,6 +30,7 @@ import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
+import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
@@ -50,27 +51,10 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var userSessionRepository: UserSessionRepository
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val cartViewModel: CartViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        CartViewModelFactory(
-            CartRepository(
-                app.database.cartDao(),
-                app.database.productDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.cartFactory(this)
     }
     private val favouriteViewModel: FavouriteViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        FavouriteViewModelFactory(
-            FavouriteRepository(
-                app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.favouriteFactory(this)
     }
     private var id = -1L
     private var width = 0
@@ -257,7 +241,7 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.bottomAddToCartBtn.setOnClickListener {
                 lifecycleScope.launch {
                     if(authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(id)
+                        cartViewModel.increaseQuantity(id)
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
@@ -285,7 +269,7 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.plusProductBtn.setOnClickListener {
-                cartViewModel.addToCart(id)
+                cartViewModel.increaseQuantity(id)
             }
 
             binding.minusProductBtn.setOnClickListener {
@@ -421,10 +405,10 @@ class ProductDetailActivity : AppCompatActivity() {
                 intent.putExtra("product_id", product.id)
                 startActivity(intent)
             },
-            onAddToCartClick = { productId ->
+            onAddToCartClick = { product ->
                 lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(productId)
+                        cartViewModel.addToCart(product)
                     }else{
                         SnackBarUtil.show(
                             view = binding.root,

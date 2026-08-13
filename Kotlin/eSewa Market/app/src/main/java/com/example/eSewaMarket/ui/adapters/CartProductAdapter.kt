@@ -6,12 +6,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.databinding.ItemCartProductBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 
 class CartProductAdapter(
     private val onClick: (ProductResponse) -> Unit,
@@ -52,15 +49,18 @@ class CartProductAdapter(
 
     override fun onBindViewHolder(holder: CartProductViewHolder, position: Int) {
         val product = productList[position]
+        val quantity = product.quantity.toDouble()
+        val price = product.price * quantity
 
         holder.binding.apply {
             Glide.with(productImage.context)
                 .load(product.thumbnail)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(productImage)
 
             productName.text = product.title
             productBrand.text = product.brand
-            productPrice.text = product.price.toString()
+            productPrice.text = "%.2f".format(price)
             numOfProduct.text = product.quantity.toString()
 
             productLayout.setOnClickListener {

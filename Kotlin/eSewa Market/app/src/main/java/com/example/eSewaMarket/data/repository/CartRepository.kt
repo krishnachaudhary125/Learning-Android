@@ -6,6 +6,7 @@ import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
 import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -36,8 +37,7 @@ class CartRepository(
             ?: throw IllegalStateException("User is not authenticated")
     }
 
-    suspend fun addToCart(productId: Long) {
-
+    suspend fun increaseQuantity(productId: Long) {
         val userId = currentUserId()
         val item = cartDao.getCartItem(userId, productId)
 
@@ -65,6 +65,25 @@ class CartRepository(
             }
             throw e
         }
+    }
+
+    suspend fun addToCart(product: Product) {
+        val token = getAuthToken()
+        val response = apiService.getCart(token)
+
+        productDao.insertIntoProducts(
+            listOf(
+                ProductEntity(
+                    productId = product.id,
+                    title = product.title,
+                    thumbnail = product.thumbnail,
+                    price = product.price,
+                    brand = product.brand
+                )
+            )
+        )
+
+        increaseQuantity(product.id)
     }
 
     suspend fun removeOneFromCart(productId: Long) {
@@ -100,12 +119,6 @@ class CartRepository(
 
     fun productQuantity(productId: Long) = userRepository.user.flatMapLatest { user ->
         cartDao.getProductQuantity(user.id, productId)
-    }
-
-    suspend fun clearCart(userId: Long) {
-        withContext(Dispatchers.IO) {
-            cartDao.clearCart(userId)
-        }
     }
 
     suspend fun syncCartWithServer() {
@@ -153,5 +166,15 @@ class CartRepository(
         return userRepository.user.flatMapLatest { user ->
             cartDao.getCartProducts(user.id)
         }
+    }
+
+    suspend fun totalPrice() : Flow<Double?>{
+        val userId = currentUserId()
+        return cartDao.getTotalPrice(userId)
+    }
+
+    suspend fun itemCount() : Flow<Int>{
+        val userId = currentUserId()
+        return cartDao.getItemCount(userId)
     }
 }

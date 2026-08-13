@@ -14,10 +14,8 @@ interface ProductDao {
         products: List<ProductEntity>
     )
 
-    @Query("SELECT * FROM products WHERE productId = :productId")
-    suspend fun getProductById(
-        productId: Long
-    ): ProductEntity?
+    @Query("SELECT * FROM products WHERE productId = :productId LIMIT 1")
+    suspend fun getProductById(productId: Long): ProductEntity?
 
     @Query("SELECT * FROM products")
     suspend fun getAllProducts(): List<ProductEntity>

@@ -59,31 +59,26 @@ interface CartDao {
     )
     suspend fun clearCart(userId: Long)
 
-    suspend fun syncCart(
-        userId: Long,
-        serverCart: List<CartEntity>
-    ) {
-
-        if (serverCart.isEmpty()) {
-            clearCart(userId)
-            return
-        }
-
-        val serverProductIds =
-            serverCart.map { it.productId }
-
-        deleteNotInServer(userId = userId, serverProductIds = serverProductIds)
-
-        insertAll(serverCart)
-    }
-
     @Query("""
         SELECT p.productId, p.title, p.brand, p.price, p.thumbnail, c.quantity
         FROM cart AS c
         INNER JOIN products AS p
-            ON c.productId = p.productId
+        ON c.productId = p.productId
         WHERE c.userId = :userId
     """
     )
     fun getCartProducts(userId: Long): Flow<List<ProductResponse>>
+
+    @Query("""
+    SELECT COALESCE(SUM(p.price * c.quantity), null)
+    FROM cart AS c
+    INNER JOIN products AS p
+    ON c.productId = p.productId
+    WHERE c.userId = :userId
+    """
+    )
+    fun getTotalPrice(userId: Long): Flow<Double?>
+
+    @Query("SELECT COUNT(*) FROM cart WHERE userId = :userId")
+    fun getItemCount(userId: Long): Flow<Int>
 }

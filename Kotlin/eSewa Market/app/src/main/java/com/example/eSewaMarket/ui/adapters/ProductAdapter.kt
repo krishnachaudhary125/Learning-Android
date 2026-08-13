@@ -20,7 +20,7 @@ class ProductAdapter(
     private val cartViewModel: CartViewModel,
     private val favouriteViewModel: FavouriteViewModel,
     private val onClick: (Product) -> Unit,
-    private val onAddToCartClick: (Long) -> Unit,
+    private val onAddToCartClick: (Product) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
     private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
@@ -70,7 +70,8 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-
+        holder.quantityJob?.cancel()
+        holder.favouriteJob?.cancel()
         val product = productList[position]
 
         holder.binding.apply {
@@ -104,7 +105,7 @@ class ProductAdapter(
 
             if (product.discountPercentage != null){
                 val dis = product.discountPercentage.toInt()
-                discount.text = "${dis}% OFF"
+                discount.text = root.context.getString(R.string.discount_off, dis)
                 discount.visibility = View.VISIBLE
             }else{
                 discount.visibility = View.GONE
@@ -115,14 +116,13 @@ class ProductAdapter(
             }
 
             plusProduct.setOnClickListener {
-                onAddToCartClick(product.id)
+                onAddToCartClick(product)
             }
 
             minusProduct.setOnClickListener {
                 onRemoveOneFromCartClick(product.id)
             }
 
-            holder.quantityJob?.cancel()
             holder.quantityJob = holder.scope.launch {
                 cartViewModel.productQuantity(product.id).collect { qty ->
 
@@ -134,7 +134,6 @@ class ProductAdapter(
                 }
             }
 
-            holder.favouriteJob?.cancel()
             holder.favouriteJob = holder.scope.launch {
                 favouriteViewModel.isFavourite(product.id).collect { isFav ->
                     favourite.setImageResource(
