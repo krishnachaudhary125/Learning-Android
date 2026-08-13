@@ -1,7 +1,6 @@
 package com.example.eSewaMarket.ui.adapters
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,10 +73,6 @@ class ProductAdapter(
         holder.quantityJob?.cancel()
         holder.favouriteJob?.cancel()
         val product = productList[position]
-        Log.d(
-            "PRODUCT_BIND",
-            "Binding product=${product.id}, position=$position"
-        )
 
         holder.binding.apply {
 
@@ -110,7 +105,7 @@ class ProductAdapter(
 
             if (product.discountPercentage != null){
                 val dis = product.discountPercentage.toInt()
-                discount.text = "${dis}% OFF"
+                discount.text = root.context.getString(R.string.discount_off, dis)
                 discount.visibility = View.VISIBLE
             }else{
                 discount.visibility = View.GONE
@@ -130,10 +125,6 @@ class ProductAdapter(
 
             holder.quantityJob = holder.scope.launch {
                 cartViewModel.productQuantity(product.id).collect { qty ->
-                    Log.d(
-                        "PRODUCT_QTY",
-                        "Quantity update product=${product.id}, qty=$qty"
-                    )
 
                     numOfProduct.text = qty.toString()
 
@@ -145,10 +136,6 @@ class ProductAdapter(
 
             holder.favouriteJob = holder.scope.launch {
                 favouriteViewModel.isFavourite(product.id).collect { isFav ->
-                    Log.d(
-                        "PRODUCT_FAV",
-                        "Favourite update product=${product.id}, fav=$isFav"
-                    )
                     favourite.setImageResource(
                         if (isFav)
                             R.drawable.ic_fav_filled
