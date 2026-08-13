@@ -257,7 +257,7 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.bottomAddToCartBtn.setOnClickListener {
                 lifecycleScope.launch {
                     if(authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(id)
+                        cartViewModel.increaseQuantity(id)
                         SnackBarUtil.show(
                             view = binding.root,
                             context = this@ProductDetailActivity,
@@ -285,7 +285,7 @@ class ProductDetailActivity : AppCompatActivity() {
             }
 
             binding.plusProductBtn.setOnClickListener {
-                cartViewModel.addToCart(id)
+                cartViewModel.increaseQuantity(id)
             }
 
             binding.minusProductBtn.setOnClickListener {
@@ -424,7 +424,7 @@ class ProductDetailActivity : AppCompatActivity() {
             onAddToCartClick = { productId ->
                 lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(productId)
+                        cartViewModel.increaseQuantity(productId)
                     }else{
                         SnackBarUtil.show(
                             view = binding.root,

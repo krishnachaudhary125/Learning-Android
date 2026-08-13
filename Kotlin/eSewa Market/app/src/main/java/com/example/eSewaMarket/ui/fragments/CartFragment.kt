@@ -172,7 +172,7 @@ class CartFragment : Fragment() {
             },
 
             onAddToCartClick = { productId ->
-                cartViewModel.addToCart(productId)
+                cartViewModel.increaseQuantity(productId)
             },
 
             onRemoveOneFromCartClick = { productId ->
@@ -248,7 +248,7 @@ class CartFragment : Fragment() {
             onAddToCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.addToCart(productId)
+                        cartViewModel.increaseQuantity(productId)
                     }else{
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)

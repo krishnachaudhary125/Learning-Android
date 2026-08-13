@@ -18,9 +18,9 @@ class CartViewModel(
 
     fun cartCount() = repository.totalQuantity()
 
-    fun addToCart(productId: Long) {
+    fun increaseQuantity(productId: Long) {
         viewModelScope.launch {
-            repository.addToCart(productId)
+            repository.increaseQuantity(productId)
         }
     }
 

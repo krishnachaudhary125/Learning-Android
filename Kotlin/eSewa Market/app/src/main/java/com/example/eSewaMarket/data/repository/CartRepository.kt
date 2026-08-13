@@ -36,8 +36,7 @@ class CartRepository(
             ?: throw IllegalStateException("User is not authenticated")
     }
 
-    suspend fun addToCart(productId: Long) {
-
+    suspend fun increaseQuantity(productId: Long) {
         val userId = currentUserId()
         val item = cartDao.getCartItem(userId, productId)
 
@@ -65,6 +64,11 @@ class CartRepository(
             }
             throw e
         }
+    }
+
+    suspend fun addToCart(productId: Long) {
+
+
     }
 
     suspend fun removeOneFromCart(productId: Long) {
@@ -100,12 +104,6 @@ class CartRepository(
 
     fun productQuantity(productId: Long) = userRepository.user.flatMapLatest { user ->
         cartDao.getProductQuantity(user.id, productId)
-    }
-
-    suspend fun clearCart(userId: Long) {
-        withContext(Dispatchers.IO) {
-            cartDao.clearCart(userId)
-        }
     }
 
     suspend fun syncCartWithServer() {
