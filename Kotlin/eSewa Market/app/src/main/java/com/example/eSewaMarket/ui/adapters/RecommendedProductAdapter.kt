@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eSewaMarket.R
@@ -71,6 +72,8 @@ class RecommendedProductAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ProductViewHolder) {
+            holder.quantityJob?.cancel()
+            holder.favouriteJob?.cancel()
             val product = items[position]
 
             holder.binding.apply {
@@ -121,7 +124,6 @@ class RecommendedProductAdapter(
                     onRemoveOneFromCartClick(product.id)
                 }
 
-                holder.quantityJob?.cancel()
                 holder.quantityJob = holder.scope.launch {
                     cartViewModel.productQuantity(product.id).collect { qty ->
 
@@ -133,7 +135,6 @@ class RecommendedProductAdapter(
                     }
                 }
 
-                holder.favouriteJob?.cancel()
                 holder.favouriteJob = holder.scope.launch {
                     val isFav = favouriteViewModel.isFavourite(product.id).first()
 
@@ -159,9 +160,34 @@ class RecommendedProductAdapter(
         }
     }
     fun submitFullList(newItems: List<Product>) {
+
+        val diffCallback = object : DiffUtil.Callback() {
+
+            override fun getOldListSize() = items.size
+
+            override fun getNewListSize() = newItems.size
+
+            override fun areItemsTheSame(
+                oldItemPosition: Int,
+                newItemPosition: Int
+            ): Boolean {
+                return items[oldItemPosition].id == newItems[newItemPosition].id
+            }
+
+            override fun areContentsTheSame(
+                oldItemPosition: Int,
+                newItemPosition: Int
+            ): Boolean {
+                return items[oldItemPosition] == newItems[newItemPosition]
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         items.clear()
         items.addAll(newItems)
-        notifyDataSetChanged()
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun setLoading(loading: Boolean) {
