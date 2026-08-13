@@ -114,7 +114,6 @@ class CartFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 cartViewModel.cartCount().collect { count ->
-                    binding.itemCount.text = "($count)"
 
                     if (count > 0) {
                         binding.emptyCartLayout.visibility = View.GONE
@@ -148,6 +147,14 @@ class CartFragment : Fragment() {
                         binding.checkoutLayout.visibility = View.VISIBLE
                         binding.tvTotalPrice.text = "Rs. %.2f".format(total)
                     }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                cartViewModel.totalItem.collect { total ->
+                    binding.itemCount.text = "( ${total} )"
                 }
             }
         }

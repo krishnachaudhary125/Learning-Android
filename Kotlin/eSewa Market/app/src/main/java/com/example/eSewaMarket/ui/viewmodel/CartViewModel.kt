@@ -44,4 +44,12 @@ class CartViewModel(
         SharingStarted.WhileSubscribed(5_000),
         null
     )
+
+    val totalItem: StateFlow<Int> = flow{
+        emitAll(repository.itemCount())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        0
+    )
 }

@@ -159,4 +159,9 @@ class CartRepository(
         val userId = currentUserId()
         return cartDao.getTotalPrice(userId)
     }
+
+    suspend fun itemCount() : Flow<Int>{
+        val userId = currentUserId()
+        return cartDao.getItemCount(userId)
+    }
 }
