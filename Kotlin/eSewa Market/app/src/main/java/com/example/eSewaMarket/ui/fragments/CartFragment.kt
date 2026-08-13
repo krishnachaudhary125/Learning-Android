@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
@@ -180,6 +181,9 @@ class CartFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvCartProduct.adapter = cartProductAdapter
         binding.rvCartProduct.isNestedScrollingEnabled = false
+
+        (binding.rvCartProduct.itemAnimator as? SimpleItemAnimator)
+            ?.supportsChangeAnimations = false
     }
 
     private fun setupRecommendedRecyclerView() {

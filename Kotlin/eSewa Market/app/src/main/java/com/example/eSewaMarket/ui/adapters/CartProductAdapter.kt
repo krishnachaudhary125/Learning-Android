@@ -8,10 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.databinding.ItemCartProductBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 
 class CartProductAdapter(
     private val onClick: (ProductResponse) -> Unit,
