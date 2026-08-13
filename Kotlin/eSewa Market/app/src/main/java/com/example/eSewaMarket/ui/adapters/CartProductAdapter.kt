@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.databinding.ItemCartProductBinding
 
@@ -54,6 +55,7 @@ class CartProductAdapter(
         holder.binding.apply {
             Glide.with(productImage.context)
                 .load(product.thumbnail)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(productImage)
 
             productName.text = product.title
