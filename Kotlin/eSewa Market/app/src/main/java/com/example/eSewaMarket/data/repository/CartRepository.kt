@@ -154,4 +154,9 @@ class CartRepository(
             cartDao.getCartProducts(user.id)
         }
     }
+
+    suspend fun totalPrice() : Flow<Double?>{
+        val userId = currentUserId()
+        return cartDao.getTotalPrice(userId)
+    }
 }

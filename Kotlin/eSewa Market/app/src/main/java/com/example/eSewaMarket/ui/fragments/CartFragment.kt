@@ -111,30 +111,19 @@ class CartFragment : Fragment() {
         observeData()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(
-                Lifecycle.State.STARTED
-            ) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 cartViewModel.cartCount().collect { count ->
-
                     binding.itemCount.text = "($count)"
 
                     if (count > 0) {
                         binding.emptyCartLayout.visibility = View.GONE
                         binding.rvCartProduct.visibility = View.VISIBLE
+                        binding.toolbarCart.numOfProductInCart.text = count.toString()
+                        binding.toolbarCart.numOfProductInCart.visibility = View.VISIBLE
                     } else {
                         binding.emptyCartLayout.visibility = View.VISIBLE
                         binding.rvCartProduct.visibility = View.GONE
-                    }
-
-                    if (count > 0) {
-                        binding.toolbarCart.numOfProductInCart.text =
-                            count.toString()
-
-                        binding.toolbarCart.numOfProductInCart.visibility =
-                            View.VISIBLE
-                    } else {
-                        binding.toolbarCart.numOfProductInCart.visibility =
-                            View.GONE
+                        binding.toolbarCart.numOfProductInCart.visibility = View.GONE
                     }
                 }
             }
@@ -146,16 +135,17 @@ class CartFragment : Fragment() {
                 if (scrollY >= totalHeight - 200) {
                     recommendedProductViewModel.loadMoreRecommended()
                 }
-            })
+            }
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                cartViewModel.cartCount().collect { count ->
-                    if (count > 0) {
-                        binding.toolbarCart.numOfProductInCart.text = count.toString()
-                        binding.toolbarCart.numOfProductInCart.visibility = View.VISIBLE
+                cartViewModel.totalPrice.collect { total ->
+                    if (total == null) {
+                        binding.checkoutLayout.visibility = View.GONE
                     } else {
-                        binding.toolbarCart.numOfProductInCart.visibility = View.GONE
+                        binding.checkoutLayout.visibility = View.VISIBLE
+                        binding.tvTotalPrice.text = "Rs. %.2f".format(total)
                     }
                 }
             }

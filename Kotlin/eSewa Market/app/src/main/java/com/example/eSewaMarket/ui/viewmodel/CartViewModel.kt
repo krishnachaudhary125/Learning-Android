@@ -5,6 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.CartRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CartViewModel(
@@ -31,4 +36,12 @@ class CartViewModel(
     fun cartProducts() : Flow<List<ProductResponse>>{
         return repository.cartProducts()
     }
+
+    val totalPrice: StateFlow<Double?> = flow {
+        emitAll(repository.totalPrice())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
 }
