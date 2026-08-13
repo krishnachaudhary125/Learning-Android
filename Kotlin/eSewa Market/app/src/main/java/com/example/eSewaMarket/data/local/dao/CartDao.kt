@@ -81,9 +81,19 @@ interface CartDao {
         SELECT p.productId, p.title, p.brand, p.price, p.thumbnail, c.quantity
         FROM cart AS c
         INNER JOIN products AS p
-            ON c.productId = p.productId
+        ON c.productId = p.productId
         WHERE c.userId = :userId
     """
     )
     fun getCartProducts(userId: Long): Flow<List<ProductResponse>>
+
+    @Query("""
+    SELECT COALESCE(SUM(p.price * c.quantity), 0)
+    FROM cart AS c
+    INNER JOIN products AS p
+    ON c.productId = p.productId
+    WHERE c.userId = :userId
+    """
+    )
+    suspend fun getTotalPrice(userId: Long): Double
 }
