@@ -261,12 +261,6 @@
                 style="@style/Widget.Card.MatchWrap"
                 android:nestedScrollingEnabled="false"/>
 
-            <LinearLayout
-                android:id="@+id/spacingForLoading"
-                style="@style/Widget.Card.Wrap"
-                android:layout_marginBottom="78dp"
-                android:orientation="vertical"/>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

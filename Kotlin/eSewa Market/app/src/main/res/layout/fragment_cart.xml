@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/checkoutLayout">
 
         <LinearLayout
             style="@style/Widget.Card.MatchWrap"
@@ -131,12 +131,6 @@
                 style="@style/Widget.Card.MatchWrap"
                 android:layout_marginStart="@dimen/margin_medium"/>
 
-            <LinearLayout
-                android:id="@+id/spacingForLoading"
-                style="@style/Widget.Card.Wrap"
-                android:layout_marginBottom="125dp"
-                android:orientation="vertical"/>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -171,8 +165,7 @@
             android:textColor="@color/text_dark_400"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:letterSpacing="0.05"
-            android:text="Rs. 52,000.00"/>
+            android:letterSpacing="0.05"/>
 
         </LinearLayout>
 
