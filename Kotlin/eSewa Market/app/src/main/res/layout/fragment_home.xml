@@ -268,8 +268,8 @@
     <LinearLayout
         android:id="@+id/floatingSellButton"
         style="@style/Widget.Card.Wrap"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_large"
         android:orientation="horizontal"
         android:gravity="center"
         android:clickable="true"
@@ -289,7 +289,7 @@
         <TextView
             android:id="@+id/floatingSell"
             style="@style/Widget.Card.Wrap"
-            android:maxHeight="16dp"
+            android:maxLines="1"
             android:paddingStart="6dp"
             android:textSize="14sp"
             android:gravity="center"

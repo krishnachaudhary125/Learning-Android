@@ -59,13 +59,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxLines="2"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textSize="14sp"
             android:paddingStart="8dp"
             app:layout_constraintTop_toBottomOf="@id/imageContainer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@id/addCartBtn"/>
 
         <TextView
             android:id="@+id/brand"
@@ -77,7 +77,7 @@
             android:paddingStart="8dp"
             app:layout_constraintTop_toBottomOf="@id/productTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/addCartBtn" />
 
         <LinearLayout
         android:id="@+id/priceLayout"
