@@ -52,6 +52,8 @@ class CartProductAdapter(
 
     override fun onBindViewHolder(holder: CartProductViewHolder, position: Int) {
         val product = productList[position]
+        val quantity = product.quantity.toDouble()
+        val price = product.price * quantity
 
         holder.binding.apply {
             Glide.with(productImage.context)
@@ -60,7 +62,7 @@ class CartProductAdapter(
 
             productName.text = product.title
             productBrand.text = product.brand
-            productPrice.text = product.price.toString()
+            productPrice.text = price.toString()
             numOfProduct.text = product.quantity.toString()
 
             productLayout.setOnClickListener {

@@ -134,11 +134,64 @@
             <LinearLayout
                 android:id="@+id/spacingForLoading"
                 style="@style/Widget.Card.Wrap"
-                android:layout_marginBottom="78dp"
+                android:layout_marginBottom="125dp"
                 android:orientation="vertical"/>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/checkoutLayout"
+        style="@style/Widget.Card.MatchWrap"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            style="@style/Widget.Card.Wrap"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            style="@style/Widget.Card.Wrap"
+            android:textColor="@color/text_dark_300"
+            android:textSize="14sp"
+            android:letterSpacing="0.1"
+            android:paddingVertical="@dimen/padding_extra_small"
+            android:text="Checkout Total" />
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            style="@style/Widget.Card.Wrap"
+            android:textColor="@color/text_dark_400"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:text="Rs. 52,000.00"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/checkoutBtn"
+            style="@style/Widget.Card.Wrap"
+            android:textColor="@color/white"
+            android:layout_margin="@dimen/margin_medium"
+            android:paddingVertical="@dimen/padding_medium"
+            android:paddingHorizontal="@dimen/padding_extra_large"
+            android:letterSpacing="0.1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bg_continue_shopping"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="CHECKOUT"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
