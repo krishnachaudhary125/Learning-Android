@@ -58,7 +58,7 @@ class CartProductAdapter(
 
             productName.text = product.title
             productBrand.text = product.brand
-            productPrice.text = price.toString()
+            productPrice.text = "%.2f".format(price)
             numOfProduct.text = product.quantity.toString()
 
             productLayout.setOnClickListener {

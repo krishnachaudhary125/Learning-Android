@@ -189,8 +189,7 @@ class CartFragment : Fragment() {
         binding.rvCartProduct.adapter = cartProductAdapter
         binding.rvCartProduct.isNestedScrollingEnabled = false
 
-        (binding.rvCartProduct.itemAnimator as? SimpleItemAnimator)
-            ?.supportsChangeAnimations = false
+        binding.rvCartProduct.itemAnimator = null
     }
 
     private fun setupRecommendedRecyclerView() {
