@@ -23,6 +23,7 @@ import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
+import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.fragments.CartFragment
 import com.example.eSewaMarket.ui.fragments.FavouriteFragment
 import com.example.eSewaMarket.ui.fragments.HomeFragment
@@ -41,27 +42,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var favourite: NavItem
     private lateinit var more: NavItem
     private val cartViewModel: CartViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        CartViewModelFactory(
-            CartRepository(
-                app.database.cartDao(),
-                app.database.productDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.cartFactory(this)
     }
     private val favouriteViewModel: FavouriteViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        FavouriteViewModelFactory(
-            FavouriteRepository(
-                app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.favouriteFactory(this)
     }
     private val homeFragment = HomeFragment()
     private val cartFragment = CartFragment()

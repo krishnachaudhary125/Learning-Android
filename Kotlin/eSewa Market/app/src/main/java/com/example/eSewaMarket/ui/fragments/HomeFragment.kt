@@ -37,6 +37,7 @@ import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
+import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.HomeViewModel
@@ -59,28 +60,11 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val recommendedProductViewModel: RecommendedProductViewModel by viewModels()
     private val cartViewModel: CartViewModel by activityViewModels {
-        val app = requireActivity().application as EsewaMarketApplication
-
-        CartViewModelFactory(
-            CartRepository(
-                app.database.cartDao(),
-                app.database.productDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.cartFactory(requireContext())
     }
 
     private val favouriteViewModel: FavouriteViewModel by activityViewModels {
-        val app = requireActivity().application as EsewaMarketApplication
-
-        FavouriteViewModelFactory(
-            FavouriteRepository(
-                app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.favouriteFactory(requireContext())
     }
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter

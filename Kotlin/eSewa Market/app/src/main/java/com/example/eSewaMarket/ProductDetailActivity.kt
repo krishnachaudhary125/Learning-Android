@@ -30,6 +30,7 @@ import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
 import com.example.eSewaMarket.ui.factory.CartViewModelFactory
 import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
+import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.ProductDetailViewModel
@@ -50,27 +51,10 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var userSessionRepository: UserSessionRepository
     private val optionAdapters = mutableMapOf<String, OptionAdapter>()
     private val cartViewModel: CartViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        CartViewModelFactory(
-            CartRepository(
-                app.database.cartDao(),
-                app.database.productDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.cartFactory(this)
     }
     private val favouriteViewModel: FavouriteViewModel by viewModels {
-        val app = this.application as EsewaMarketApplication
-
-        FavouriteViewModelFactory(
-            FavouriteRepository(
-                app.database.favouriteDao(),
-                UserSessionRepository(app.applicationContext),
-                RetrofitInstance.api
-            )
-        )
+        ViewModelFactoryProvider.favouriteFactory(this)
     }
     private var id = -1L
     private var width = 0
