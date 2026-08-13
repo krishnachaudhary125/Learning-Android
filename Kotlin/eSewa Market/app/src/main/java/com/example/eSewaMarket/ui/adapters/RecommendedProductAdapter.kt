@@ -27,7 +27,7 @@ class RecommendedProductAdapter(
     private val cartViewModel: CartViewModel,
     private val favouriteViewModel: FavouriteViewModel,
     private val onClick: (Product) -> Unit,
-    private val onAddToCartClick: (Long) -> Unit,
+    private val onAddToCartClick: (Product) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
     private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -114,7 +114,7 @@ class RecommendedProductAdapter(
                 }
 
                 plusProduct.setOnClickListener {
-                    onAddToCartClick(product.id)
+                    onAddToCartClick(product)
                 }
 
                 minusProduct.setOnClickListener {

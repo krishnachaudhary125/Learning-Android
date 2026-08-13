@@ -245,10 +245,10 @@ class CartFragment : Fragment() {
                 intent.putExtra("product_id", product.id)
                 startActivity(intent)
             },
-            onAddToCartClick = { productId ->
+            onAddToCartClick = { product ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.increaseQuantity(productId)
+                        cartViewModel.increaseQuantity(product.id)
                     }else{
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
