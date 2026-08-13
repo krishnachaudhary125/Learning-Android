@@ -421,10 +421,10 @@ class ProductDetailActivity : AppCompatActivity() {
                 intent.putExtra("product_id", product.id)
                 startActivity(intent)
             },
-            onAddToCartClick = { productId ->
+            onAddToCartClick = { product ->
                 lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()){
-                        cartViewModel.increaseQuantity(productId)
+                        cartViewModel.addToCart(product)
                     }else{
                         SnackBarUtil.show(
                             view = binding.root,

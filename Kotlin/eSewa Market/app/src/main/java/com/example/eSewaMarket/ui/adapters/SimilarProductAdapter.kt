@@ -28,7 +28,7 @@ class SimilarProductAdapter(
     private val favouriteViewModel: FavouriteViewModel,
     private val itemWidth: Int? = null,
     private val onClick: (Product) -> Unit,
-    private val onAddToCartClick: (Long) -> Unit,
+    private val onAddToCartClick: (Product) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
     private val onFavouriteClick: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -158,7 +158,7 @@ class SimilarProductAdapter(
                     }
 
                     plusProduct.setOnClickListener {
-                        onAddToCartClick(product.id)
+                        onAddToCartClick(product)
                     }
 
                     minusProduct.setOnClickListener {

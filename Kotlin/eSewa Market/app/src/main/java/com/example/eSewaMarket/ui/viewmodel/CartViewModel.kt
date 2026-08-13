@@ -2,6 +2,7 @@ package com.example.eSewaMarket.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.CartRepository
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,12 @@ class CartViewModel(
     fun increaseQuantity(productId: Long) {
         viewModelScope.launch {
             repository.increaseQuantity(productId)
+        }
+    }
+
+    fun addToCart(product: Product){
+        viewModelScope.launch {
+            repository.addToCart(product)
         }
     }
 
