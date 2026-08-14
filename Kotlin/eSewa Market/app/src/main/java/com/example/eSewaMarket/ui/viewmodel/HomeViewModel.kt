@@ -27,6 +27,9 @@ class HomeViewModel : ViewModel() {
     val category: LiveData<List<Category>> = categoryRepository.category
     val hotDealCategories: LiveData<List<HotDeal>> = hotDealCategoryRepository.hotDealCategories
     val products: LiveData<List<Product>> = productRepository.products
+    val featuredProducts: LiveData<List<Product>> = productRepository.featuredProducts
+    val hotDealProducts: LiveData<List<Product>> = productRepository.hotDealProducts
+    val popularBrandProducts: LiveData<List<Product>> = productRepository.popularBrandProducts
 
     private val _homeError = MutableStateFlow(false)
     val homeError: StateFlow<Boolean> = _homeError.asStateFlow()
@@ -40,7 +43,9 @@ class HomeViewModel : ViewModel() {
         loadBanners()
         loadCategory()
         loadHotDealCategories()
-        loadProduct()
+        loadPopularBrandProducts()
+        loadFeaturedProduct()
+        loadHotDealProducts()
     }
 
     fun loadBanners() {
@@ -76,10 +81,32 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun loadProduct() {
+    fun loadFeaturedProduct(){
         viewModelScope.launch {
             try {
-                productRepository.fetchProducts()
+                productRepository.fetchFeaturedProduct()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
+        }
+    }
+
+    fun loadHotDealProducts(){
+        viewModelScope.launch {
+            try {
+                productRepository.fetchHotDealProducts()
+                _homeError.value = false
+            }catch (e: Exception){
+                _homeError.value = true
+            }
+        }
+    }
+
+    fun loadPopularBrandProducts(){
+        viewModelScope.launch {
+            try {
+                productRepository.fetchPopularBrandProducts()
                 _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true

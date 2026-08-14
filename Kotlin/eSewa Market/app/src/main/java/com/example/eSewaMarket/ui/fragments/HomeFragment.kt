@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var popularBrandProductAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
     private lateinit var recommendedAdapter: RecommendedProductAdapter
@@ -178,7 +178,7 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        productAdapter = createProductAdapter()
+        popularBrandProductAdapter = createProductAdapter()
 
         featuredProductAdapter = createProductAdapter()
 
@@ -216,11 +216,11 @@ class HomeFragment : Fragment() {
 
     private fun setupPopularBrandRecyclerView() {
         binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
-        binding.rvPopularBrand.adapter = productAdapter
+        binding.rvPopularBrand.adapter = popularBrandProductAdapter
     }
 
     private fun setupFeaturedProductRecyclerView() {
-        binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
+        binding.rvFeaturedProduct.layoutManager =  GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvFeaturedProduct.adapter = featuredProductAdapter
     }
 
@@ -258,10 +258,16 @@ class HomeFragment : Fragment() {
             hotDealCategoryAdapter.submitList(hotDealCategories)
         }
 
-        homeViewModel.products.observe(viewLifecycleOwner) { products ->
-            productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
-            featuredProductAdapter.submitList(products.take(getItemsToShow(1)))
-            hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
+        homeViewModel.popularBrandProducts.observe(viewLifecycleOwner) { products ->
+            popularBrandProductAdapter.submitList(products.take(getItemsToShow(2)))
+        }
+
+        homeViewModel.featuredProducts.observe(viewLifecycleOwner){ featuredProducts ->
+            featuredProductAdapter.submitList(featuredProducts.take(getItemsToShow(1)))
+        }
+
+        homeViewModel.hotDealProducts.observe(viewLifecycleOwner){ hotDealProducts ->
+            hotDealProductAdapter.submitList(hotDealProducts.take(getItemsToShow(1)))
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -296,7 +302,7 @@ class HomeFragment : Fragment() {
     private fun createAnimator(): ValueAnimator {
         val initSize = binding.floatingSell.measuredWidth
         val animator = ValueAnimator.ofInt(initSize, 0)
-        animator.duration = 250
+        animator.duration = 350
 
         animator.addUpdateListener { animation ->
             val value = animation.animatedValue as Int
