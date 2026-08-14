@@ -37,4 +37,14 @@ class ProductRepository {
     suspend fun fetchRecommendedProducts(page: Int): PageResponse<Product> {
         return RetrofitInstance.api.getRecommendedProducts(page)
     }
+
+    suspend fun fetchFeaturedProduct(){
+        try {
+            val response = RetrofitInstance.api.getFeaturedProducts()
+            _products.postValue(response)
+        } catch (e: Exception) {
+            android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
+        }
+    }
 }
