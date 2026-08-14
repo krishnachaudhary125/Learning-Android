@@ -32,6 +32,9 @@ interface ApiService {
     @GET("hot-deal-products")
     suspend fun getHotDealProducts(): List<Product>
 
+    @GET("popular-brand-products")
+    suspend fun getPopularBrandProducts(): List<Product>
+
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: Long): Product
 

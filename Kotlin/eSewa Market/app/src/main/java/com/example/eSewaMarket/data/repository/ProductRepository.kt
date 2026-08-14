@@ -17,6 +17,9 @@ class ProductRepository {
     private val _hotDealProducts = MutableLiveData<List<Product>>()
     val hotDealProducts: LiveData<List<Product>> = _hotDealProducts
 
+    private val _popularBrandProducts = MutableLiveData<List<Product>>()
+    val popularBrandProducts: LiveData<List<Product>> = _popularBrandProducts
+
     private val _selectedProduct = MutableLiveData<Product>()
     val selectedProduct: LiveData<Product> = _selectedProduct
 
@@ -58,6 +61,16 @@ class ProductRepository {
         try {
             val response = RetrofitInstance.api.getHotDealProducts()
             _hotDealProducts.postValue(response)
+        }catch (e: Exception){
+            android.util.Log.e("API_ERROR", e.toString(), e)
+            throw e
+        }
+    }
+
+    suspend fun fetchPopularBrandProducts(){
+        try {
+            val response = RetrofitInstance.api.getPopularBrandProducts()
+            _popularBrandProducts.postValue(response)
         }catch (e: Exception){
             android.util.Log.e("API_ERROR", e.toString(), e)
             throw e

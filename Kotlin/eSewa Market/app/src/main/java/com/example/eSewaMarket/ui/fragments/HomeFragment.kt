@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
     private lateinit var bannerAdapter: BannerPagerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var hotDealCategoryAdapter: HotDealCategoryAdapter
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var popularBrandProductAdapter: ProductAdapter
     private lateinit var featuredProductAdapter: ProductAdapter
     private lateinit var hotDealProductAdapter: ProductAdapter
     private lateinit var recommendedAdapter: RecommendedProductAdapter
@@ -178,7 +178,7 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        productAdapter = createProductAdapter()
+        popularBrandProductAdapter = createProductAdapter()
 
         featuredProductAdapter = createProductAdapter()
 
@@ -216,7 +216,7 @@ class HomeFragment : Fragment() {
 
     private fun setupPopularBrandRecyclerView() {
         binding.rvPopularBrand.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
-        binding.rvPopularBrand.adapter = productAdapter
+        binding.rvPopularBrand.adapter = popularBrandProductAdapter
     }
 
     private fun setupFeaturedProductRecyclerView() {
@@ -258,8 +258,8 @@ class HomeFragment : Fragment() {
             hotDealCategoryAdapter.submitList(hotDealCategories)
         }
 
-        homeViewModel.products.observe(viewLifecycleOwner) { products ->
-            productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
+        homeViewModel.popularBrandProducts.observe(viewLifecycleOwner) { products ->
+            popularBrandProductAdapter.submitList(products.take(getItemsToShow(2)))
         }
 
         homeViewModel.featuredProducts.observe(viewLifecycleOwner){ featuredProducts ->
