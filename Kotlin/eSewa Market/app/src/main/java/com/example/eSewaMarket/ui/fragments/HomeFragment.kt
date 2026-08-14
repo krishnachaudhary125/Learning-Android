@@ -220,7 +220,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupFeaturedProductRecyclerView() {
-        binding.rvFeaturedProduct.layoutManager = GridLayoutManager(requireContext(), getProductSpanCount())
+        binding.rvFeaturedProduct.layoutManager =  GridLayoutManager(requireContext(), getProductSpanCount())
         binding.rvFeaturedProduct.adapter = featuredProductAdapter
     }
 
@@ -260,8 +260,11 @@ class HomeFragment : Fragment() {
 
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
             productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
-            featuredProductAdapter.submitList(products.take(getItemsToShow(1)))
             hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
+        }
+
+        homeViewModel.featuredProducts.observe(viewLifecycleOwner){ featuredProducts ->
+            featuredProductAdapter.submitList(featuredProducts.take(getItemsToShow(1)))
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
