@@ -296,7 +296,7 @@ class HomeFragment : Fragment() {
     private fun createAnimator(): ValueAnimator {
         val initSize = binding.floatingSell.measuredWidth
         val animator = ValueAnimator.ofInt(initSize, 0)
-        animator.duration = 250
+        animator.duration = 350
 
         animator.addUpdateListener { animation ->
             val value = animation.animatedValue as Int
