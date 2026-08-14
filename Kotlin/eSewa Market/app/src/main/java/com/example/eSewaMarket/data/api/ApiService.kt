@@ -26,6 +26,9 @@ interface ApiService {
     @GET("products")
     suspend fun getProduct(): List<Product>
 
+    @GET("featured-products")
+    suspend fun getFeaturedProducts(): List<Product>
+
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: Long): Product
 
