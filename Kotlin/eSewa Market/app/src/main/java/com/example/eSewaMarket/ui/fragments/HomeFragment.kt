@@ -260,11 +260,14 @@ class HomeFragment : Fragment() {
 
         homeViewModel.products.observe(viewLifecycleOwner) { products ->
             productAdapter.submitList(products.drop(22).take(getItemsToShow(2)))
-            hotDealProductAdapter.submitList(products.drop(2).take(getItemsToShow(1)))
         }
 
         homeViewModel.featuredProducts.observe(viewLifecycleOwner){ featuredProducts ->
             featuredProductAdapter.submitList(featuredProducts.take(getItemsToShow(1)))
+        }
+
+        homeViewModel.hotDealProducts.observe(viewLifecycleOwner){ hotDealProducts ->
+            hotDealProductAdapter.submitList(hotDealProducts.take(getItemsToShow(1)))
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
