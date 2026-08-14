@@ -7,6 +7,8 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StrikethroughSpan
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -194,7 +196,25 @@ class ProductDetailActivity : AppCompatActivity() {
                 )
                 binding.bottomAddToCartBtn.isEnabled = false
             }
+
+            val smooth = AccelerateDecelerateInterpolator()
+
             binding.productDescription.text = product.description
+            binding.productDescription.setAnimationDuration(750L)
+            binding.productDescription.expandInterpolator = smooth
+            binding.productDescription.collapseInterpolator = smooth
+
+            binding.viewMoreToggle.setOnClickListener {
+                binding.productDescription.toggle()
+                if (binding.productDescription.isExpanded){
+                    binding.productDescription.collapse()
+                    binding.viewMoreToggle.text = "View More"
+                }else{
+                    binding.productDescription.expand()
+                    binding.viewMoreToggle.text = "View Less"
+                }
+            }
+
             setRating(product.rating.toFloat())
             imageGalleryAdapter.submitList(product.images)
 

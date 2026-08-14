@@ -153,15 +153,17 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <at.blogc.android.views.ExpandableTextView
                         android:id="@+id/productDescription"
                         style="@style/Widget.Card.MatchWrap"
                         android:letterSpacing="0.05"
+                        android:maxLines="1"
                         android:lineHeight="30dp"
                         android:textColor="@color/text_dark"
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/viewMoreToggle"
                         style="@style/Widget.Card.Wrap"
                         android:layout_gravity="center"
                         android:layout_marginTop="4dp"

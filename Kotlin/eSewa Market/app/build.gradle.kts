@@ -101,4 +101,7 @@ dependencies {
     val room_version = "3.0.1"
     implementation("androidx.room3:room3-runtime:$room_version")
     ksp("androidx.room3:room3-compiler:$room_version")
+
+    //Expandable textview third part library
+    implementation("at.blogc:expandabletextview:1.0.5")
 }
