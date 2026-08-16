@@ -27,12 +27,10 @@ class HomeViewModel : ViewModel() {
     val category: LiveData<List<Category>> = categoryRepository.category
     val hotDealCategories: LiveData<List<HotDeal>> = hotDealCategoryRepository.hotDealCategories
     val products: LiveData<List<Product>> = productRepository.products
-    val featuredProducts: LiveData<List<Product>> = productRepository.featuredProducts
-    val hotDealProducts: LiveData<List<Product>> = productRepository.hotDealProducts
-    val popularBrandProducts: LiveData<List<Product>> = productRepository.popularBrandProducts
-
+    val home = productRepository.home
     private val _homeError = MutableStateFlow(false)
     val homeError: StateFlow<Boolean> = _homeError.asStateFlow()
+
 
     init {
         loadAllData()
@@ -43,9 +41,7 @@ class HomeViewModel : ViewModel() {
         loadBanners()
         loadCategory()
         loadHotDealCategories()
-        loadPopularBrandProducts()
-        loadFeaturedProduct()
-        loadHotDealProducts()
+        loadHome()
     }
 
     fun loadBanners() {
@@ -81,32 +77,10 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun loadFeaturedProduct(){
+    fun loadHome(){
         viewModelScope.launch {
             try {
-                productRepository.fetchFeaturedProduct()
-                _homeError.value = false
-            }catch (e: Exception){
-                _homeError.value = true
-            }
-        }
-    }
-
-    fun loadHotDealProducts(){
-        viewModelScope.launch {
-            try {
-                productRepository.fetchHotDealProducts()
-                _homeError.value = false
-            }catch (e: Exception){
-                _homeError.value = true
-            }
-        }
-    }
-
-    fun loadPopularBrandProducts(){
-        viewModelScope.launch {
-            try {
-                productRepository.fetchPopularBrandProducts()
+                productRepository.fetchHome()
                 _homeError.value = false
             }catch (e: Exception){
                 _homeError.value = true
