@@ -3,6 +3,7 @@ package com.example.eSewaMarket.data.api
 import com.example.eSewaMarket.data.models.AddToCartRequest
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
+import com.example.eSewaMarket.data.models.HomeResponse
 import com.example.eSewaMarket.data.models.HotDeal
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
@@ -26,14 +27,8 @@ interface ApiService {
     @GET("products")
     suspend fun getProduct(): List<Product>
 
-    @GET("featured-products")
-    suspend fun getFeaturedProducts(): List<Product>
-
-    @GET("hot-deal-products")
-    suspend fun getHotDealProducts(): List<Product>
-
-    @GET("popular-brand-products")
-    suspend fun getPopularBrandProducts(): List<Product>
+    @GET("home")
+    suspend fun getHome(): HomeResponse
 
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: Long): Product
