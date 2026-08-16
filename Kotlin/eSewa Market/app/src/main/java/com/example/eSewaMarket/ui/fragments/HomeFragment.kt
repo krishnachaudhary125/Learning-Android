@@ -19,15 +19,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.example.eSewaMarket.EsewaMarketApplication
+import com.example.eSewaMarket.FeaturedProductActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.repository.CartRepository
-import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentHomeBinding
 import com.example.eSewaMarket.ui.adapters.BannerPagerAdapter
@@ -35,8 +32,6 @@ import com.example.eSewaMarket.ui.adapters.CategoryAdapter
 import com.example.eSewaMarket.ui.adapters.HotDealCategoryAdapter
 import com.example.eSewaMarket.ui.adapters.ProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
-import com.example.eSewaMarket.ui.factory.CartViewModelFactory
-import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
@@ -48,8 +43,6 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -163,6 +156,11 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        binding.featuredProductBtn.setOnClickListener {
+            val intent = Intent(requireContext(), FeaturedProductActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initAdapters() {
@@ -258,16 +256,10 @@ class HomeFragment : Fragment() {
             hotDealCategoryAdapter.submitList(hotDealCategories)
         }
 
-        homeViewModel.popularBrandProducts.observe(viewLifecycleOwner) { products ->
-            popularBrandProductAdapter.submitList(products.take(getItemsToShow(2)))
-        }
-
-        homeViewModel.featuredProducts.observe(viewLifecycleOwner){ featuredProducts ->
-            featuredProductAdapter.submitList(featuredProducts.take(getItemsToShow(1)))
-        }
-
-        homeViewModel.hotDealProducts.observe(viewLifecycleOwner){ hotDealProducts ->
-            hotDealProductAdapter.submitList(hotDealProducts.take(getItemsToShow(1)))
+        homeViewModel.home.observe(viewLifecycleOwner) { home ->
+            featuredProductAdapter.submitList(home.featuredProducts.take(getItemsToShow(1)))
+            hotDealProductAdapter.submitList(home.hotDeals.take(getItemsToShow(1)))
+            popularBrandProductAdapter.submitList(home.popularBrandProducts.take(getItemsToShow(2)))
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
