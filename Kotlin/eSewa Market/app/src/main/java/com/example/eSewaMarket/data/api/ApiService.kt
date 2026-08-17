@@ -79,4 +79,11 @@ interface ApiService {
     suspend fun getFavourite(
         @Header("Authorization") token: String
     ): List<ProductResponse>
+
+    @GET("products/section")
+    suspend fun getProductsBySection(
+        @Query("type") type: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int = 10
+    ): PageResponse<Product>
 }
