@@ -3,6 +3,7 @@ package com.example.eSewaMarket.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.eSewaMarket.data.api.RetrofitInstance
+import com.example.eSewaMarket.data.models.HomeResponse
 import com.example.eSewaMarket.data.models.PageResponse
 import com.example.eSewaMarket.data.models.Product
 
@@ -11,14 +12,8 @@ class ProductRepository {
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _products
 
-    private val _featuredProducts = MutableLiveData<List<Product>>()
-    val featuredProducts: LiveData<List<Product>> = _featuredProducts
-
-    private val _hotDealProducts = MutableLiveData<List<Product>>()
-    val hotDealProducts: LiveData<List<Product>> = _hotDealProducts
-
-    private val _popularBrandProducts = MutableLiveData<List<Product>>()
-    val popularBrandProducts: LiveData<List<Product>> = _popularBrandProducts
+    private val _home = MutableLiveData<HomeResponse>()
+    val home: LiveData<HomeResponse> = _home
 
     private val _selectedProduct = MutableLiveData<Product>()
     val selectedProduct: LiveData<Product> = _selectedProduct
@@ -33,11 +28,11 @@ class ProductRepository {
         }
     }
 
-    suspend fun fetchProductById(id: Long){
+    suspend fun fetchProductById(id: Long) {
         try {
             val response = RetrofitInstance.api.getProductById(id)
             _selectedProduct.postValue(response)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             android.util.Log.e("API_ERROR", e.toString(), e)
             throw e
         }
@@ -47,31 +42,11 @@ class ProductRepository {
         return RetrofitInstance.api.getRecommendedProducts(page)
     }
 
-    suspend fun fetchFeaturedProduct(){
+    suspend fun fetchHome() {
         try {
-            val response = RetrofitInstance.api.getFeaturedProducts()
-            _featuredProducts.postValue(response)
+            val response = RetrofitInstance.api.getHome()
+            _home.postValue(response)
         } catch (e: Exception) {
-            android.util.Log.e("API_ERROR", e.toString(), e)
-            throw e
-        }
-    }
-
-    suspend fun fetchHotDealProducts(){
-        try {
-            val response = RetrofitInstance.api.getHotDealProducts()
-            _hotDealProducts.postValue(response)
-        }catch (e: Exception){
-            android.util.Log.e("API_ERROR", e.toString(), e)
-            throw e
-        }
-    }
-
-    suspend fun fetchPopularBrandProducts(){
-        try {
-            val response = RetrofitInstance.api.getPopularBrandProducts()
-            _popularBrandProducts.postValue(response)
-        }catch (e: Exception){
             android.util.Log.e("API_ERROR", e.toString(), e)
             throw e
         }
