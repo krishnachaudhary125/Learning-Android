@@ -14,19 +14,20 @@ import com.example.eSewaMarket.R
 
 @Composable
 fun AppToolBar(
+    modifier: Modifier,
     onBackClick: () -> Unit,
     title: (@Composable () -> Unit)? = {},
     actionBtn: (@Composable () -> Unit)? = {}
 ){
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
             .background(color = Color.White)
             .padding(horizontal = 8.dp)
     ){
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.CenterStart)
         ){
             CleanIconButton(
@@ -38,7 +39,7 @@ fun AppToolBar(
 
         title?.let {
             Box(
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.Center)
             ){
                 it()
@@ -47,7 +48,7 @@ fun AppToolBar(
 
         actionBtn?.let {
             Box(
-                modifier = Modifier.align(Alignment.CenterEnd)
+                modifier = modifier.align(Alignment.CenterEnd)
             ) {
                 it()
             }
