@@ -86,4 +86,9 @@ class FavouriteRepository(
             favouriteDao.getFavouriteProducts(user.id)
         }
     }
+
+    suspend fun deleteFavourites(){
+        val userId = currentUserId()
+        favouriteDao.clearFavourites(userId)
+    }
 }

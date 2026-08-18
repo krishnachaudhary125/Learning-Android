@@ -8,16 +8,21 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
     private val favouriteViewModel: FavouriteViewModel by viewModels {
@@ -30,6 +35,8 @@ class FavouriteFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                var checked by remember { mutableStateOf(false) }
+
                 val products by favouriteViewModel.favouriteProducts()
                     .collectAsStateWithLifecycle(
                         initialValue = emptyList()
@@ -37,6 +44,10 @@ class FavouriteFragment : Fragment() {
 
                 FavouriteFragmentScreen(
                     products = products,
+                    checked = checked,
+                    onCheckedChange = {
+                        checked = it
+                    },
                     onBackClick = {
                         requireActivity()
                             .onBackPressedDispatcher
@@ -48,7 +59,9 @@ class FavouriteFragment : Fragment() {
                         )
                     },
                     deleteAll = {
-                        deleteAllAlertDialog()
+                        deleteAllAlertDialog{
+                            checked = false
+                        }
                     },
                     onProductClick = {},
                     onAddToCartClick = {},
@@ -59,7 +72,7 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun deleteAllAlertDialog(){
+    private fun deleteAllAlertDialog(onComplete: () -> Unit) {
 
         val titleView = TextView(requireContext()).apply {
             text = "Do you want to delete all favourite products?"
@@ -71,7 +84,12 @@ class FavouriteFragment : Fragment() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setCustomTitle(titleView)
             .setNegativeButton("No", null)
-            .setPositiveButton("Yes", null)
+            .setPositiveButton("Yes"){ _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    favouriteViewModel.deleteAllFavourites()
+                    onComplete()
+                }
+            }
             .create()
 
         dialog.show()

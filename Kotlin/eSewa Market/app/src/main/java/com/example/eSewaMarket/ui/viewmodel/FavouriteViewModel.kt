@@ -27,4 +27,10 @@ class FavouriteViewModel(
     fun favouriteProducts() : Flow<List<FavouriteResponse>>{
         return repository.favouriteProducts()
     }
+
+    suspend fun deleteAllFavourites() {
+        viewModelScope.launch {
+            repository.deleteFavourites()
+        }
+    }
 }
