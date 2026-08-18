@@ -29,6 +29,7 @@ fun AppToolBar(
         Box(
             modifier = modifier
                 .align(Alignment.CenterStart)
+                .padding(start = 8.dp)
         ){
             CleanIconButton(
                 icon = R.drawable.ic_back_arrow,
