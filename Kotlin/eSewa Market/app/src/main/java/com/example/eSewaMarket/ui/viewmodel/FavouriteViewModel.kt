@@ -29,8 +29,6 @@ class FavouriteViewModel(
     }
 
     suspend fun deleteAllFavourites() {
-        viewModelScope.launch {
-            repository.deleteFavourites()
-        }
+        repository.deleteFavourites()
     }
 }

@@ -89,6 +89,22 @@ class FavouriteRepository(
 
     suspend fun deleteFavourites(){
         val userId = currentUserId()
+        val favourites = favouriteDao.getFavouriteIds(userId)
+
+        val token = FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?: throw IllegalStateException("User is not authenticated")
+
+        favourites.forEach { productId ->
+            apiService.toggleFavourite(
+                "Bearer $token",
+                FavouriteToggles(productId = productId)
+            )
+        }
+
         favouriteDao.clearFavourites(userId)
     }
 }

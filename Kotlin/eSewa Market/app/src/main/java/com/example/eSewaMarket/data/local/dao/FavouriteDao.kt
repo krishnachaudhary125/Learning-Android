@@ -70,6 +70,14 @@ interface FavouriteDao {
     }
 
     @Query("""
+        SELECT productId
+        FROM favourite
+        WHERE userId = :userId
+    """
+    )
+    suspend fun getFavouriteIds(userId: Long): List<Long>
+
+    @Query("""
         SELECT p.productId, p.title, p.brand, p.price, p.thumbnail
         FROM favourite AS f
         INNER JOIN products AS p
