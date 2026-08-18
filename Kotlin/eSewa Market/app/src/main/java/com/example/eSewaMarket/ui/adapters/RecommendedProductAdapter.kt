@@ -136,15 +136,14 @@ class RecommendedProductAdapter(
                 }
 
                 holder.favouriteJob = holder.scope.launch {
-                    val isFav = favouriteViewModel.isFavourite(product.id).first()
-
-                    favourite.setImageResource(
-                        if (isFav) {
-                            R.drawable.ic_fav_filled
-                        } else {
-                            R.drawable.ic_fav
-                        }
-                    )
+                    favouriteViewModel.isFavourite(product.id).collect { isFav ->
+                        favourite.setImageResource(
+                            if (isFav)
+                                R.drawable.ic_fav_filled
+                            else
+                                R.drawable.ic_fav
+                        )
+                    }
                 }
 
                 favourite.setOnClickListener {
