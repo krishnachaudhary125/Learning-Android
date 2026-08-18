@@ -4,7 +4,9 @@ import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.FavouriteDao
 import com.example.eSewaMarket.data.local.entity.FavouriteEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
+import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -77,5 +79,32 @@ class FavouriteRepository(
         )
 
         favouriteDao.insertAll(serverFavourites)
+    }
+
+    fun favouriteProducts() : Flow<List<FavouriteResponse>>{
+        return userRepository.user.flatMapLatest { user ->
+            favouriteDao.getFavouriteProducts(user.id)
+        }
+    }
+
+    suspend fun deleteFavourites(){
+        val userId = currentUserId()
+        val favourites = favouriteDao.getFavouriteIds(userId)
+
+        val token = FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?: throw IllegalStateException("User is not authenticated")
+
+        favourites.forEach { productId ->
+            apiService.toggleFavourite(
+                "Bearer $token",
+                FavouriteToggles(productId = productId)
+            )
+        }
+
+        favouriteDao.clearFavourites(userId)
     }
 }

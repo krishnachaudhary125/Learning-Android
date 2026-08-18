@@ -5,6 +5,8 @@ import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import com.example.eSewaMarket.data.local.entity.FavouriteEntity
+import com.example.eSewaMarket.data.models.FavouriteResponse
+import com.example.eSewaMarket.data.models.ProductResponse
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -66,4 +68,22 @@ interface FavouriteDao {
 
         insertAll(serverFavourites)
     }
+
+    @Query("""
+        SELECT productId
+        FROM favourite
+        WHERE userId = :userId
+    """
+    )
+    suspend fun getFavouriteIds(userId: Long): List<Long>
+
+    @Query("""
+        SELECT p.productId, p.title, p.brand, p.price, p.thumbnail
+        FROM favourite AS f
+        INNER JOIN products AS p
+        ON f.productId = p.productId
+        WHERE f.userId = :userId
+    """
+    )
+    fun getFavouriteProducts(userId: Long): Flow<List<FavouriteResponse>>
 }

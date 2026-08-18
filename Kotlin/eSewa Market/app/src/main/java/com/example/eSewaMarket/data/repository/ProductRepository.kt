@@ -51,4 +51,16 @@ class ProductRepository {
             throw e
         }
     }
+
+    suspend fun fetchProductsBySection(
+        type: String,
+        page: Int,
+        size: Int = 10
+    ): PageResponse<Product> {
+        return RetrofitInstance.api.getProductsBySection(
+            type = type,
+            page = page,
+            size = size
+        )
+    }
 }
