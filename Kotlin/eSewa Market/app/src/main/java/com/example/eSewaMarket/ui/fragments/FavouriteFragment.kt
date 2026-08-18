@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.eSewaMarket.R
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class FavouriteFragment : Fragment() {
     private val favouriteViewModel: FavouriteViewModel by viewModels {
@@ -42,7 +47,9 @@ class FavouriteFragment : Fragment() {
                             text = "( ${products.size} )"
                         )
                     },
-                    deleteAll = {},
+                    deleteAll = {
+                        deleteAllAlertDialog()
+                    },
                     onProductClick = {},
                     onAddToCartClick = {},
                     onOptionClick = {},
@@ -50,5 +57,29 @@ class FavouriteFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun deleteAllAlertDialog(){
+
+        val titleView = TextView(requireContext()).apply {
+            text = "Do you want to delete all favourite products?"
+            textSize = 18f
+            setTextColor(ContextCompat.getColor(context, R.color.text_dark))
+            setPadding(60, 60, 0, 0)
+        }
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setCustomTitle(titleView)
+            .setNegativeButton("No", null)
+            .setPositiveButton("Yes", null)
+            .create()
+
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
     }
 }
