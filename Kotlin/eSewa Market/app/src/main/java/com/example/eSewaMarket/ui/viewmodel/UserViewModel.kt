@@ -11,6 +11,7 @@ import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.UserResponse
 import com.example.eSewaMarket.data.models.UserSyncRequest
 import com.example.eSewaMarket.data.repository.CartRepository
+import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import kotlinx.coroutines.launch
@@ -23,6 +24,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val cartRepository = CartRepository(
         cartDao = database.cartDao(),
+        productDao = database.productDao(),
+        userRepository = sessionRepository,
+        apiService = RetrofitInstance.api
+    )
+
+    private val favouriteRepository = FavouriteRepository(
+        favouriteDao = database.favouriteDao(),
         productDao = database.productDao(),
         userRepository = sessionRepository,
         apiService = RetrofitInstance.api
@@ -76,9 +84,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     sessionRepository.saveUser(user)
                     _user.value = user
                     try {
-                    cartRepository.syncCartWithServer()
+                        cartRepository.syncCartWithServer()
                     }catch (e: Exception){
                         Log.e("SYNC", "Syncing cart data failed.", e)
+                    }
+                    try {
+                        favouriteRepository.syncFavouritesWithServer()
+                    }catch (e: Exception){
+                        Log.e("SYNC", "Syncing favourite data failed.", e)
                     }
                 } else {
                     val error = response.errorBody()?.string()

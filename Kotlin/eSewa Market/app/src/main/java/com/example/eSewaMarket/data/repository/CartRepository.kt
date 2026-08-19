@@ -68,8 +68,6 @@ class CartRepository(
     }
 
     suspend fun addToCart(product: Product) {
-        val token = getAuthToken()
-        val response = apiService.getCart(token)
 
         productDao.insertIntoProducts(
             listOf(

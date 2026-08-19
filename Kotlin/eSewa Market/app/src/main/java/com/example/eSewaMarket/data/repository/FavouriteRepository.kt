@@ -26,8 +26,19 @@ class FavouriteRepository(
         return userRepository.user.first().id
     }
 
+    private suspend fun getAuthToken(): String {
+        return FirebaseAuth.getInstance()
+            .currentUser
+            ?.getIdToken(false)
+            ?.await()
+            ?.token
+            ?.let { "Bearer $it" }
+            ?: throw IllegalStateException("User is not authenticated")
+    }
+
     suspend fun toggleFavourite(product: Product) {
         val userId = currentUserId()
+        val token = getAuthToken()
 
         val item = favouriteDao.getFavouriteItem(userId, product.id)
 
@@ -54,15 +65,8 @@ class FavouriteRepository(
             favouriteDao.removeFromFavourite(userId, product.id)
         }
 
-        val token = FirebaseAuth.getInstance()
-            .currentUser
-            ?.getIdToken(false)
-            ?.await()
-            ?.token
-            ?: throw IllegalStateException("User is not authenticated")
-
         apiService.toggleFavourite(
-            "Bearer $token",
+            token,
             FavouriteToggles(productId = product.id)
         )
     }
@@ -77,24 +81,32 @@ class FavouriteRepository(
         }
     }
 
-    suspend fun syncFavourites(
-        userId: Long,
-        serverFavourites: List<FavouriteEntity>
-    ) {
-        if (serverFavourites.isEmpty()) {
-            favouriteDao.clearFavourites(userId)
-            return
+    suspend fun syncFavouritesWithServer() {
+        val userId = currentUserId()
+        val token = getAuthToken()
+
+        val response = apiService.getFavourite(token)
+
+        val favouriteItems = response.map {
+            FavouriteEntity(
+                userId = userId,
+                productId = it.productId
+            )
         }
 
-        val serverProductIds =
-            serverFavourites.map { it.productId }
+        if (favouriteItems.isEmpty()) {
+            favouriteDao.clearFavourites(userId)
+        } else {
+            val serverProductIds =
+                favouriteItems.map { it.productId }
 
-        favouriteDao.deleteNotInServer(
-            userId = userId,
-            serverProductIds = serverProductIds
-        )
+            favouriteDao.deleteNotInServer(
+                userId = userId,
+                serverProductIds = serverProductIds
+            )
 
-        favouriteDao.insertAll(serverFavourites)
+            favouriteDao.insertAll(favouriteItems)
+        }
     }
 
     fun favouriteProducts() : Flow<List<FavouriteResponse>>{
@@ -106,17 +118,11 @@ class FavouriteRepository(
     suspend fun deleteFavourites(){
         val userId = currentUserId()
         val favourites = favouriteDao.getFavouriteIds(userId)
-
-        val token = FirebaseAuth.getInstance()
-            .currentUser
-            ?.getIdToken(false)
-            ?.await()
-            ?.token
-            ?: throw IllegalStateException("User is not authenticated")
+        val token = getAuthToken()
 
         favourites.forEach { productId ->
             apiService.toggleFavourite(
-                "Bearer $token",
+                token,
                 FavouriteToggles(productId = productId)
             )
         }
