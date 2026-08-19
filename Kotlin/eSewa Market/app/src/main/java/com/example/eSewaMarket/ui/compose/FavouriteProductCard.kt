@@ -130,7 +130,7 @@ fun FavouriteProductCard(
                     onClick = addToCartClick,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(bottom = 8.dp, end = 8.dp)
+                        .padding(bottom = 16.dp, end = 16.dp)
                         .size(36.dp)
                         .background(
                             color = colorResource(R.color.green),
