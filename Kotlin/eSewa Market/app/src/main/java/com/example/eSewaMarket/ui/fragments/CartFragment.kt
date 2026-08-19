@@ -18,21 +18,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
-import com.example.eSewaMarket.EsewaMarketApplication
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.repository.CartRepository
-import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentCartBinding
 import com.example.eSewaMarket.ui.adapters.CartProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
-import com.example.eSewaMarket.ui.factory.CartViewModelFactory
-import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
@@ -117,7 +110,7 @@ class CartFragment : Fragment() {
         }
 
         binding.cartScrollLayer.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight - 200) {
                     recommendedProductViewModel.loadMoreRecommended()
