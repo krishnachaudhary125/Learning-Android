@@ -215,21 +215,37 @@ fun FavouriteFragmentScreen(
 
                         title = {
                             Text(
-                                text = product.title
+                                text = product.title,
+                                maxLines = 1,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.sp,
+                                lineHeight = 24.sp,
+                                color = colorResource(id = R.color.text_dark_400),
+                                modifier = Modifier.padding(bottom = 8.dp)
                             )
                         },
 
                         brand = {
                             Text(
-                                text = product.brand
+                                text = product.brand.uppercase(),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                lineHeight = 16.sp,
+                                letterSpacing = 2.sp,
+                                color = colorResource(id = R.color.text_dark_200),
+                                modifier = Modifier.padding(bottom = 8.dp)
                             )
                         },
 
                         price = {
                             Text(
                                 text = "%.2f".format(product.price),
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                fontSize = 20.sp,
+                                lineHeight = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.sp,
+                                color = colorResource(id = R.color.text_dark_400)
                             )
                         },
 

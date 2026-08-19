@@ -105,7 +105,8 @@ fun FavouriteProductCard(
                         Text(
                             text = "Rs.",
                             fontSize = 14.sp,
-                            color = colorResource(id = R.color.text_dark_400)
+                            color = colorResource(id = R.color.text_dark_400),
+                            modifier = Modifier.padding(end = 4.dp)
                         )
 
                         price()
@@ -119,7 +120,7 @@ fun FavouriteProductCard(
                 onClick = optionClick,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 8.dp, end = 8.dp)
+                    .padding(top = 16.dp, end = 16.dp)
             )
 
             if (checked) {
