@@ -82,7 +82,10 @@ class CartFragment : Fragment() {
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.esewa_bg_light))
 
         binding.continueShoppingBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra("open_fragment", "home")
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
             startActivity(intent)
         }
         return binding.root
