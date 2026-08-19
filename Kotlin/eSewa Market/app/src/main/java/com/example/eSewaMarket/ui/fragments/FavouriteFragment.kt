@@ -53,7 +53,8 @@ class FavouriteFragment : Fragment() {
                             .onBackPressedDispatcher
                             .onBackPressed()
                     },
-                    noOfItems = {
+                    noOfItems = products.size,
+                    noOfItemsContent = {
                         Text(
                             text = "( ${products.size} )"
                         )

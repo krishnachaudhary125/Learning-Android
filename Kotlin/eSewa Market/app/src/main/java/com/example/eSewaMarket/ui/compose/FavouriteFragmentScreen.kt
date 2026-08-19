@@ -36,7 +36,8 @@ import kotlinx.coroutines.launch
 fun FavouriteFragmentScreen(
     products: List<FavouriteResponse>,
     onBackClick: () -> Unit,
-    noOfItems: @Composable () -> Unit,
+    noOfItems: Int,
+    noOfItemsContent: @Composable () -> Unit,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     deleteAll: () -> Unit,
@@ -83,10 +84,12 @@ fun FavouriteFragmentScreen(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
-            CustomCheckbox(
-                checked = checked,
-                onCheckedChange = onCheckedChange
-            )
+            if (noOfItems > 0){
+                CustomCheckbox(
+                    checked = checked,
+                    onCheckedChange = onCheckedChange
+                )
+            }
 
             Text(
                 "Items",
@@ -96,7 +99,7 @@ fun FavouriteFragmentScreen(
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
 
-            noOfItems()
+            noOfItemsContent()
 
             Spacer(
                 modifier = Modifier
