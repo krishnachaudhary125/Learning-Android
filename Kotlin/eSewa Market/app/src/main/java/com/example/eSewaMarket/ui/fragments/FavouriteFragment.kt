@@ -1,5 +1,6 @@
 package com.example.eSewaMarket.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
@@ -58,6 +60,13 @@ class FavouriteFragment : Fragment() {
                         deleteAllAlertDialog{
                             checked = false
                         }
+                    },
+                    continueShopping = {
+                        val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                            putExtra("open_fragment", "home")
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                        startActivity(intent)
                     },
                     onProductClick = {},
                     onAddToCartClick = {},
