@@ -68,7 +68,8 @@ fun FavouriteFragmentScreen(
 
                     },
                     modifier = Modifier
-                        .size(40.dp)
+                        .padding(end = 8.dp)
+                        .size(56.dp)
                         .background(
                             color = colorResource(id = R.color.esewa_bg_light),
                             shape = RoundedCornerShape(8.dp)
