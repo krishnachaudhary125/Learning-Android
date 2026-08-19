@@ -13,17 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eSewaMarket.R
@@ -150,54 +145,4 @@ fun FavouriteProductCard(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FavouriteProductCardPreview() {
-
-    FavouriteProductCard(
-        image = {
-            Box(
-                modifier = Modifier
-                    .size(88.dp)
-                    .background(Color.LightGray)
-            )
-        },
-
-        title = {
-            Text(
-                text = "Nike Air Max",
-                modifier = Modifier
-                    .padding(top = 4.dp, bottom = 2.dp)
-            )
-        },
-
-        brand = {
-            Text(
-                text = "Nike",
-                fontSize = 14.sp,
-                modifier = Modifier
-                    .padding(top = 2.dp, bottom = 2.dp)
-            )
-        },
-
-        price = {
-            Text(
-                text = "1999",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-        },
-
-        onClick = {},
-
-        optionClick = {},
-
-        addToCartClick = {},
-
-        tickClick = {},
-
-        checked = true
-    )
 }
