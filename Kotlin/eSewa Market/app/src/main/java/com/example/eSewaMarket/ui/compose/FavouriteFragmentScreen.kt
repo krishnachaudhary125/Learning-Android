@@ -3,6 +3,7 @@ package com.example.eSewaMarket.ui.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,6 @@ fun FavouriteFragmentScreen(
     products: List<FavouriteResponse>,
     onBackClick: () -> Unit,
     noOfItems: Int,
-    noOfItemsContent: @Composable () -> Unit,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     deleteAll: () -> Unit,
@@ -45,7 +45,7 @@ fun FavouriteFragmentScreen(
     onAddToCartClick: (Long) -> Unit,
     onOptionClick: (Long) -> Unit,
     onTickClick: (Long) -> Unit,
-){
+) {
 
     Column(
         modifier = Modifier.background(colorResource(id = R.color.background))
@@ -59,7 +59,7 @@ fun FavouriteFragmentScreen(
                     "Favourites",
                     fontSize = 16.sp,
                     color = colorResource(id = R.color.text_dark_400)
-                    )
+                )
             },
             actionBtn = {
                 CleanIconButton(
@@ -84,29 +84,28 @@ fun FavouriteFragmentScreen(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
-            if (noOfItems > 0){
+            if (noOfItems > 0) {
                 CustomCheckbox(
                     checked = checked,
-                    onCheckedChange = onCheckedChange
+                    onCheckedChange = onCheckedChange,
+                    modifier = Modifier.padding(end = 8.dp)
                 )
             }
 
             Text(
-                "Items",
+                "Items  ( $noOfItems )",
                 fontSize = 14.sp,
                 color = colorResource(id = R.color.text_dark_300),
                 letterSpacing = 1.sp,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(end = 8.dp)
             )
-
-            noOfItemsContent()
 
             Spacer(
                 modifier = Modifier
                     .weight(1f)
             )
 
-            if(checked){
+            if (checked) {
                 Text(
                     "DELETE ALL",
                     fontSize = 14.sp,
@@ -123,61 +122,68 @@ fun FavouriteFragmentScreen(
             }
         }
 
-        LazyColumn() {
-            items(
-                items = products,
-                key = { product ->
-                    product.productId
+        if (noOfItems == 0) {
+
+            Box(){}
+
+        } else {
+
+            LazyColumn() {
+                items(
+                    items = products,
+                    key = { product ->
+                        product.productId
+                    }
+                ) { product ->
+                    FavouriteProductCard(
+                        image = {
+                            AsyncImage(
+                                model = product.thumbnail,
+                                contentDescription = "Product Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        },
+
+                        title = {
+                            Text(
+                                text = product.title
+                            )
+                        },
+
+                        brand = {
+                            Text(
+                                text = product.brand
+                            )
+                        },
+
+                        price = {
+                            Text(
+                                text = "%.2f".format(product.price),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+
+                        onClick = {
+                            onProductClick(product)
+                        },
+
+                        optionClick = {
+                            onOptionClick(product.productId)
+                        },
+
+                        addToCartClick = {
+                            onAddToCartClick(product.productId)
+                        },
+
+                        tickClick = {
+                            onTickClick(product.productId)
+                        },
+
+                        checked = checked
+                    )
                 }
-            ){ product ->
-                FavouriteProductCard(
-                    image = {
-                        AsyncImage(
-                            model = product.thumbnail,
-                            contentDescription = "Product Image",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    },
-
-                    title = {
-                        Text(
-                            text = product.title
-                        )
-                    },
-
-                    brand = {
-                        Text(
-                            text = product.brand
-                        )
-                    },
-
-                    price = {
-                        Text(
-                            text = "%.2f".format(product.price),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-
-                    onClick = {
-                        onProductClick(product)
-                    },
-
-                    optionClick = {
-                        onOptionClick(product.productId)
-                    },
-
-                    addToCartClick = {
-                        onAddToCartClick(product.productId)
-                    },
-
-                    tickClick = {
-                        onTickClick(product.productId)
-                    },
-
-                    checked = checked
-                )
             }
         }
     }

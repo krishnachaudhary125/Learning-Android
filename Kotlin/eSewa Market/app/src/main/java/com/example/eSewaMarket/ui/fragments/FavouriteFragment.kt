@@ -54,11 +54,6 @@ class FavouriteFragment : Fragment() {
                             .onBackPressed()
                     },
                     noOfItems = products.size,
-                    noOfItemsContent = {
-                        Text(
-                            text = "( ${products.size} )"
-                        )
-                    },
                     deleteAll = {
                         deleteAllAlertDialog{
                             checked = false
