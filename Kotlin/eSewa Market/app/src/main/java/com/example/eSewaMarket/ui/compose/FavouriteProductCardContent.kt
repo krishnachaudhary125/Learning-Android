@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -135,7 +136,10 @@ fun FavouriteProductCardContent(
                 onClick = tickClick,
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(top = 6.dp, start = 6.dp)
+                    .offset(
+                        x = (-6).dp,
+                        y = (-6).dp
+                    )
             )
         }
     }
