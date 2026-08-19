@@ -16,4 +16,6 @@
     <color name="cart_image_bg">#ebebeb</color>
     <color name="below_welcome">#8E90A6</color>
     <color name="background">#E6ECF4</color>
+    <color name="delete_red">#FF7F6A</color>
+    <color name="light_300">#F2F2F5</color>
 </resources>

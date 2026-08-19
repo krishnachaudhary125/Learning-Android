@@ -71,7 +71,8 @@ class FavouriteFragment : Fragment() {
                     onProductClick = {},
                     onAddToCartClick = {},
                     onOptionClick = {},
-                    onTickClick = {}
+                    onTickClick = {},
+                    onDeleteClick = {}
                 )
             }
         }
