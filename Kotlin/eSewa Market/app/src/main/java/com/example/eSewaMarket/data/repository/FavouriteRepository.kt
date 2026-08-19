@@ -2,10 +2,13 @@ package com.example.eSewaMarket.data.repository
 
 import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.FavouriteDao
+import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.FavouriteEntity
+import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
 import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +18,7 @@ import kotlinx.coroutines.tasks.await
 
 class FavouriteRepository(
     private val favouriteDao: FavouriteDao,
+    private val productDao: ProductDao,
     private val userRepository: UserSessionRepository,
     private val apiService: ApiService
 ) {
@@ -22,20 +26,32 @@ class FavouriteRepository(
         return userRepository.user.first().id
     }
 
-    suspend fun toggleFavourite(productId: Long) {
+    suspend fun toggleFavourite(product: Product) {
         val userId = currentUserId()
 
-        val item = favouriteDao.getFavouriteItem(userId, productId)
+        val item = favouriteDao.getFavouriteItem(userId, product.id)
 
         if (item == null) {
+            productDao.insertIntoProducts(
+                listOf(
+                    ProductEntity(
+                        productId = product.id,
+                        title = product.title,
+                        thumbnail = product.thumbnail,
+                        price = product.price,
+                        brand = product.brand
+                    )
+                )
+            )
+
             favouriteDao.insert(
                 FavouriteEntity(
                     userId = userId,
-                    productId = productId
+                    productId = product.id
                 )
             )
         } else {
-            favouriteDao.removeFromFavourite(userId, productId)
+            favouriteDao.removeFromFavourite(userId, product.id)
         }
 
         val token = FirebaseAuth.getInstance()
@@ -47,7 +63,7 @@ class FavouriteRepository(
 
         apiService.toggleFavourite(
             "Bearer $token",
-            FavouriteToggles(productId = productId)
+            FavouriteToggles(productId = product.id)
         )
     }
 

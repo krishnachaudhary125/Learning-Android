@@ -3,6 +3,7 @@ package com.example.eSewaMarket.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eSewaMarket.data.models.FavouriteResponse
+import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.FavouriteRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,9 +15,9 @@ class FavouriteViewModel(
 
     fun favouriteCount() = repository.totalQuantity()
 
-    fun toggleFavourite(productId: Long) {
+    fun toggleFavourite(product: Product) {
         viewModelScope.launch {
-            repository.toggleFavourite(productId)
+            repository.toggleFavourite(product)
         }
     }
 

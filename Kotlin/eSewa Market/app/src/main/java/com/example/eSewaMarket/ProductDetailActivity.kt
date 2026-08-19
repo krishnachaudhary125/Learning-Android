@@ -301,7 +301,7 @@ class ProductDetailActivity : AppCompatActivity() {
                     if (authNavigator.isLoggedIn()) {
 
                         val wasFavourite = favouriteViewModel.isFavourite(id).first()
-                        favouriteViewModel.toggleFavourite(id)
+                        favouriteViewModel.toggleFavourite(product)
 
                         SnackBarUtil.show(
                             view = binding.root,
@@ -449,10 +449,10 @@ class ProductDetailActivity : AppCompatActivity() {
                     }
                 }
             },
-            onFavouriteClick = { productId ->
+            onFavouriteClick = { product ->
                 lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()) {
-                        favouriteViewModel.toggleFavourite(productId)
+                        favouriteViewModel.toggleFavourite(product)
                     } else {
                         SnackBarUtil.show(
                             view = binding.root,

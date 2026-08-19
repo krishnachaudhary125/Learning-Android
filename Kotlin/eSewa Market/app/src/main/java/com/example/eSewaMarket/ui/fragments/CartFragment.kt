@@ -253,10 +253,10 @@ class CartFragment : Fragment() {
                     }
                 }
             },
-            onFavouriteClick = { productId ->
+            onFavouriteClick = { product ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()) {
-                        favouriteViewModel.toggleFavourite(productId)
+                        favouriteViewModel.toggleFavourite(product)
                     } else {
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
