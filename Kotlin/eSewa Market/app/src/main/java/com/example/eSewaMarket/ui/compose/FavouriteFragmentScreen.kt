@@ -87,7 +87,7 @@ fun FavouriteFragmentScreen(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
+                .padding(16.dp)
         ) {
             if (noOfItems > 0) {
                 CustomCheckbox(
@@ -133,7 +133,7 @@ fun FavouriteFragmentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 326.dp)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
