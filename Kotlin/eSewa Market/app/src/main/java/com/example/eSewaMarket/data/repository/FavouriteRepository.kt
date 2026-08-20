@@ -1,5 +1,6 @@
 package com.example.eSewaMarket.data.repository
 
+import android.util.Log
 import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.FavouriteDao
 import com.example.eSewaMarket.data.local.dao.ProductDao
@@ -122,13 +123,13 @@ class FavouriteRepository(
         }
     }
 
-    fun favouriteProducts() : Flow<List<FavouriteResponse>>{
+    fun favouriteProducts(): Flow<List<FavouriteResponse>> {
         return userRepository.user.flatMapLatest { user ->
             favouriteDao.getFavouriteProducts(user.id)
         }
     }
 
-    suspend fun deleteFavourites(){
+    suspend fun deleteFavourites() {
         val userId = currentUserId()
         val favourites = favouriteDao.getFavouriteIds(userId)
         val token = getAuthToken()
@@ -143,8 +144,19 @@ class FavouriteRepository(
         favouriteDao.clearFavourites(userId)
     }
 
-    suspend fun removeOneFromFavourite(productId: Long){
+    suspend fun removeOneFromFavourite(productId: Long) {
         val userId = currentUserId()
-        favouriteDao.removeFromFavourite(userId, productId)
+        val token = getAuthToken()
+
+        try {
+            apiService.toggleFavourite(
+                token,
+                FavouriteToggles(productId = productId)
+            )
+            favouriteDao.removeFromFavourite(userId, productId)
+        }catch(e: Exception){
+            Log.e("FAVOURITE_DELETE", "Failed to delete favourite product from the server.", e)
+            throw e
+        }
     }
 }
