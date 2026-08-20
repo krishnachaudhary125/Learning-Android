@@ -15,7 +15,8 @@ class CheckoutActivity : AppCompatActivity() {
             CheckoutScreen(
                 onBackClick = {
                     onBackPressedDispatcher.onBackPressed()
-                }
+                },
+                address = ""
             )
         }
     }
