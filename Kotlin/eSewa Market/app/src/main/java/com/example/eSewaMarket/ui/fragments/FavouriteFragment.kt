@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
+import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
@@ -32,6 +34,9 @@ import kotlinx.coroutines.launch
 class FavouriteFragment : Fragment() {
     private val favouriteViewModel: FavouriteViewModel by viewModels {
         ViewModelFactoryProvider.favouriteFactory(requireContext())
+    }
+    private val cartViewModel: CartViewModel by viewModels {
+        ViewModelFactoryProvider.cartFactory(requireContext())
     }
     private lateinit var userSessionRepository: UserSessionRepository
     private lateinit var authNavigator: AuthNavigator
@@ -51,6 +56,10 @@ class FavouriteFragment : Fragment() {
                         initialValue = emptyList()
                     )
 
+                val cartCount by cartViewModel
+                    .cartCount()
+                    .collectAsStateWithLifecycle(initialValue = 0)
+
                 FavouriteFragmentScreen(
                     products = products,
                     checked = checked,
@@ -63,15 +72,17 @@ class FavouriteFragment : Fragment() {
                             .onBackPressed()
                     },
                     noOfItems = products.size,
+                    cartCount = cartCount,
                     deleteAll = {
-                        deleteAllAlertDialog{
+                        deleteAllAlertDialog {
                             checked = false
                         }
                     },
                     continueShopping = {
                         val intent = Intent(requireContext(), MainActivity::class.java).apply {
                             putExtra("open_fragment", "home")
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
                         startActivity(intent)
                     },
@@ -81,9 +92,9 @@ class FavouriteFragment : Fragment() {
                     onTickClick = {},
                     onDeleteClick = { productId ->
                         viewLifecycleOwner.lifecycleScope.launch {
-                            if (authNavigator.isLoggedIn()){
+                            if (authNavigator.isLoggedIn()) {
                                 favouriteViewModel.removeOne(productId)
-                            }else{
+                            } else {
                                 val coordinator = requireActivity().findViewById<View>(R.id.main)
                                 val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
@@ -117,7 +128,7 @@ class FavouriteFragment : Fragment() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setCustomTitle(titleView)
             .setNegativeButton("No", null)
-            .setPositiveButton("Yes"){ _, _ ->
+            .setPositiveButton("Yes") { _, _ ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     favouriteViewModel.deleteAllFavourites()
                     onComplete()
@@ -128,7 +139,7 @@ class FavouriteFragment : Fragment() {
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))

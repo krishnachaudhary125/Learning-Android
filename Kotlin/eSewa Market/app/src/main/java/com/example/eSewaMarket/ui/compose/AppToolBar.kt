@@ -24,12 +24,11 @@ fun AppToolBar(
             .fillMaxWidth()
             .wrapContentHeight()
             .background(color = Color.White)
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp)
     ){
         Box(
             modifier = modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 8.dp)
         ){
             CleanIconButton(
                 icon = R.drawable.ic_back_arrow,

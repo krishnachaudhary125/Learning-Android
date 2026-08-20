@@ -2,6 +2,7 @@ package com.example.eSewaMarket.ui.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,6 +45,7 @@ fun FavouriteFragmentScreen(
     products: List<FavouriteResponse>,
     onBackClick: () -> Unit,
     noOfItems: Int,
+    cartCount: Int,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     deleteAll: () -> Unit,
@@ -67,20 +72,48 @@ fun FavouriteFragmentScreen(
                 )
             },
             actionBtn = {
-                CleanIconButton(
-                    icon = R.drawable.ic_cart,
-                    contentDescription = "Cart",
-                    onClick = {
 
-                    },
+                Box(
                     modifier = Modifier
-                        .padding(end = 8.dp)
                         .size(56.dp)
                         .background(
                             color = colorResource(id = R.color.esewa_bg_light),
                             shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CleanIconButton(
+                        icon = R.drawable.ic_cart,
+                        contentDescription = "Cart",
+                        onClick = {
+
+                        }
+                    )
+                    if (cartCount > 0) {
+                        Text(
+                            text = cartCount.toString(),
+                            fontSize = 10.sp,
+                            color = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .offset(
+                                    x = (-10).dp,
+                                    y = 10.dp
+                                )
+                                .size(16.dp)
+                                .background(
+                                    color = colorResource(id = R.color.green),
+                                    shape = CircleShape,
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.White,
+                                    shape = CircleShape
+                                )
+                                .wrapContentSize(Alignment.Center)
                         )
-                )
+                    }
+                }
             }
         )
 
@@ -138,13 +171,13 @@ fun FavouriteFragmentScreen(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
                     )
-            ){
+            ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource( R.drawable.ic_empty_cart),
+                        painter = painterResource(R.drawable.ic_empty_cart),
                         contentDescription = "Empty Favourite",
                         modifier = Modifier.padding(top = 32.dp)
                     )
