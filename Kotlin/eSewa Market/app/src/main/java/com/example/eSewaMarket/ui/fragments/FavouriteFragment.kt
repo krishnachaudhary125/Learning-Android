@@ -18,16 +18,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
-import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -39,15 +36,12 @@ class FavouriteFragment : Fragment() {
     private val cartViewModel: CartViewModel by viewModels {
         ViewModelFactoryProvider.cartFactory(requireContext())
     }
-    private lateinit var userSessionRepository: UserSessionRepository
-    private lateinit var authNavigator: AuthNavigator
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        userSessionRepository = UserSessionRepository(requireContext())
-        authNavigator = AuthNavigator(userSessionRepository)
         return ComposeView(requireContext()).apply {
             setContent {
                 var checked by remember { mutableStateOf(false) }
@@ -83,7 +77,7 @@ class FavouriteFragment : Fragment() {
                         startActivity(intent)
                     },
                     deleteAll = {
-                        deleteAllAlertDialog {
+                        deleteAllAlertDialog(products.size) {
                             checked = false
                         }
                     },
@@ -110,12 +104,12 @@ class FavouriteFragment : Fragment() {
                                 SnackBarUtil.show(
                                     view = coordinator,
                                     context = requireContext(),
-                                    text = "Product added to cart.",
+                                    text = "Added to cart successfully.",
                                     anchorView = bottomNav,
                                     actionText = "GO TO CART"
                                 ) {
                                     val intent =
-                                        Intent(requireContext(), CartViewModel::class.java).apply {
+                                        Intent(requireContext(), MainActivity::class.java).apply {
                                             putExtra("open_fragment", "cart")
                                             flags =
                                                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -135,22 +129,27 @@ class FavouriteFragment : Fragment() {
                     onTickClick = {},
                     onDeleteClick = { productId ->
                         viewLifecycleOwner.lifecycleScope.launch {
-                            if (authNavigator.isLoggedIn()) {
+                            try {
                                 favouriteViewModel.removeOne(productId)
-                            } else {
                                 val coordinator = requireActivity().findViewById<View>(R.id.main)
                                 val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
                                 SnackBarUtil.show(
                                     view = coordinator,
                                     context = requireContext(),
-                                    text = "Login to continue.",
+                                    text = "(1) Item has been deleted.",
                                     anchorView = bottomNav,
-                                    actionText = "GO TO LOGIN"
+                                    actionText = "UNDO"
                                 ) {
-                                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                                    startActivity(intent)
+
                                 }
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Failed to delete product.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                throw e
                             }
                         }
                     }
@@ -159,7 +158,10 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun deleteAllAlertDialog(onComplete: () -> Unit) {
+    private fun deleteAllAlertDialog(
+        productCount: Int,
+        onComplete: () -> Unit
+    ) {
 
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.alert_dialog_delete)
@@ -174,6 +176,18 @@ class FavouriteFragment : Fragment() {
             .setPositiveButton("Yes") { _, _ ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     favouriteViewModel.deleteAllFavourites()
+                    val coordinator = requireActivity().findViewById<View>(R.id.main)
+                    val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+
+                    SnackBarUtil.show(
+                        view = coordinator,
+                        context = requireContext(),
+                        text = "($productCount) Items has been deleted.",
+                        anchorView = bottomNav,
+                        actionText = "UNDO"
+                    ) {
+
+                    }
                     onComplete()
                 }
             }
