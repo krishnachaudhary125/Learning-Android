@@ -108,7 +108,7 @@ class FavouriteFragment : Fragment() {
     private fun deleteAllAlertDialog(onComplete: () -> Unit) {
 
         val titleView = TextView(requireContext()).apply {
-            text = "Do you want to delete all favourite products?"
+            text = getString(R.string.alert_dialog_delete)
             textSize = 18f
             setTextColor(ContextCompat.getColor(context, R.color.text_dark))
             setPadding(60, 60, 0, 0)

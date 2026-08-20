@@ -61,8 +61,7 @@ class LoginActivity : AppCompatActivity() {
             apiService = RetrofitInstance.api
         )
 
-        userViewModel = ViewModelProvider(this)
-            .get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
         cartViewModel = ViewModelProvider(
             this,
@@ -94,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        userViewModel.user.observe(this) { user ->
+        userViewModel.user.observe(this) {
 
             cartViewModel.syncCartWithServer()
             favouriteViewModel.syncFavouritesWithServer()

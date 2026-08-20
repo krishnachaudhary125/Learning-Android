@@ -10,6 +10,7 @@ import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
 import com.example.eSewaMarket.data.models.Product
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -70,10 +71,12 @@ class FavouriteRepository(
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun totalQuantity() = userRepository.user.flatMapLatest { user ->
         favouriteDao.getFavouriteCount(user.id)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun isFavourite(productId: Long): Flow<Boolean> {
         return userRepository.user.flatMapLatest { user ->
             favouriteDao.isFavourite(user.id, productId)
@@ -123,6 +126,7 @@ class FavouriteRepository(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun favouriteProducts(): Flow<List<FavouriteResponse>> {
         return userRepository.user.flatMapLatest { user ->
             favouriteDao.getFavouriteProducts(user.id)
