@@ -46,6 +46,7 @@ fun FavouriteFragmentScreen(
     onBackClick: () -> Unit,
     noOfItems: Int,
     cartCount: Int,
+    onCartClick: () -> Unit,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     deleteAll: () -> Unit,
@@ -86,7 +87,7 @@ fun FavouriteFragmentScreen(
                         icon = R.drawable.ic_cart,
                         contentDescription = "Cart",
                         onClick = {
-
+                            onCartClick()
                         }
                     )
                     if (cartCount > 0) {

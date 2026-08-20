@@ -73,6 +73,14 @@ class FavouriteFragment : Fragment() {
                     },
                     noOfItems = products.size,
                     cartCount = cartCount,
+                    onCartClick = {
+                        val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                            putExtra("open_fragment","cart")
+                            flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                        startActivity(intent)
+                    },
                     deleteAll = {
                         deleteAllAlertDialog {
                             checked = false
