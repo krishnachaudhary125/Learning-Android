@@ -163,4 +163,32 @@ class FavouriteRepository(
             throw e
         }
     }
+
+    suspend fun addFavourite(favourite: FavouriteResponse) {
+        val userId = currentUserId()
+        val token = getAuthToken()
+
+        productDao.insertIntoProducts(
+            listOf(
+                ProductEntity(
+                    productId = favourite.productId,
+                    title = favourite.title,
+                    thumbnail = favourite.thumbnail,
+                    price = favourite.price,
+                    brand = favourite.brand
+                )
+            )
+        )
+
+        favouriteDao.insert(
+            FavouriteEntity(
+                userId = userId,
+                productId = favourite.productId
+            )
+        )
+        apiService.toggleFavourite(
+            token,
+            FavouriteToggles(productId = favourite.productId)
+        )
+    }
 }

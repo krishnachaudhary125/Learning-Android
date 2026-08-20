@@ -127,10 +127,10 @@ class FavouriteFragment : Fragment() {
                     },
                     onOptionClick = {},
                     onTickClick = {},
-                    onDeleteClick = { productId ->
+                    onDeleteClick = { product ->
                         viewLifecycleOwner.lifecycleScope.launch {
                             try {
-                                favouriteViewModel.removeOne(productId)
+                                favouriteViewModel.removeOne(product.productId)
                                 val coordinator = requireActivity().findViewById<View>(R.id.main)
                                 val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
@@ -139,9 +139,18 @@ class FavouriteFragment : Fragment() {
                                     context = requireContext(),
                                     text = "(1) Item has been deleted.",
                                     anchorView = bottomNav,
+                                    duration = 5000,
                                     actionText = "UNDO"
                                 ) {
-
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        favouriteViewModel.restoreFavourite(product)
+                                    }
+                                    SnackBarUtil.show(
+                                        view = coordinator,
+                                        context = requireContext(),
+                                        text = "(1) Item restored successfully.",
+                                        anchorView = bottomNav
+                                    )
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(
@@ -184,6 +193,7 @@ class FavouriteFragment : Fragment() {
                         context = requireContext(),
                         text = "($productCount) Items has been deleted.",
                         anchorView = bottomNav,
+                        duration = 5000,
                         actionText = "UNDO"
                     ) {
 

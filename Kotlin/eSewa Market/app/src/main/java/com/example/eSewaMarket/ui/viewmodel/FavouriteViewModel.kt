@@ -51,4 +51,10 @@ class FavouriteViewModel(
             }
         }
     }
+
+    fun restoreFavourite(favourite: FavouriteResponse) {
+        viewModelScope.launch {
+            repository.addFavourite(favourite)
+        }
+    }
 }

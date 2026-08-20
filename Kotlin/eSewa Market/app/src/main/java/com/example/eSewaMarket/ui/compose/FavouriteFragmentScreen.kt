@@ -55,7 +55,7 @@ fun FavouriteFragmentScreen(
     onAddToCartClick: (FavouriteResponse) -> Unit,
     onOptionClick: (Long) -> Unit,
     onTickClick: (Long) -> Unit,
-    onDeleteClick: (Long) -> Unit
+    onDeleteClick: (FavouriteResponse) -> Unit
 ) {
 
     Column(
@@ -297,7 +297,7 @@ fun FavouriteFragmentScreen(
                         checked = checked,
 
                         onDeleteClick = {
-                            onDeleteClick(product.productId)
+                            onDeleteClick(product)
                         }
                     )
                 }
