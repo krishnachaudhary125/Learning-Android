@@ -69,6 +69,11 @@ class CartFragment : Fragment() {
             insets
         }
 
+        binding.toolbarCart.backBtn.setOnClickListener {
+            requireActivity()
+                .onBackPressedDispatcher
+                .onBackPressed()
+        }
         binding.toolbarCart.toolbarTitle.text = "My Cart"
         binding.toolbarCart.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarCart.toolbarIcon.backgroundTintList =
