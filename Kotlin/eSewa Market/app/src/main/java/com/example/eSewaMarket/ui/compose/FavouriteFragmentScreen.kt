@@ -52,7 +52,7 @@ fun FavouriteFragmentScreen(
     deleteAll: () -> Unit,
     continueShopping: () -> Unit,
     onProductClick: (FavouriteResponse) -> Unit,
-    onAddToCartClick: (Long) -> Unit,
+    onAddToCartClick: (FavouriteResponse) -> Unit,
     onOptionClick: (Long) -> Unit,
     onTickClick: (Long) -> Unit,
     onDeleteClick: (Long) -> Unit
@@ -287,7 +287,7 @@ fun FavouriteFragmentScreen(
                         },
 
                         addToCartClick = {
-                            onAddToCartClick(product.productId)
+                            onAddToCartClick(product)
                         },
 
                         tickClick = {

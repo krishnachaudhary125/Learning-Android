@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
+import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
@@ -75,7 +76,7 @@ class FavouriteFragment : Fragment() {
                     cartCount = cartCount,
                     onCartClick = {
                         val intent = Intent(requireContext(), MainActivity::class.java).apply {
-                            putExtra("open_fragment","cart")
+                            putExtra("open_fragment", "cart")
                             flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
@@ -94,8 +95,42 @@ class FavouriteFragment : Fragment() {
                         }
                         startActivity(intent)
                     },
-                    onProductClick = {},
-                    onAddToCartClick = {},
+                    onProductClick = { products ->
+                        val intent = Intent(requireContext(), ProductDetailActivity::class.java)
+                        intent.putExtra("product_id", products.productId)
+                        startActivity(intent)
+                    },
+                    onAddToCartClick = { product ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            try {
+                                cartViewModel.addToCartFromFavourite(product)
+                                val coordinator = requireActivity().findViewById<View>(R.id.main)
+                                val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
+
+                                SnackBarUtil.show(
+                                    view = coordinator,
+                                    context = requireContext(),
+                                    text = "Product added to cart.",
+                                    anchorView = bottomNav,
+                                    actionText = "GO TO CART"
+                                ) {
+                                    val intent =
+                                        Intent(requireContext(), CartViewModel::class.java).apply {
+                                            putExtra("open_fragment", "cart")
+                                            flags =
+                                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        }
+                                    startActivity(intent)
+                                }
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    requireContext(), "Failed to add product in cart.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                throw e
+                            }
+                        }
+                    },
                     onOptionClick = {},
                     onTickClick = {},
                     onDeleteClick = { productId ->

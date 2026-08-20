@@ -3,6 +3,7 @@ package com.example.eSewaMarket.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.CartRepository
@@ -30,6 +31,12 @@ class CartViewModel(
     fun addToCart(product: Product){
         viewModelScope.launch {
             repository.addToCart(product)
+        }
+    }
+
+    fun addToCartFromFavourite(product: FavouriteResponse){
+        viewModelScope.launch {
+            repository.addToCartFromFavourite(product)
         }
     }
 

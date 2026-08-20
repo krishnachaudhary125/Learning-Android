@@ -6,6 +6,7 @@ import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.CartEntity
 import com.example.eSewaMarket.data.local.entity.ProductEntity
 import com.example.eSewaMarket.data.models.AddToCartRequest
+import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -82,6 +83,22 @@ class CartRepository(
         )
 
         increaseQuantity(product.id)
+    }
+
+    suspend fun addToCartFromFavourite(product: FavouriteResponse){
+        productDao.insertIntoProducts(
+            listOf(
+                ProductEntity(
+                    productId = product.productId,
+                    title = product.title,
+                    thumbnail = product.thumbnail,
+                    price = product.price,
+                    brand = product.brand
+                )
+            )
+        )
+
+        increaseQuantity(product.productId)
     }
 
     suspend fun removeOneFromCart(productId: Long) {
