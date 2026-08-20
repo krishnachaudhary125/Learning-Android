@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eSewaMarket.CheckoutActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
@@ -82,6 +83,12 @@ class CartFragment : Fragment() {
         binding.continueShoppingBtn.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java).apply {
                 putExtra("open_fragment", "home")
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
+        binding.checkoutBtn.setOnClickListener {
+            val intent = Intent(requireContext(), CheckoutActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
             startActivity(intent)

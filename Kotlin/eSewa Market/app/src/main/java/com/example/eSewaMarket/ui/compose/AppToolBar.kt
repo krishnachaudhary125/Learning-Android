@@ -3,6 +3,7 @@ package com.example.eSewaMarket.ui.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
@@ -22,7 +23,7 @@ fun AppToolBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .height(64.dp)
             .background(color = Color.White)
             .padding(horizontal = 16.dp, vertical = 4.dp)
     ){
