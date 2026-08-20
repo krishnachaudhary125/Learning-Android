@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
+import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
@@ -77,7 +78,7 @@ class FavouriteFragment : Fragment() {
                         startActivity(intent)
                     },
                     deleteAll = {
-                        deleteAllAlertDialog(products.size) {
+                        deleteAllAlertDialog(products) {
                             checked = false
                         }
                     },
@@ -168,7 +169,7 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun deleteAllAlertDialog(
-        productCount: Int,
+        products: List<FavouriteResponse>,
         onComplete: () -> Unit
     ) {
 
@@ -184,6 +185,7 @@ class FavouriteFragment : Fragment() {
             .setNegativeButton("No", null)
             .setPositiveButton("Yes") { _, _ ->
                 viewLifecycleOwner.lifecycleScope.launch {
+                    val deletedProducts = products.toList()
                     favouriteViewModel.deleteAllFavourites()
                     val coordinator = requireActivity().findViewById<View>(R.id.main)
                     val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
@@ -191,12 +193,24 @@ class FavouriteFragment : Fragment() {
                     SnackBarUtil.show(
                         view = coordinator,
                         context = requireContext(),
-                        text = "($productCount) Items has been deleted.",
+                        text = "(${products.size}) Items has been deleted.",
                         anchorView = bottomNav,
                         duration = 5000,
                         actionText = "UNDO"
                     ) {
+                        viewLifecycleOwner.lifecycleScope.launch {
 
+                            deletedProducts.forEach { product ->
+                                favouriteViewModel.restoreFavourite(product)
+                            }
+
+                            SnackBarUtil.show(
+                                view = coordinator,
+                                context = requireContext(),
+                                text = "(${products.size}) Items restored successfully.",
+                                anchorView = bottomNav
+                            )
+                        }
                     }
                     onComplete()
                 }
