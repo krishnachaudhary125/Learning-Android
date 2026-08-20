@@ -41,9 +41,6 @@ class MoreFragment : Fragment() {
         val userSessionRepository =
             UserSessionRepository(context)
 
-        val database =
-            (context as EsewaMarketApplication).database
-
         AuthViewModelFactory(
             AuthRepository(
                 userSessionRepository = userSessionRepository
@@ -59,7 +56,6 @@ class MoreFragment : Fragment() {
         binding = FragmentMoreBinding.inflate(inflater, container, false)
         userSessionRepository = UserSessionRepository(requireContext())
         ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarMore.toolbarBackTitleAction) { view, insets ->
-
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -68,13 +64,6 @@ class MoreFragment : Fragment() {
                 view.paddingRight,
                 view.paddingBottom
             )
-
-            view.layoutParams.height =
-                view.context.resources.getDimensionPixelSize(
-                    com.google.android.material.R.dimen.mtrl_toolbar_default_height
-                ) + top
-
-            view.requestLayout()
 
             insets
         }
