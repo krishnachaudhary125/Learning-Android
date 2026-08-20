@@ -128,7 +128,7 @@ class FeaturedProductActivity : AppCompatActivity() {
                 onFavouriteClick = { product ->
                     lifecycleScope.launch {
                         if (authNavigator.isLoggedIn()) {
-                            favouriteViewModel.toggleFavourite(product.id)
+                            favouriteViewModel.toggleFavourite(product)
                         } else {
                             SnackBarUtil.show(
                                 view = binding.root,

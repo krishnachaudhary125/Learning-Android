@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,14 +23,13 @@ fun AppToolBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(64.dp)
             .background(color = Color.White)
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp)
     ){
         Box(
             modifier = modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 8.dp)
         ){
             CleanIconButton(
                 icon = R.drawable.ic_back_arrow,

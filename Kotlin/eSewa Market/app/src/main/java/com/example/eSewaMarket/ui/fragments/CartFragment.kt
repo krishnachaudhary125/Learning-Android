@@ -18,21 +18,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
-import com.example.eSewaMarket.EsewaMarketApplication
+import com.example.eSewaMarket.CheckoutActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
-import com.example.eSewaMarket.data.api.RetrofitInstance
-import com.example.eSewaMarket.data.repository.CartRepository
-import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.FragmentCartBinding
 import com.example.eSewaMarket.ui.adapters.CartProductAdapter
 import com.example.eSewaMarket.ui.adapters.RecommendedProductAdapter
-import com.example.eSewaMarket.ui.factory.CartViewModelFactory
-import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
@@ -76,13 +70,27 @@ class CartFragment : Fragment() {
             insets
         }
 
+        binding.toolbarCart.backBtn.setOnClickListener {
+            requireActivity()
+                .onBackPressedDispatcher
+                .onBackPressed()
+        }
         binding.toolbarCart.toolbarTitle.text = "My Cart"
         binding.toolbarCart.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarCart.toolbarIcon.backgroundTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.esewa_bg_light))
 
         binding.continueShoppingBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra("open_fragment", "home")
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
+        binding.checkoutBtn.setOnClickListener {
+            val intent = Intent(requireContext(), CheckoutActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
             startActivity(intent)
         }
         return binding.root
@@ -114,7 +122,7 @@ class CartFragment : Fragment() {
         }
 
         binding.cartScrollLayer.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
                 val totalHeight = v.getChildAt(0).measuredHeight - v.measuredHeight
                 if (scrollY >= totalHeight - 200) {
                     recommendedProductViewModel.loadMoreRecommended()
@@ -257,10 +265,10 @@ class CartFragment : Fragment() {
                     }
                 }
             },
-            onFavouriteClick = { productId ->
+            onFavouriteClick = { product ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (authNavigator.isLoggedIn()) {
-                        favouriteViewModel.toggleFavourite(productId)
+                        favouriteViewModel.toggleFavourite(product)
                     } else {
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)

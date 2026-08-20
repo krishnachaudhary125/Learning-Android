@@ -1,6 +1,7 @@
 package com.example.eSewaMarket.ui.fragments
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,9 +42,6 @@ class MoreFragment : Fragment() {
         val userSessionRepository =
             UserSessionRepository(context)
 
-        val database =
-            (context as EsewaMarketApplication).database
-
         AuthViewModelFactory(
             AuthRepository(
                 userSessionRepository = userSessionRepository
@@ -59,7 +57,6 @@ class MoreFragment : Fragment() {
         binding = FragmentMoreBinding.inflate(inflater, container, false)
         userSessionRepository = UserSessionRepository(requireContext())
         ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarMore.toolbarBackTitleAction) { view, insets ->
-
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -69,18 +66,18 @@ class MoreFragment : Fragment() {
                 view.paddingBottom
             )
 
-            view.layoutParams.height =
-                view.context.resources.getDimensionPixelSize(
-                    com.google.android.material.R.dimen.mtrl_toolbar_default_height
-                ) + top
-
-            view.requestLayout()
-
             insets
         }
 
+        binding.toolbarMore.backBtn.setOnClickListener {
+            requireActivity()
+                .onBackPressedDispatcher
+                .onBackPressed()
+        }
         binding.toolbarMore.toolbarTitle.text = "More"
         binding.toolbarMore.toolbarIcon.setImageResource(R.drawable.ic_more_vertical)
+        binding.toolbarMore.toolbarIcon.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.esewa_bg_light))
 
         binding.login.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)

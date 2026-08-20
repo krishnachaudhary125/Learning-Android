@@ -28,6 +28,7 @@ object ViewModelFactoryProvider {
         return FavouriteViewModelFactory(
             FavouriteRepository(
                 app.database.favouriteDao(),
+                app.database.productDao(),
                 UserSessionRepository(app.applicationContext),
                 RetrofitInstance.api
             )

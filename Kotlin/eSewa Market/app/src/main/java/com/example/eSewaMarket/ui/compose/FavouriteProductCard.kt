@@ -1,32 +1,42 @@
 package com.example.eSewaMarket.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.eSewaMarket.R
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
+private enum class FavouriteSwipeValue{
+    Closed,
+    Open
+}
 
 @Composable
 fun FavouriteProductCard(
@@ -38,165 +48,106 @@ fun FavouriteProductCard(
     optionClick: () -> Unit,
     addToCartClick: () -> Unit,
     tickClick: () -> Unit,
-    checked: Boolean
+    checked: Boolean,
+    onDeleteClick: () -> Unit
 ) {
+    val deleteWidth = 120.dp
+    val density = LocalDensity.current
+    val deleteWidthPx = with(density) { deleteWidth.toPx() }
+    val scope = rememberCoroutineScope()
+
+    val state = remember {
+        AnchoredDraggableState(
+            initialValue = FavouriteSwipeValue.Closed
+        )
+    }
+
+    val anchors = remember(deleteWidth) {
+        DraggableAnchors {
+            FavouriteSwipeValue.Closed at 0f
+            FavouriteSwipeValue.Open at -deleteWidthPx
+        }
+    }
+
+    state.updateAnchors(anchors)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 120.dp)
-            .background(Color.Transparent)
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    top = 8.dp,
-                    end = 16.dp,
-                    bottom = 8.dp
-                )
-                .heightIn(min = 120.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 120.dp)
-                    .padding(
-                        start = 16.dp,
-                        top = 16.dp,
-                        end = 48.dp,
-                        bottom = 16.dp
-                    )
-                    .clickable(
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null,
-                        onClick = onClick
-                    ),
-                verticalAlignment = Alignment.CenterVertically
+                .background(
+                    color = colorResource(id = R.color.light_300),
+                    shape = RoundedCornerShape(16.dp)
+                ),
+            contentAlignment = Alignment.CenterEnd
+        ){
+            CompositionLocalProvider(
+                LocalRippleConfiguration provides null
             ) {
+                IconButton(
+                    onClick = {
+                        onDeleteClick()
 
-                Box(
-                    modifier = Modifier
-                        .size(88.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        scope.launch {
+                            state.animateTo(
+                                FavouriteSwipeValue.Closed
+                            )
+                        }
+                    },
+                    modifier = Modifier.size(deleteWidth)
                 ) {
-                    image()
-                }
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 16.dp)
-                ) {
-
-                    title()
-                    brand()
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                    Icon(
+                        painter = painterResource(R.drawable.ic_trash),
+                        contentDescription = "Delete product from favourite",
+                        tint = Color.Unspecified,
                         modifier = Modifier
-                            .padding(top = 2.dp, bottom = 4.dp)
-                    ) {
-                        Text(
-                            text = "Rs.",
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.text_dark_400)
-                        )
-
-                        price()
-                    }
+                            .background(
+                                color = colorResource(R.color.delete_red),
+                                shape = CircleShape
+                            )
+                            .padding(16.dp)
+                    )
                 }
-            }
-
-            CleanIconButton(
-                icon = R.drawable.ic_more_vertical,
-                contentDescription = "Options",
-                onClick = optionClick,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 8.dp, end = 8.dp)
-            )
-
-            if (checked) {
-                CleanIconButton(
-                    icon = R.drawable.ic_fav_add_cart,
-                    contentDescription = "Add to cart",
-                    onClick = addToCartClick,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 8.dp, end = 8.dp)
-                        .size(36.dp)
-                        .background(
-                            color = colorResource(R.color.green),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                )
             }
         }
-        if (checked) {
-            CleanIconButton(
-                icon = R.drawable.ic_tick,
-                contentDescription = "Checked",
-                onClick = tickClick,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(top = 6.dp, start = 6.dp)
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset {
+                    IntOffset(
+                        x = if (state.offset.isNaN()) {
+                            0
+                        } else {
+                            state.offset.roundToInt()
+                        },
+                        y = 0
+                    )
+                }
+                .anchoredDraggable(
+                    state = state,
+                    orientation = Orientation.Horizontal
+                )
+        ) {
+            FavouriteProductCardContent(
+                image = image,
+                title = title,
+                brand = brand,
+                price = price,
+                onClick = onClick,
+                optionClick = optionClick,
+                addToCartClick = addToCartClick,
+                tickClick = tickClick,
+                checked = checked
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FavouriteProductCardPreview() {
-
-    FavouriteProductCard(
-        image = {
-            Box(
-                modifier = Modifier
-                    .size(88.dp)
-                    .background(Color.LightGray)
-            )
-        },
-
-        title = {
-            Text(
-                text = "Nike Air Max",
-                modifier = Modifier
-                    .padding(top = 4.dp, bottom = 2.dp)
-            )
-        },
-
-        brand = {
-            Text(
-                text = "Nike",
-                fontSize = 14.sp,
-                modifier = Modifier
-                    .padding(top = 2.dp, bottom = 2.dp)
-            )
-        },
-
-        price = {
-            Text(
-                text = "1999",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-        },
-
-        onClick = {},
-
-        optionClick = {},
-
-        addToCartClick = {},
-
-        tickClick = {},
-
-        checked = true
-    )
 }

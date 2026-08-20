@@ -1,16 +1,12 @@
 package com.example.eSewaMarket.ui.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.eSewaMarket.EsewaMarketApplication
-import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.UserResponse
 import com.example.eSewaMarket.data.models.UserSyncRequest
-import com.example.eSewaMarket.data.repository.CartRepository
 import com.example.eSewaMarket.data.repository.UserRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import kotlinx.coroutines.launch
@@ -18,15 +14,6 @@ import kotlinx.coroutines.launch
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = UserRepository()
     private val sessionRepository = UserSessionRepository(application)
-    private val database =
-        (application as EsewaMarketApplication).database
-
-    private val cartRepository = CartRepository(
-        cartDao = database.cartDao(),
-        productDao = database.productDao(),
-        userRepository = sessionRepository,
-        apiService = RetrofitInstance.api
-    )
     private val _user = MutableLiveData<UserResponse>()
     val user: LiveData<UserResponse> = _user
 
@@ -49,7 +36,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
                     sessionRepository.saveUser(response.body()!!)
-                    _user.value = response.body()
+                    _user.value = user
                 } else {
                     val errorBody = response.errorBody()?.string()
 
@@ -73,13 +60,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
+
                     sessionRepository.saveUser(user)
                     _user.value = user
-                    try {
-                    cartRepository.syncCartWithServer()
-                    }catch (e: Exception){
-                        Log.e("SYNC", "Syncing cart data failed.", e)
-                    }
+
                 } else {
                     val error = response.errorBody()?.string()
                     _error.value = "Code: ${response.code()}\n$error"

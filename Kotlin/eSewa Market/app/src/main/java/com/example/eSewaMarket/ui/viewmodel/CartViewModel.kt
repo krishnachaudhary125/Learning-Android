@@ -1,7 +1,9 @@
 package com.example.eSewaMarket.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.example.eSewaMarket.data.repository.CartRepository
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class CartViewModel(
     private val repository: CartRepository
@@ -28,6 +31,12 @@ class CartViewModel(
     fun addToCart(product: Product){
         viewModelScope.launch {
             repository.addToCart(product)
+        }
+    }
+
+    fun addToCartFromFavourite(product: FavouriteResponse){
+        viewModelScope.launch {
+            repository.addToCartFromFavourite(product)
         }
     }
 
@@ -59,4 +68,16 @@ class CartViewModel(
         SharingStarted.WhileSubscribed(5_000),
         0
     )
+
+    fun syncCartWithServer() {
+        viewModelScope.launch {
+            try {
+                repository.syncCartWithServer()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("SYNC_Cart", "Cart sync failed", e)
+            }
+        }
+    }
 }

@@ -42,8 +42,9 @@
             style="@style/Widget.Card.Wrap"
             android:minWidth="@dimen/icon_size"
             android:minHeight="@dimen/icon_size"
-            android:padding="@dimen/margin_medium"
-            android:background="@null"/>
+            android:padding="@dimen/padding_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:background="@drawable/bg_cart"/>
 
     </LinearLayout>
 

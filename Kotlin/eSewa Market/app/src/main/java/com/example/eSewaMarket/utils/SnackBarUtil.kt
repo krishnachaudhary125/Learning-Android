@@ -15,15 +15,27 @@ object SnackBarUtil {
         text: String,
         anchorView: View? = null,
         actionText: String? = null,
+        duration: Int = Snackbar.LENGTH_LONG,
         action: (() -> Unit)? = null
     ) {
-        val snackBar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+        val snackBar = Snackbar.make(view, text, duration)
 
-        anchorView?.let { snackBar.setAnchorView(it) }
+        anchorView?.let {
+            snackBar.setAnchorView(it)
+        }
 
-        snackBar.setBackgroundTint(ContextCompat.getColor(context, R.color.black))
-        snackBar.setTextColor(ContextCompat.getColor(context, R.color.white))
-        snackBar.setActionTextColor(ContextCompat.getColor(context, R.color.green))
+        snackBar.setBackgroundTint(
+            ContextCompat.getColor(context, R.color.black)
+        )
+
+        snackBar.setTextColor(
+            ContextCompat.getColor(context, R.color.white)
+        )
+
+        snackBar.setActionTextColor(
+            ContextCompat.getColor(context, R.color.green)
+        )
+
         snackBar.view.setPadding(
             snackBar.view.paddingStart,
             8,

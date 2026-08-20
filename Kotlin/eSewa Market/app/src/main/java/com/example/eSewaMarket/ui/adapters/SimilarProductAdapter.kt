@@ -30,7 +30,7 @@ class SimilarProductAdapter(
     private val onClick: (Product) -> Unit,
     private val onAddToCartClick: (Product) -> Unit,
     private val onRemoveOneFromCartClick: (Long) -> Unit,
-    private val onFavouriteClick: (Long) -> Unit
+    private val onFavouriteClick: (Product) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -190,7 +190,7 @@ class SimilarProductAdapter(
                     }
 
                     favourite.setOnClickListener {
-                        onFavouriteClick(product.id)
+                        onFavouriteClick(product)
                     }
                 }
             }

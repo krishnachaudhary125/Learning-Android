@@ -6,7 +6,6 @@ import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import com.example.eSewaMarket.data.local.entity.FavouriteEntity
 import com.example.eSewaMarket.data.models.FavouriteResponse
-import com.example.eSewaMarket.data.models.ProductResponse
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -47,27 +46,6 @@ interface FavouriteDao {
     """
     )
     suspend fun clearFavourites(userId: Long)
-
-    suspend fun syncFavourites(
-        userId: Long,
-        serverFavourites: List<FavouriteEntity>
-    ) {
-
-        if (serverFavourites.isEmpty()) {
-            clearFavourites(userId)
-            return
-        }
-
-        val serverProductIds =
-            serverFavourites.map { it.productId }
-
-        deleteNotInServer(
-            userId = userId,
-            serverProductIds = serverProductIds
-        )
-
-        insertAll(serverFavourites)
-    }
 
     @Query("""
         SELECT productId
