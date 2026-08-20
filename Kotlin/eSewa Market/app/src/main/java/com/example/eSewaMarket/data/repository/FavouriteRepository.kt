@@ -5,11 +5,9 @@ import com.example.eSewaMarket.data.local.dao.FavouriteDao
 import com.example.eSewaMarket.data.local.dao.ProductDao
 import com.example.eSewaMarket.data.local.entity.FavouriteEntity
 import com.example.eSewaMarket.data.local.entity.ProductEntity
-import com.example.eSewaMarket.data.models.AddToCartRequest
 import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.FavouriteToggles
 import com.example.eSewaMarket.data.models.Product
-import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -95,8 +93,11 @@ class FavouriteRepository(
         }
 
         if (favouriteItems.isEmpty()) {
+
             favouriteDao.clearFavourites(userId)
+
         } else {
+
             val serverProductIds =
                 favouriteItems.map { it.productId }
 
@@ -106,6 +107,18 @@ class FavouriteRepository(
             )
 
             favouriteDao.insertAll(favouriteItems)
+
+            val products = response.map {
+                ProductEntity(
+                    productId = it.productId,
+                    title = it.title,
+                    brand = it.brand,
+                    price = it.price,
+                    thumbnail = it.thumbnail
+                )
+            }
+
+            productDao.insertIntoProducts(products)
         }
     }
 
@@ -128,5 +141,10 @@ class FavouriteRepository(
         }
 
         favouriteDao.clearFavourites(userId)
+    }
+
+    suspend fun removeOneFromFavourite(productId: Long){
+        val userId = currentUserId()
+        favouriteDao.removeFromFavourite(userId, productId)
     }
 }

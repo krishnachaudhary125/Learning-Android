@@ -75,7 +75,7 @@ interface ApiService {
         @Body request: FavouriteToggles
     )
 
-    @GET("favourite")
+    @GET("favourites")
     suspend fun getFavourite(
         @Header("Authorization") token: String
     ): List<ProductResponse>
