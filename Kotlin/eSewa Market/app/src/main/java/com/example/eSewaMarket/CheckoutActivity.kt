@@ -27,16 +27,32 @@ class CheckoutActivity : AppCompatActivity() {
                 .collectAsStateWithLifecycle(
                     initialValue = emptyList()
                 )
+
+            val productPrice by cartViewModel.totalPrice
+                .collectAsStateWithLifecycle(
+                    initialValue = 0.0
+                )
+            val priceProductOnly = productPrice ?: 0.00
+            val taxAmount = (priceProductOnly * 13)/100
+            val shippingCharge = 70.00
+
+            val totalAmount = priceProductOnly + taxAmount + shippingCharge
+
+            val count by cartViewModel.cartCount()
+                .collectAsStateWithLifecycle(
+                    initialValue = 0
+                )
+
             CheckoutScreen(
                 checkoutProducts = products,
                 onBackClick = {
                     onBackPressedDispatcher.onBackPressed()
                 },
-                totalPrice = 19500.00,
-                itemCount = 5,
-                productPrice = 18000.00,
-                totalTax = 1450.00,
-                shippingCharge = 50.00,
+                totalPrice = totalAmount,
+                itemCount = count,
+                productPrice = priceProductOnly,
+                totalTax = taxAmount,
+                shippingCharge = shippingCharge,
                 address = "Pulchowk, Lalitpur - 20",
                 onProductClick = {}
             )
