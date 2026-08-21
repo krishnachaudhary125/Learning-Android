@@ -32,6 +32,11 @@ class CheckoutActivity : AppCompatActivity() {
                 onBackClick = {
                     onBackPressedDispatcher.onBackPressed()
                 },
+                totalPrice = 19500.00,
+                itemCount = 5,
+                productPrice = 18000.00,
+                totalTax = 1450.00,
+                shippingCharge = 50.00,
                 address = "Pulchowk, Lalitpur - 20",
                 onProductClick = {}
             )

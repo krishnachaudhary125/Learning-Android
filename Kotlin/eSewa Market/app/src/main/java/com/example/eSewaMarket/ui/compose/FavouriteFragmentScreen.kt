@@ -269,7 +269,7 @@ fun FavouriteFragmentScreen(
 
                         price = {
                             Text(
-                                text = "%.2f".format(product.price),
+                                text = "%,.2f".format(product.price),
                                 fontSize = 20.sp,
                                 lineHeight = 24.sp,
                                 fontWeight = FontWeight.Bold,

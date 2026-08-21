@@ -2,6 +2,7 @@ package com.example.eSewaMarket.ui.compose
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +14,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import com.example.eSewaMarket.R
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,9 +28,18 @@ import com.example.eSewaMarket.data.models.ProductResponse
 fun CheckoutScreen(
     checkoutProducts: List<ProductResponse>,
     onBackClick: () -> Unit,
+    totalPrice: Double,
+    itemCount: Int,
+    productPrice: Double,
+    totalTax: Double,
+    shippingCharge: Double,
     address: String,
     onProductClick: (ProductResponse) -> Unit
 ) {
+    var isExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         containerColor = colorResource(id = R.color.background),
         topBar = {
@@ -42,7 +56,18 @@ fun CheckoutScreen(
             )
         },
         bottomBar = {
-
+            CheckoutBottomBar(
+                modifier = Modifier.navigationBarsPadding(),
+                totalPrice = totalPrice,
+                isExpanded = isExpanded,
+                itemCount = itemCount,
+                productPrice = productPrice,
+                totalTax = totalTax,
+                shippingCharge = shippingCharge,
+                onToggleClick = {
+                    isExpanded = !isExpanded
+                }
+            )
         }
     ) { innerPadding ->
 
