@@ -47,9 +47,11 @@ fun FavouriteFragmentScreen(
     noOfItems: Int,
     cartCount: Int,
     onCartClick: () -> Unit,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    deleteAll: () -> Unit,
+    selectedIds: Set<Long>,
+    allSelected: Boolean,
+    onSelectAll: (Boolean) -> Unit,
+    selectedCount: Int,
+    deleteSelected: () -> Unit,
     continueShopping: () -> Unit,
     onProductClick: (FavouriteResponse) -> Unit,
     onAddToCartClick: (FavouriteResponse) -> Unit,
@@ -125,8 +127,8 @@ fun FavouriteFragmentScreen(
         ) {
             if (noOfItems > 0) {
                 CustomCheckbox(
-                    checked = checked,
-                    onCheckedChange = onCheckedChange,
+                    checked = allSelected,
+                    onCheckedChange = onSelectAll,
                     modifier = Modifier.padding(end = 8.dp)
                 )
             }
@@ -144,9 +146,9 @@ fun FavouriteFragmentScreen(
                     .weight(1f)
             )
 
-            if (checked) {
+            if (selectedCount > 0) {
                 Text(
-                    "DELETE ALL",
+                    text = if(allSelected) "DELETE ALL" else "DELETE",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.text_dark_300),
@@ -155,7 +157,7 @@ fun FavouriteFragmentScreen(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
-                            onClick = deleteAll
+                            onClick = deleteSelected
                         )
                 )
             }
@@ -294,7 +296,7 @@ fun FavouriteFragmentScreen(
                             onTickClick(product.productId)
                         },
 
-                        checked = checked,
+                        checked = selectedIds.contains(product.productId),
 
                         onDeleteClick = {
                             onDeleteClick(product)
