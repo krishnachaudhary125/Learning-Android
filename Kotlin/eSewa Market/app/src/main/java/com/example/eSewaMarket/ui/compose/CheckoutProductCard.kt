@@ -34,7 +34,11 @@ fun CheckoutProductCard(
 ){
     Box(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            )
             .fillMaxWidth()
             .heightIn(min = 120.dp)
             .clip(RoundedCornerShape(16.dp))
