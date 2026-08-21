@@ -1,10 +1,13 @@
 package com.example.eSewaMarket.ui.compose
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -18,6 +21,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -33,8 +37,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -167,7 +174,8 @@ fun CheckoutScreen(
                 modifier = Modifier
                     .padding(
                         start = 16.dp,
-                        top = 16.dp
+                        top = 16.dp,
+                        bottom = 16.dp
                     )
             ) {
                 Text(
@@ -179,6 +187,65 @@ fun CheckoutScreen(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 10.dp)
                 )
+            }
+
+            Text(
+                "Choose Your Payment Option",
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                letterSpacing = 1.sp,
+                color = colorResource(id = R.color.text_dark_300),
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        top  = 8.dp,
+                        bottom = 8.dp
+                    )
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 32.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_cash_on_delivery),
+                        contentDescription = "Cash on Delivery",
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
+
+                    Text(
+                        "Cash on Delivery",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 24.sp,
+                        letterSpacing = 1.sp,
+                        color = colorResource(id = R.color.text_dark_300),
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back_arrow),
+                        contentDescription = "Cash on Delivery",
+                        modifier = Modifier
+                            .rotate(180f)
+                            .padding(end = 8.dp)
+                    )
+                }
             }
         }
     }
