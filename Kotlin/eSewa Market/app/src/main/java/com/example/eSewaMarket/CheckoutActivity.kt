@@ -38,7 +38,6 @@ class CheckoutActivity : AppCompatActivity() {
                 totalTax = 1450.00,
                 shippingCharge = 50.00,
                 address = "Pulchowk, Lalitpur - 20",
-                promoBtn = {},
                 onProductClick = {}
             )
         }
