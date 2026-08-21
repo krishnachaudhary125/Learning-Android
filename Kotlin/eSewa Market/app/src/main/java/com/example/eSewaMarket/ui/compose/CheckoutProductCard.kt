@@ -30,8 +30,9 @@ fun CheckoutProductCard(
     image: @Composable () -> Unit,
     title: String,
     brand: String,
-    price: Double
-){
+    price: Double,
+    quantity: Int
+) {
     Box(
         modifier = Modifier
             .padding(
@@ -113,7 +114,7 @@ fun CheckoutProductCard(
                     )
 
                     Text(
-                        text = "%.2f".format(price),
+                        text = "%.2f".format(price*quantity),
                         fontSize = 20.sp,
                         lineHeight = 24.sp,
                         fontWeight = FontWeight.Bold,
@@ -123,5 +124,17 @@ fun CheckoutProductCard(
                 }
             }
         }
+        Text(
+            text = "x$quantity",
+            fontSize = 20.sp,
+            letterSpacing = 1.sp,
+            color = colorResource(id = R.color.text_dark_400),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(
+                    top = 16.dp,
+                    end = 16.dp
+                )
+        )
     }
 }

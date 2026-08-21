@@ -2,10 +2,12 @@ package com.example.eSewaMarket.ui.compose
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -55,7 +57,7 @@ fun CheckoutScreen(
         mutableStateOf(false)
     }
 
-    var showPromoSheet by rememberSaveable{
+    var showPromoSheet by rememberSaveable {
         mutableStateOf(false)
     }
     val promoSheetState = rememberModalBottomSheetState()
@@ -119,7 +121,10 @@ fun CheckoutScreen(
                 modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
             )
 
-            LazyColumn() {
+            LazyColumn(
+                modifier = Modifier
+                    .heightIn(max = 268.dp)
+            ) {
                 items(
                     items = checkoutProducts,
                     key = { product ->
@@ -140,7 +145,8 @@ fun CheckoutScreen(
                         },
                         title = product.title,
                         brand = product.brand,
-                        price = product.price
+                        price = product.price,
+                        quantity = product.quantity
                     )
                 }
             }
@@ -159,8 +165,11 @@ fun CheckoutScreen(
                     contentColor = colorResource(id = R.color.green)
                 ),
                 modifier = Modifier
-                    .padding(start = 16.dp)
-            ){
+                    .padding(
+                        start = 16.dp,
+                        top = 16.dp
+                    )
+            ) {
                 Text(
                     "HAVE A PROMOCODE?",
                     fontSize = 16.sp,
@@ -173,14 +182,14 @@ fun CheckoutScreen(
             }
         }
     }
-    if(showPromoSheet){
+    if (showPromoSheet) {
         ModalBottomSheet(
             onDismissRequest = {
                 showPromoSheet = false
             },
             sheetState = promoSheetState,
             dragHandle = null,
-           containerColor = Color.White
+            containerColor = Color.White
         ) {
             Column(
                 modifier = Modifier
