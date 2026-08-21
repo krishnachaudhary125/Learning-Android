@@ -69,7 +69,13 @@ fun CheckoutBottomBar(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                     ) {
-                        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .padding(
+                                    top = 16.dp,
+                                    bottom = 4.dp
+                                )
+                        ) {
                             Text(
                                 "Sub Total (${itemCount} items)",
                                 fontSize = 14.sp,
@@ -92,7 +98,11 @@ fun CheckoutBottomBar(
                             )
                         }
 
-                        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = 4.dp)
+                        ) {
                             Text(
                                 "Tax",
                                 fontSize = 14.sp,
@@ -115,7 +125,13 @@ fun CheckoutBottomBar(
                             )
                         }
 
-                        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .padding(
+                                    top = 4.dp,
+                                    bottom = 40.dp
+                                )
+                        ) {
                             Text(
                                 "Shipping Charge",
                                 fontSize = 14.sp,
