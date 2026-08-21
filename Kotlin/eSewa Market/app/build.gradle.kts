@@ -121,4 +121,7 @@ dependencies {
     // Coil setup
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
+    // To use constraintlayout in compose
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.2")
 }

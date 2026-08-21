@@ -1,6 +1,7 @@
 package com.example.eSewaMarket.data.repository
 
 import android.util.Log
+import coil3.network.HttpException
 import com.example.eSewaMarket.data.api.ApiService
 import com.example.eSewaMarket.data.local.dao.FavouriteDao
 import com.example.eSewaMarket.data.local.dao.ProductDao
@@ -158,9 +159,11 @@ class FavouriteRepository(
                 FavouriteToggles(productId = productId)
             )
             favouriteDao.removeFromFavourite(userId, productId)
-        }catch(e: Exception){
+        }catch (e: HttpException){
+            Log.e("Favourite_DELETE", "Failed to delete favourite product from the server due to http exception", e)
+        }
+        catch(e: Exception){
             Log.e("FAVOURITE_DELETE", "Failed to delete favourite product from the server.", e)
-            throw e
         }
     }
 

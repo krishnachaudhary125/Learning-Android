@@ -90,6 +90,12 @@ class RegisterActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
+                !phone.matches(Regex("^(?:(\\+977[-.\\s]?)?9[78]\\d{8}|\\+(?!977)[1-9]\\d{6,14})$")) -> {
+                    binding.phone.error = "Enter valid phone number"
+                    binding.phone.requestFocus()
+                    return@setOnClickListener
+                }
+
                 phone.length != 10 -> {
                     binding.phone.error = "Enter valid phone number"
                     binding.phone.requestFocus()
@@ -116,6 +122,12 @@ class RegisterActivity : AppCompatActivity() {
 
                 password.length < 8 -> {
                     binding.password.error = "Password must be at least 8 characters"
+                    binding.password.requestFocus()
+                    return@setOnClickListener
+                }
+
+                !password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")) -> {
+                    binding.password.error = "Password must contain uppercase, lowercase, number & special character"
                     binding.password.requestFocus()
                     return@setOnClickListener
                 }

@@ -2,6 +2,7 @@ package com.example.eSewaMarket.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,12 +46,19 @@ class FavouriteFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                var checked by remember { mutableStateOf(false) }
+                var selectedIds by remember {
+                    mutableStateOf<Set<Long>>(emptySet())
+                }
 
                 val products by favouriteViewModel.favouriteProducts()
                     .collectAsStateWithLifecycle(
                         initialValue = emptyList()
                     )
+
+                val allSelected =
+                    products.isNotEmpty() && selectedIds.size == products.size
+
+                val selectedCount = selectedIds.size
 
                 val cartCount by cartViewModel
                     .cartCount()
@@ -58,9 +66,41 @@ class FavouriteFragment : Fragment() {
 
                 FavouriteFragmentScreen(
                     products = products,
-                    checked = checked,
-                    onCheckedChange = {
-                        checked = it
+                    selectedIds = selectedIds,
+                    allSelected = allSelected,
+                    selectedCount = selectedCount,
+                    onSelectAll = { selectAll ->
+
+                        selectedIds = if (selectAll) {
+                            products.map { it.productId }.toSet()
+                        } else {
+                            emptySet()
+                        }
+                    },
+                    deleteSelected = {
+
+                        val productsToDelete = products.filter {
+                            it.productId in selectedIds
+                        }
+
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            try {
+
+                                productsToDelete.forEach { product ->
+                                    favouriteViewModel.removeOne(product.productId)
+                                }
+
+                                selectedIds = emptySet()
+
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Failed to delete selected products.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.e("DELETE_FAILED", "Failed to delete selected products.", e)
+                            }
+                        }
                     },
                     onBackClick = {
                         requireActivity()
@@ -77,11 +117,6 @@ class FavouriteFragment : Fragment() {
                         }
                         startActivity(intent)
                     },
-                    deleteAll = {
-                        deleteAllAlertDialog(products) {
-                            checked = false
-                        }
-                    },
                     continueShopping = {
                         val intent = Intent(requireContext(), MainActivity::class.java).apply {
                             putExtra("open_fragment", "home")
@@ -90,10 +125,13 @@ class FavouriteFragment : Fragment() {
                         }
                         startActivity(intent)
                     },
-                    onProductClick = { products ->
-                        val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-                        intent.putExtra("product_id", products.productId)
-                        startActivity(intent)
+                    onProductClick = { product ->
+
+                        selectedIds = if (product.productId in selectedIds) {
+                            selectedIds - product.productId
+                        } else {
+                            selectedIds + product.productId
+                        }
                     },
                     onAddToCartClick = { product ->
                         viewLifecycleOwner.lifecycleScope.launch {
