@@ -1,5 +1,6 @@
 package com.example.eSewaMarket.ui.compose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -7,6 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,7 @@ fun CheckoutScreen(
     totalTax: Double,
     shippingCharge: Double,
     address: String,
+    promoBtn: () -> Unit,
     onProductClick: (ProductResponse) -> Unit
 ) {
     var isExpanded by rememberSaveable {
@@ -123,6 +129,31 @@ fun CheckoutScreen(
                         price = product.price
                     )
                 }
+            }
+
+            Button(
+                onClick = promoBtn,
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(
+                    width = 2.dp,
+                    color = colorResource(id = R.color.green)
+                ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = colorResource(id = R.color.green)
+                ),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            ){
+                Text(
+                    "HAVE A PROMOCODE?",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 16.sp,
+                    letterSpacing = 4.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 16.dp)
+                )
             }
         }
     }
