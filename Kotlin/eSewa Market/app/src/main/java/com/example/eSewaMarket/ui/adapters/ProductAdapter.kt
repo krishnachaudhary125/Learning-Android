@@ -29,8 +29,12 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
         var quantityJob: Job? = null
         var favouriteJob: Job? = null
+        var collapseJob: Job? = null
+
+        var isQuantityExpanded = false
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
@@ -67,6 +71,7 @@ class ProductAdapter(
         super.onViewRecycled(holder)
         holder.quantityJob?.cancel()
         holder.favouriteJob?.cancel()
+        holder.collapseJob?.cancel()
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -117,6 +122,19 @@ class ProductAdapter(
 
             plusProduct.setOnClickListener {
                 onAddToCartClick(product)
+
+                holder.isQuantityExpanded = true
+
+                holder.collapseJob?.cancel()
+
+                holder.collapseJob = holder.scope.launch {
+                    delay(5_000)
+
+                    holder.isQuantityExpanded = false
+
+                    numOfProduct.visibility = View.GONE
+                    minusProduct.visibility = View.GONE
+                }
             }
 
             minusProduct.setOnClickListener {
@@ -128,7 +146,12 @@ class ProductAdapter(
 
                     numOfProduct.text = qty.toString()
 
-                    val visible = if (qty > 0) View.VISIBLE else View.GONE
+                    val visible = if (qty > 0 && holder.isQuantityExpanded) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+
                     numOfProduct.visibility = visible
                     minusProduct.visibility = visible
                 }
