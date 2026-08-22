@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,14 +20,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.MainActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
 import com.example.eSewaMarket.data.models.FavouriteResponse
+import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.ui.compose.FavouriteFragmentScreen
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
+import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -38,6 +42,8 @@ class FavouriteFragment : Fragment() {
     private val cartViewModel: CartViewModel by viewModels {
         ViewModelFactoryProvider.cartFactory(requireContext())
     }
+    private lateinit var userSessionRepository: UserSessionRepository
+    private lateinit var authNavigator: AuthNavigator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +51,18 @@ class FavouriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
+            userSessionRepository = UserSessionRepository(requireContext())
+            authNavigator = AuthNavigator(userSessionRepository)
             setContent {
+
+                var isLoggedIn by remember {
+                    mutableStateOf(false)
+                }
+
+                LaunchedEffect(Unit) {
+                    isLoggedIn = authNavigator.isLoggedIn()
+                }
+
                 var selectedIds by remember {
                     mutableStateOf<Set<Long>>(emptySet())
                 }
@@ -66,6 +83,7 @@ class FavouriteFragment : Fragment() {
 
                 FavouriteFragmentScreen(
                     products = products,
+                    isLoggedIn = isLoggedIn,
                     selectedIds = selectedIds,
                     allSelected = allSelected,
                     selectedCount = selectedCount,
@@ -78,28 +96,17 @@ class FavouriteFragment : Fragment() {
                         }
                     },
                     deleteSelected = {
-
                         val productsToDelete = products.filter {
                             it.productId in selectedIds
                         }
 
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            try {
-
-                                productsToDelete.forEach { product ->
-                                    favouriteViewModel.removeOne(product.productId)
+                        if (productsToDelete.isNotEmpty()) {
+                            deleteAlertDialog(
+                                products = productsToDelete,
+                                onComplete = {
+                                    selectedIds = emptySet()
                                 }
-
-                                selectedIds = emptySet()
-
-                            } catch (e: Exception) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Failed to delete selected products.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.e("DELETE_FAILED", "Failed to delete selected products.", e)
-                            }
+                            )
                         }
                     },
                     onBackClick = {
@@ -118,12 +125,17 @@ class FavouriteFragment : Fragment() {
                         startActivity(intent)
                     },
                     continueShopping = {
-                        val intent = Intent(requireContext(), MainActivity::class.java).apply {
-                            putExtra("open_fragment", "home")
-                            flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        if (isLoggedIn) {
+                            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                                putExtra("open_fragment", "home")
+                                flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            }
+                            startActivity(intent)
+                        } else {
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent)
                         }
-                        startActivity(intent)
                     },
                     onProductClick = { product ->
 
@@ -206,15 +218,19 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun deleteAllAlertDialog(
+    private fun deleteAlertDialog(
         products: List<FavouriteResponse>,
         onComplete: () -> Unit
     ) {
-
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.alert_dialog_delete)
             textSize = 18f
-            setTextColor(ContextCompat.getColor(context, R.color.text_dark))
+            setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.text_dark
+                )
+            )
             setPadding(60, 60, 0, 0)
         }
 
@@ -222,35 +238,60 @@ class FavouriteFragment : Fragment() {
             .setCustomTitle(titleView)
             .setNegativeButton("No", null)
             .setPositiveButton("Yes") { _, _ ->
+
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val deletedProducts = products.toList()
-                    favouriteViewModel.deleteAllFavourites()
-                    val coordinator = requireActivity().findViewById<View>(R.id.main)
-                    val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
-                    SnackBarUtil.show(
-                        view = coordinator,
-                        context = requireContext(),
-                        text = "(${products.size}) Items has been deleted.",
-                        anchorView = bottomNav,
-                        duration = 5000,
-                        actionText = "UNDO"
-                    ) {
-                        viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        val deletedProducts = products.toList()
 
-                            deletedProducts.forEach { product ->
-                                favouriteViewModel.restoreFavourite(product)
-                            }
-
-                            SnackBarUtil.show(
-                                view = coordinator,
-                                context = requireContext(),
-                                text = "(${products.size}) Items restored successfully.",
-                                anchorView = bottomNav
-                            )
+                        deletedProducts.forEach { product ->
+                            favouriteViewModel.removeOne(product.productId)
                         }
+
+                        val coordinator =
+                            requireActivity().findViewById<View>(R.id.main)
+
+                        val bottomNav =
+                            requireActivity().findViewById<View>(R.id.bottomNav)
+
+                        SnackBarUtil.show(
+                            view = coordinator,
+                            context = requireContext(),
+                            text = "(${deletedProducts.size}) Items have been deleted.",
+                            anchorView = bottomNav,
+                            duration = 5000,
+                            actionText = "UNDO"
+                        ) {
+                            viewLifecycleOwner.lifecycleScope.launch {
+
+                                deletedProducts.forEach { product ->
+                                    favouriteViewModel.restoreFavourite(product)
+                                }
+
+                                SnackBarUtil.show(
+                                    view = coordinator,
+                                    context = requireContext(),
+                                    text = "(${deletedProducts.size}) Items restored successfully.",
+                                    anchorView = bottomNav
+                                )
+                            }
+                        }
+
+                        onComplete()
+
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to delete selected products.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Log.e(
+                            "DELETE_FAILED",
+                            "Failed to delete selected products.",
+                            e
+                        )
                     }
-                    onComplete()
                 }
             }
             .create()
@@ -258,9 +299,19 @@ class FavouriteFragment : Fragment() {
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            .setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.green
+                )
+            )
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            .setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.green
+                )
+            )
     }
 }

@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -42,6 +43,9 @@ class RecommendedProductAdapter(
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         var quantityJob: Job? = null
         var favouriteJob: Job? = null
+        var collapseJob: Job? = null
+
+        var isQuantityExpanded = false
         }
 
     class LoadingViewHolder(val binding: ItemLoadingBinding) :
@@ -118,6 +122,19 @@ class RecommendedProductAdapter(
 
                 plusProduct.setOnClickListener {
                     onAddToCartClick(product)
+
+                    holder.isQuantityExpanded = true
+
+                    holder.collapseJob?.cancel()
+
+                    holder.collapseJob = holder.scope.launch {
+                        delay(5_000)
+
+                        holder.isQuantityExpanded = false
+
+                        numOfProduct.visibility = View.GONE
+                        minusProduct.visibility = View.GONE
+                    }
                 }
 
                 minusProduct.setOnClickListener {
@@ -129,7 +146,12 @@ class RecommendedProductAdapter(
 
                         numOfProduct.text = qty.toString()
 
-                        val visible = if (qty > 0) View.VISIBLE else View.GONE
+                        val visible = if (qty > 0 && holder.isQuantityExpanded) {
+                            View.VISIBLE
+                        } else {
+                            View.GONE
+                        }
+
                         numOfProduct.visibility = visible
                         minusProduct.visibility = visible
                     }

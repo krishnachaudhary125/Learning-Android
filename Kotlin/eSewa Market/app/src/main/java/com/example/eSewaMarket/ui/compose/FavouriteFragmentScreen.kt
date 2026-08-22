@@ -43,6 +43,7 @@ import com.example.eSewaMarket.data.models.FavouriteResponse
 @Composable
 fun FavouriteFragmentScreen(
     products: List<FavouriteResponse>,
+    isLoggedIn: Boolean,
     onBackClick: () -> Unit,
     noOfItems: Int,
     cartCount: Int,
@@ -148,7 +149,7 @@ fun FavouriteFragmentScreen(
 
             if (selectedCount > 0) {
                 Text(
-                    text = if(allSelected) "DELETE ALL" else "DELETE",
+                    text = if (allSelected) "DELETE ALL" else "DELETE",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.text_dark_300),
@@ -195,7 +196,7 @@ fun FavouriteFragmentScreen(
                     )
 
                     Text(
-                        "Add your favourites to wishlist and\nthey will show here.",
+                        if (isLoggedIn) "Add your favourites to wishlist and\nthey will show here." else "Login to add items in favourite.",
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
@@ -216,7 +217,7 @@ fun FavouriteFragmentScreen(
                             .padding(top = 16.dp, bottom = 32.dp)
                     ) {
                         Text(
-                            "CONTINUE SHOPPING",
+                            if (isLoggedIn) "CONTINUE SHOPPING" else "LOGIN",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 1.sp
@@ -239,7 +240,11 @@ fun FavouriteFragmentScreen(
                             AsyncImage(
                                 model = product.thumbnail,
                                 contentDescription = "Product Image",
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        color = colorResource(id = R.color.image_bg_color)
+                                    ),
                                 contentScale = ContentScale.Crop
                             )
                         },

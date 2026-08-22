@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +20,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -35,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,9 +44,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.eSewaMarket.data.models.ProductResponse
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +70,10 @@ fun CheckoutScreen(
     var showPromoSheet by rememberSaveable {
         mutableStateOf(false)
     }
+
     val promoSheetState = rememberModalBottomSheetState()
+
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         containerColor = colorResource(id = R.color.background),
@@ -146,7 +152,11 @@ fun CheckoutScreen(
                             AsyncImage(
                                 model = product.thumbnail,
                                 contentDescription = "Product Image",
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        color = colorResource(id = R.color.image_bg_color)
+                                    ),
                                 contentScale = ContentScale.Crop
                             )
                         },
@@ -203,19 +213,18 @@ fun CheckoutScreen(
                     )
             )
 
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                    )
             ){
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 32.dp)
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_cash_on_delivery),
@@ -243,9 +252,75 @@ fun CheckoutScreen(
                         contentDescription = "Cash on Delivery",
                         modifier = Modifier
                             .rotate(180f)
-                            .padding(end = 8.dp)
+                            .padding(horizontal = 8.dp)
                     )
                 }
+
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = colorResource(id = R.color.text_dark_100),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_esewa_logo_gray),
+                        contentDescription = "Cash on Delivery",
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
+
+                    Text(
+                        "Pay with eSewa",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 24.sp,
+                        letterSpacing = 1.sp,
+                        color = colorResource(id = R.color.text_dark_300),
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back_arrow),
+                        contentDescription = "Pay with eSewa",
+                        modifier = Modifier
+                            .rotate(180f)
+                            .padding(horizontal = 8.dp)
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_secure),
+                    contentDescription = "Secured",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                )
+
+                Text(
+                    "SAFE AND SECURE PAYMENTS.\n100% AUTHENTIC PRODUCTS.",
+                    fontSize = 14.sp,
+                    lineHeight = 16.sp,
+                    letterSpacing = 5.sp,
+                    color = colorResource(id = R.color.text_dark_200),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -311,9 +386,17 @@ fun CheckoutScreen(
                     )
                 )
 
-                Row() {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                ) {
                     Button(
-                        onClick = {},
+                        onClick = {
+                            scope.launch {
+                                promoSheetState.hide()
+                                showPromoSheet = false
+                            }
+                        },
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.text_dark_300),
@@ -322,7 +405,6 @@ fun CheckoutScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(
-                                top = 16.dp,
                                 end = 8.dp
                             )
                     ) {
@@ -347,7 +429,6 @@ fun CheckoutScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(
-                                top = 16.dp,
                                 start = 8.dp
                             )
                     ) {

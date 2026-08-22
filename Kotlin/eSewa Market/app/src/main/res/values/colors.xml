@@ -8,7 +8,7 @@
     <color name="red">#FF0000</color>
     <color name="addToCartSoldOut">#E3E4EB</color>
     <color name="text_dark_100">#C7C8D9</color>
-    <color name="text_dark_200">#757575</color>
+    <color name="text_dark_200">#8E90A6</color>
     <color name="text_dark_300">#555770</color>
     <color name="text_dark_400">#28293D</color>
     <color name="esewa_yellow">#FFC107</color>
@@ -21,4 +21,5 @@
     <color name="primary_green">#EAF9E6</color>
     <color name="color_charcoal">#182B3C</color>
     <color name="compose_text_field">#E9E9E9</color>
+    <color name="image_bg_color">#F0F0F0</color>
 </resources>

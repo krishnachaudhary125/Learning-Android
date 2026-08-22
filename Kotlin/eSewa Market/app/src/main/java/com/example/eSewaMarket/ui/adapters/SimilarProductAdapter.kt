@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SimilarProductAdapter(
@@ -49,6 +50,9 @@ class SimilarProductAdapter(
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         var quantityJob: Job? = null
         var favouriteJob: Job? = null
+        var collapseJob: Job? = null
+
+        var isQuantityExpanded = false
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
@@ -159,6 +163,19 @@ class SimilarProductAdapter(
 
                     plusProduct.setOnClickListener {
                         onAddToCartClick(product)
+
+                        holder.isQuantityExpanded = true
+
+                        holder.collapseJob?.cancel()
+
+                        holder.collapseJob = holder.scope.launch {
+                            delay(5_000)
+
+                            holder.isQuantityExpanded = false
+
+                            numOfProduct.visibility = View.GONE
+                            minusProduct.visibility = View.GONE
+                        }
                     }
 
                     minusProduct.setOnClickListener {
@@ -171,7 +188,12 @@ class SimilarProductAdapter(
 
                             numOfProduct.text = qty.toString()
 
-                            val visible = if (qty > 0) View.VISIBLE else View.GONE
+                            val visible = if (qty > 0 && holder.isQuantityExpanded) {
+                                View.VISIBLE
+                            } else {
+                                View.GONE
+                            }
+
                             numOfProduct.visibility = visible
                             minusProduct.visibility = visible
                         }
