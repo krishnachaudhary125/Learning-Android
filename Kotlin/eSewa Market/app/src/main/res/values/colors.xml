@@ -21,4 +21,5 @@
     <color name="primary_green">#EAF9E6</color>
     <color name="color_charcoal">#182B3C</color>
     <color name="compose_text_field">#E9E9E9</color>
+    <color name="image_bg_color">"#F0F0F0</color>
 </resources>
