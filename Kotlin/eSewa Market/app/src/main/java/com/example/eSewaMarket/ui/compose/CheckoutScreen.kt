@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.eSewaMarket.data.models.ProductResponse
@@ -292,6 +292,31 @@ fun CheckoutScreen(
                     )
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_secure),
+                    contentDescription = "Secured",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                )
+
+                Text(
+                    "SAFE AND SECURE PAYMENTS.\n100% AUTHENTIC PRODUCTS.",
+                    fontSize = 14.sp,
+                    lineHeight = 16.sp,
+                    letterSpacing = 5.sp,
+                    color = colorResource(id = R.color.text_dark_200),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
     if (showPromoSheet) {
@@ -356,7 +381,10 @@ fun CheckoutScreen(
                     )
                 )
 
-                Row() {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                ) {
                     Button(
                         onClick = {},
                         shape = RoundedCornerShape(16.dp),
@@ -367,7 +395,6 @@ fun CheckoutScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(
-                                top = 16.dp,
                                 end = 8.dp
                             )
                     ) {
@@ -392,7 +419,6 @@ fun CheckoutScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(
-                                top = 16.dp,
                                 start = 8.dp
                             )
                     ) {
