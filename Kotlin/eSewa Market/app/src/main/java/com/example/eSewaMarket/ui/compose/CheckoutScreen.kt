@@ -35,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.eSewaMarket.data.models.ProductResponse
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +70,10 @@ fun CheckoutScreen(
     var showPromoSheet by rememberSaveable {
         mutableStateOf(false)
     }
+
     val promoSheetState = rememberModalBottomSheetState()
+
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         containerColor = colorResource(id = R.color.background),
@@ -386,7 +391,12 @@ fun CheckoutScreen(
                         .padding(top = 16.dp)
                 ) {
                     Button(
-                        onClick = {},
+                        onClick = {
+                            scope.launch {
+                                promoSheetState.hide()
+                                showPromoSheet = false
+                            }
+                        },
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.text_dark_300),
