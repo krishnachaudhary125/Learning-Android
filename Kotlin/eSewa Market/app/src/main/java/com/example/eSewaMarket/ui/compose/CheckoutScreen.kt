@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -207,19 +208,18 @@ fun CheckoutScreen(
                     )
             )
 
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                    )
             ){
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 32.dp)
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_cash_on_delivery),
@@ -247,7 +247,48 @@ fun CheckoutScreen(
                         contentDescription = "Cash on Delivery",
                         modifier = Modifier
                             .rotate(180f)
-                            .padding(end = 8.dp)
+                            .padding(horizontal = 8.dp)
+                    )
+                }
+
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = colorResource(id = R.color.text_dark_100),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_esewa_logo_gray),
+                        contentDescription = "Cash on Delivery",
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
+
+                    Text(
+                        "Pay with eSewa",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 24.sp,
+                        letterSpacing = 1.sp,
+                        color = colorResource(id = R.color.text_dark_300),
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back_arrow),
+                        contentDescription = "Pay with eSewa",
+                        modifier = Modifier
+                            .rotate(180f)
+                            .padding(horizontal = 8.dp)
                     )
                 }
             }
