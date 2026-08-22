@@ -36,14 +36,10 @@
 
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                style="@style/Widget.Card.Wrap"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/Widget.Card.WrapMatch"
                 android:layout_margin="@dimen/margin_medium"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                app:layout_constraintStart_toEndOf="@id/imageLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toEndOf="@id/imageLayout">
 
                 <TextView
                     android:id="@+id/productName"
@@ -51,18 +47,27 @@
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:letterSpacing="0.05"
-                    android:paddingVertical="@dimen/padding_small"/>
+                    android:paddingVertical="@dimen/padding_small"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
                     android:id="@+id/productBrand"
                     style="@style/Widget.Card.Wrap"
-                    android:textSize="10sp"
-                    android:letterSpacing="0.05"
-                    android:textColor="@color/text_dark_200"/>
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:letterSpacing="0.2"
+                    android:textColor="@color/text_dark_200"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/productName"/>
 
                 <LinearLayout
                     style="@style/Widget.Card.Wrap"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
                         style="@style/Widget.Card.Wrap"
@@ -80,7 +85,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
