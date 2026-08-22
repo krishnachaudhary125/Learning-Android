@@ -58,7 +58,7 @@ class CartFragment : Fragment() {
         binding = FragmentCartBinding.inflate(inflater, container, false)
         userSessionRepository = UserSessionRepository(requireContext())
         authNavigator = AuthNavigator(userSessionRepository)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarCart.toolBarCartFragment){ view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarCart.toolBarCartFragment) { view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -87,6 +87,12 @@ class CartFragment : Fragment() {
             }
             startActivity(intent)
         }
+
+        binding.goToLoginBtn.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.checkoutBtn.setOnClickListener {
             val intent = Intent(requireContext(), CheckoutActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -114,6 +120,15 @@ class CartFragment : Fragment() {
                         binding.toolbarCart.numOfProductInCart.visibility = View.VISIBLE
                     } else {
                         binding.emptyCartLayout.visibility = View.VISIBLE
+                        if (authNavigator.isLoggedIn()) {
+                            binding.goToLoginBtn.visibility = View.GONE
+                            binding.continueShoppingBtn.visibility = View.VISIBLE
+                            binding.emptyCartMsg.text = "No items added to the cart yet"
+                        } else {
+                            binding.goToLoginBtn.visibility = View.VISIBLE
+                            binding.continueShoppingBtn.visibility = View.GONE
+                            binding.emptyCartMsg.text = "Login to add items"
+                        }
                         binding.rvCartProduct.visibility = View.GONE
                         binding.toolbarCart.numOfProductInCart.visibility = View.GONE
                     }
@@ -144,7 +159,7 @@ class CartFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 cartViewModel.totalItem.collect { total ->
                     binding.itemCount.text = "( ${total} )"
                 }
@@ -191,7 +206,8 @@ class CartFragment : Fragment() {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (recommendedAdapter.isLoadingFooterShown() &&
-                    position == recommendedAdapter.itemCount - 1) spanCount else 1
+                    position == recommendedAdapter.itemCount - 1
+                ) spanCount else 1
             }
         }
 
@@ -228,7 +244,7 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun createRecommendedProductAdapter(): RecommendedProductAdapter{
+    private fun createRecommendedProductAdapter(): RecommendedProductAdapter {
         return RecommendedProductAdapter(
             cartViewModel = cartViewModel,
             favouriteViewModel = favouriteViewModel,
@@ -239,9 +255,9 @@ class CartFragment : Fragment() {
             },
             onAddToCartClick = { product ->
                 viewLifecycleOwner.lifecycleScope.launch {
-                    if (authNavigator.isLoggedIn()){
+                    if (authNavigator.isLoggedIn()) {
                         cartViewModel.addToCart(product)
-                    }else{
+                    } else {
                         val coordinator = requireActivity().findViewById<View>(R.id.main)
                         val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
@@ -260,7 +276,7 @@ class CartFragment : Fragment() {
             },
             onRemoveOneFromCartClick = { productId ->
                 viewLifecycleOwner.lifecycleScope.launch {
-                    if (authNavigator.isLoggedIn()){
+                    if (authNavigator.isLoggedIn()) {
                         cartViewModel.removeOneFromCart(productId)
                     }
                 }

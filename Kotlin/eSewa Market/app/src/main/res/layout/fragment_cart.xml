@@ -72,13 +72,14 @@
                         android:text="Empty cart"/>
 
                     <TextView
+                        android:id="@+id/emptyCartMsg"
                         style="@style/Widget.Card.Wrap"
                         android:layout_margin="@dimen/margin_small"
                         android:textSize="16sp"
-                        android:textColor="@color/text_dark_200"
-                        android:text="No items added to the cart yet"/>
+                        android:textColor="@color/text_dark_200"/>
 
                     <TextView
+                        visibility="gone"
                         android:id="@+id/continueShoppingBtn"
                         style="@style/Widget.Card.Wrap"
                         android:layout_marginTop="@dimen/margin_medium"
@@ -86,6 +87,22 @@
                         android:textColor="@android:color/white"
                         android:background="@drawable/bg_continue_shopping"
                         android:text="CONTINUE SHOPPING"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:textSize="14sp"
+                        android:paddingVertical="12dp"
+                        android:paddingHorizontal="@dimen/padding_medium"
+                        android:letterSpacing="0.15"/>
+
+                    <TextView
+                        visibility="gone"
+                        android:id="@+id/goToLoginBtn"
+                        style="@style/Widget.Card.Wrap"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginBottom="32dp"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/bg_continue_shopping"
+                        android:text="LOGIN"
                         android:clickable="true"
                         android:focusable="true"
                         android:textSize="14sp"
