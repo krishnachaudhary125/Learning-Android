@@ -78,28 +78,17 @@ class FavouriteFragment : Fragment() {
                         }
                     },
                     deleteSelected = {
-
                         val productsToDelete = products.filter {
                             it.productId in selectedIds
                         }
 
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            try {
-
-                                productsToDelete.forEach { product ->
-                                    favouriteViewModel.removeOne(product.productId)
+                        if (productsToDelete.isNotEmpty()) {
+                            deleteAlertDialog(
+                                products = productsToDelete,
+                                onComplete = {
+                                    selectedIds = emptySet()
                                 }
-
-                                selectedIds = emptySet()
-
-                            } catch (e: Exception) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Failed to delete selected products.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.e("DELETE_FAILED", "Failed to delete selected products.", e)
-                            }
+                            )
                         }
                     },
                     onBackClick = {
@@ -206,15 +195,19 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun deleteAllAlertDialog(
+    private fun deleteAlertDialog(
         products: List<FavouriteResponse>,
         onComplete: () -> Unit
     ) {
-
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.alert_dialog_delete)
             textSize = 18f
-            setTextColor(ContextCompat.getColor(context, R.color.text_dark))
+            setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.text_dark
+                )
+            )
             setPadding(60, 60, 0, 0)
         }
 
@@ -222,35 +215,60 @@ class FavouriteFragment : Fragment() {
             .setCustomTitle(titleView)
             .setNegativeButton("No", null)
             .setPositiveButton("Yes") { _, _ ->
+
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val deletedProducts = products.toList()
-                    favouriteViewModel.deleteAllFavourites()
-                    val coordinator = requireActivity().findViewById<View>(R.id.main)
-                    val bottomNav = requireActivity().findViewById<View>(R.id.bottomNav)
 
-                    SnackBarUtil.show(
-                        view = coordinator,
-                        context = requireContext(),
-                        text = "(${products.size}) Items has been deleted.",
-                        anchorView = bottomNav,
-                        duration = 5000,
-                        actionText = "UNDO"
-                    ) {
-                        viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        val deletedProducts = products.toList()
 
-                            deletedProducts.forEach { product ->
-                                favouriteViewModel.restoreFavourite(product)
-                            }
-
-                            SnackBarUtil.show(
-                                view = coordinator,
-                                context = requireContext(),
-                                text = "(${products.size}) Items restored successfully.",
-                                anchorView = bottomNav
-                            )
+                        deletedProducts.forEach { product ->
+                            favouriteViewModel.removeOne(product.productId)
                         }
+
+                        val coordinator =
+                            requireActivity().findViewById<View>(R.id.main)
+
+                        val bottomNav =
+                            requireActivity().findViewById<View>(R.id.bottomNav)
+
+                        SnackBarUtil.show(
+                            view = coordinator,
+                            context = requireContext(),
+                            text = "(${deletedProducts.size}) Items have been deleted.",
+                            anchorView = bottomNav,
+                            duration = 5000,
+                            actionText = "UNDO"
+                        ) {
+                            viewLifecycleOwner.lifecycleScope.launch {
+
+                                deletedProducts.forEach { product ->
+                                    favouriteViewModel.restoreFavourite(product)
+                                }
+
+                                SnackBarUtil.show(
+                                    view = coordinator,
+                                    context = requireContext(),
+                                    text = "(${deletedProducts.size}) Items restored successfully.",
+                                    anchorView = bottomNav
+                                )
+                            }
+                        }
+
+                        onComplete()
+
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to delete selected products.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Log.e(
+                            "DELETE_FAILED",
+                            "Failed to delete selected products.",
+                            e
+                        )
                     }
-                    onComplete()
                 }
             }
             .create()
@@ -258,9 +276,19 @@ class FavouriteFragment : Fragment() {
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            .setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.green
+                )
+            )
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            .setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.green
+                )
+            )
     }
 }
