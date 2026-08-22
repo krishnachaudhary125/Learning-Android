@@ -146,7 +146,11 @@ fun CheckoutScreen(
                             AsyncImage(
                                 model = product.thumbnail,
                                 contentDescription = "Product Image",
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        color = colorResource(id = R.color.image_bg_color)
+                                    ),
                                 contentScale = ContentScale.Crop
                             )
                         },
