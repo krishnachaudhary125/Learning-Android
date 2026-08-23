@@ -10,12 +10,10 @@ import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import kotlin.collections.map
 
 class CartRepository(
