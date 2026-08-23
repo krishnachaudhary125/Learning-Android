@@ -10,12 +10,14 @@ import com.example.eSewaMarket.data.models.FavouriteResponse
 import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.models.ProductResponse
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
 import kotlin.collections.map
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CartRepository(
     private val cartDao: CartDao,
     private val productDao: ProductDao,
@@ -103,7 +105,7 @@ class CartRepository(
 
         val userId = currentUserId()
         val item = cartDao.getCartItem(userId, productId) ?: return
-        val oldQuantity = item.quantity?:0
+        val oldQuantity = item.quantity
 
         if (item.quantity == 1) {
             cartDao.removeFromCart(userId, productId)
