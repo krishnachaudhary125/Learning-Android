@@ -151,7 +151,7 @@ class HomeFragment : Fragment() {
                         binding.homeAppBar.userName.text = "${user.name},"
                     }
                 } else {
-                    userSessionRepository.user.collect { user ->
+                    userSessionRepository.user.collect {
                         binding.homeAppBar.userName.text = "User,"
                     }
                 }
@@ -170,15 +170,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun initAdapters() {
-        bannerAdapter = BannerPagerAdapter { banner ->
+        bannerAdapter = BannerPagerAdapter {
             Toast.makeText(requireContext(), "Banner: ", Toast.LENGTH_SHORT).show()
         }
 
-        categoryAdapter = CategoryAdapter { category ->
+        categoryAdapter = CategoryAdapter {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        hotDealCategoryAdapter = HotDealCategoryAdapter { hotDealCategories ->
+        hotDealCategoryAdapter = HotDealCategoryAdapter {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
