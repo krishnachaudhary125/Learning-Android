@@ -32,6 +32,7 @@
                     style="@style/Widget.Card.Wrap"
                     android:minWidth="90dp"
                     android:minHeight="90dp"
+                    android:scaleType="centerCrop"
                     android:background="@color/cart_image_bg"/>
 
             </androidx.cardview.widget.CardView>
