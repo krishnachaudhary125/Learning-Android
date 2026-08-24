@@ -11,10 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityFeaturedProductsBinding
 import com.example.eSewaMarket.ui.compose.FeaturedProductScreen
+import com.example.eSewaMarket.ui.factory.SectionProductViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
-import com.example.eSewaMarket.ui.viewmodel.FeaturedProductViewModel
+import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import kotlinx.coroutines.launch
@@ -22,7 +23,9 @@ import kotlinx.coroutines.launch
 class FeaturedProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFeaturedProductsBinding
-    private val featuredProductViewModel: FeaturedProductViewModel by viewModels()
+    private val featuredProductViewModel: SectionProductViewModel by viewModels {
+        SectionProductViewModelFactory("featured")
+    }
     private val cartViewModel: CartViewModel by viewModels {
         ViewModelFactoryProvider.cartFactory(this)
     }

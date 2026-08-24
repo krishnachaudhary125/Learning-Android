@@ -23,11 +23,11 @@ import com.example.eSewaMarket.databinding.ItemLoadingBinding
 import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
-import com.example.eSewaMarket.ui.viewmodel.FeaturedProductViewModel
+import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
 
 @Composable
 fun FeaturedProductScreen(
-    viewModel: FeaturedProductViewModel,
+    viewModel: SectionProductViewModel,
     cartViewModel: CartViewModel,
     favouriteViewModel: FavouriteViewModel,
     onClick: (Product) -> Unit,
