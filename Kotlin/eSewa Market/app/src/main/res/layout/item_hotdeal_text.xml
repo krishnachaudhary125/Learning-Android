@@ -4,5 +4,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="@color/popular_category_background"
-    android:background="@drawable/popular_catgeories"
+    android:backgroundTint="#f1f3f6"
     android:layout_margin="8dp"/>
