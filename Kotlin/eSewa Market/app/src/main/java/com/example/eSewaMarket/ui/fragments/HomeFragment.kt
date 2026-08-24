@@ -23,6 +23,7 @@ import com.example.eSewaMarket.FeaturedProductActivity
 import com.example.eSewaMarket.HotDealProductsActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.NotificationActivity
+import com.example.eSewaMarket.PopularBrandActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
@@ -165,6 +166,11 @@ class HomeFragment : Fragment() {
 
         binding.hotDealProductsBtn.setOnClickListener {
             val intent = Intent(requireContext(), HotDealProductsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.popularBrandBtn.setOnClickListener {
+            val intent = Intent(requireContext(), PopularBrandActivity::class.java)
             startActivity(intent)
         }
     }
