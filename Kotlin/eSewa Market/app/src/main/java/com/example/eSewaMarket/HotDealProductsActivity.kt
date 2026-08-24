@@ -31,6 +31,18 @@ class HotDealProductsActivity : AppCompatActivity(){
             insets
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.composeView){ view, insets ->
+            val bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+
+            view.setPadding(
+                view.paddingLeft,
+                view.paddingTop,
+                view.paddingRight,
+                bottom
+            )
+            insets
+        }
+
         binding.tbHotDealProducts.backBtn.setOnClickListener {
             onBackPressedDispatcher
                 .onBackPressed()
