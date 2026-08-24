@@ -13,6 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,6 +28,7 @@ import com.example.eSewaMarket.databinding.ItemProductBinding
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SectionProductScreen(
@@ -131,6 +136,21 @@ fun ItemProductCard(
         .isFavourite(product.id)
         .collectAsState(initial = false)
 
+    var isQuantityExpanded by remember(product.id) {
+        mutableStateOf(false)
+    }
+
+    var expandRequest by remember(product.id) {
+        mutableIntStateOf(0)
+    }
+
+    LaunchedEffect(expandRequest) {
+        if (expandRequest > 0) {
+            delay(5_000)
+            isQuantityExpanded = false
+        }
+    }
+
     AndroidView(
         factory = { context ->
             ItemProductBinding.inflate(
@@ -150,7 +170,12 @@ fun ItemProductCard(
                     .into(productImage)
 
                 numOfProduct.text = quantity.toString()
-                val visibility = if (quantity > 0) View.VISIBLE else View.GONE
+                val visibility =
+                    if (quantity > 0 && isQuantityExpanded) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
                 numOfProduct.visibility = visibility
                 minusProduct.visibility = visibility
 
@@ -166,6 +191,8 @@ fun ItemProductCard(
                 }
 
                 plusProduct.setOnClickListener {
+                    isQuantityExpanded = true
+                    expandRequest++
                     onAddToCartClick(product)
                 }
 
