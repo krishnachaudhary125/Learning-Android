@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.FeaturedProductActivity
+import com.example.eSewaMarket.HotDealProductsActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.NotificationActivity
 import com.example.eSewaMarket.PostProductActivity
@@ -159,6 +160,11 @@ class HomeFragment : Fragment() {
 
         binding.featuredProductBtn.setOnClickListener {
             val intent = Intent(requireContext(), FeaturedProductActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.hotDealProductsBtn.setOnClickListener {
+            val intent = Intent(requireContext(), HotDealProductsActivity::class.java)
             startActivity(intent)
         }
     }

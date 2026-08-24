@@ -144,6 +144,7 @@
                 <Space style="@style/Widget.Card.layout_weight"/>
 
                 <ImageView
+                    android:id="@+id/hotDealProductsBtn"
                     style="@style/Widget.Card.Wrap"
                     android:minWidth="46dp"
                     android:minHeight="24dp"
