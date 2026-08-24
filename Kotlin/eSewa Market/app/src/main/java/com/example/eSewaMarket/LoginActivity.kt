@@ -222,15 +222,42 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun getFirebaseToken() {
+        val user = auth.currentUser
 
-        auth.currentUser
-            ?.getIdToken(true)
-            ?.addOnSuccessListener { result ->
+        if (user == null) {
+            handleLoginError("User authentication failed")
+            return
+        }
 
-                result.token?.let { token ->
+        user.getIdToken(false)
+            .addOnSuccessListener { result ->
 
+                val token = result.token
+
+                if (token != null) {
                     userViewModel.getCurrentUser(token)
+                } else {
+                    handleLoginError("Unable to get Firebase token")
                 }
             }
+            .addOnFailureListener { exception ->
+
+                handleLoginError(
+                    exception.message ?: "Unable to get Firebase token"
+                )
+            }
+    }
+
+    private fun handleLoginError(message: String) {
+
+        binding.loadingOverlay.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.loginBtn.isEnabled = true
+
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
