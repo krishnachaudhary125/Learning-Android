@@ -26,7 +26,7 @@ import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
 import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
 
 @Composable
-fun FeaturedProductScreen(
+fun SectionProductScreen(
     viewModel: SectionProductViewModel,
     cartViewModel: CartViewModel,
     favouriteViewModel: FavouriteViewModel,

@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityFeaturedProductsBinding
-import com.example.eSewaMarket.ui.compose.FeaturedProductScreen
+import com.example.eSewaMarket.ui.compose.SectionProductScreen
 import com.example.eSewaMarket.ui.factory.SectionProductViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
@@ -83,7 +83,7 @@ class FeaturedProductActivity : AppCompatActivity() {
 
         binding.composeView.setContent {
 
-            FeaturedProductScreen(
+            SectionProductScreen(
                 viewModel = featuredProductViewModel,
                 cartViewModel = cartViewModel,
                 favouriteViewModel = favouriteViewModel,
