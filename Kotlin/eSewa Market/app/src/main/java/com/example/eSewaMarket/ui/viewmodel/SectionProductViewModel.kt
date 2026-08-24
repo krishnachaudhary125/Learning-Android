@@ -76,4 +76,12 @@ class SectionProductViewModel(
             }
         }
     }
+
+    fun retry(){
+        if(_isLoading.value)
+            return
+
+        _error.value = false
+        loadNextPage()
+    }
 }
