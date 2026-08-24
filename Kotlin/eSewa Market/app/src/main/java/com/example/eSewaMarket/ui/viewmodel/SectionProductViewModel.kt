@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FeaturedProductViewModel : ViewModel() {
+class SectionProductViewModel(
+    private val type: String
+) : ViewModel() {
 
     private val productRepository = ProductRepository()
 
@@ -47,7 +49,7 @@ class FeaturedProductViewModel : ViewModel() {
 
                 val response =
                     productRepository.fetchProductsBySection(
-                        type = "featured",
+                        type = type,
                         page = currentPage,
                         size = pageSize
                     )
