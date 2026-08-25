@@ -9,5 +9,6 @@ import androidx.room3.Entity
 data class CartEntity(
     val userId: Long,
     val productId: Long,
-    val quantity: Int
+    val quantity: Int,
+    val addedAt: Long = System.currentTimeMillis()
 )
