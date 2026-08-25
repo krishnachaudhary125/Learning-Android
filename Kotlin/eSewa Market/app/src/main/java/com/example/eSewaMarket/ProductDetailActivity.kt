@@ -89,6 +89,8 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
+        binding.toolbarProductDetail.toolbarIcon.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.esewa_bg_light))
 
         userSessionRepository = UserSessionRepository(applicationContext)
         authNavigator = AuthNavigator(userSessionRepository)

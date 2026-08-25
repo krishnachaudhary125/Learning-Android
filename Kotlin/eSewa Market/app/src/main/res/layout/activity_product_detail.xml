@@ -1,73 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.Card.Match"
-    android:background="#E6ECF4"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#E6ECF4">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/productDetailLayout"
         style="@style/Widget.Card.Match"
         android:layout_marginBottom="64dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/Widget.Card.Match">
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/Widget.Card.Match">
+
+            <include
+                android:id="@+id/toolbarProductDetail"
+                style="@style/Widget.Card.MatchWrap"
+                layout="@layout/toolbar_back_action"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpProductImage"
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/Widget.Card.MatchWrap"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <include
-                    android:id="@+id/toolbarProductDetail"
-                    style="@style/Widget.Card.MatchWrap"
-                    layout="@layout/toolbar_back_action"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@id/toolbarProductDetail" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/imageDotIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:tabPaddingStart="5dp"
-                app:tabPaddingEnd="5dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabBackground="@drawable/tab_selector"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="@id/vpProductImage"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabPaddingEnd="5dp"
+                app:tabPaddingStart="5dp" />
 
             <ImageView
                 android:id="@+id/favBtn"
                 style="@style/Widget.Card.Wrap"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_green_circle"
+                android:elevation="1dp"
                 android:minWidth="56dp"
                 android:minHeight="56dp"
                 android:padding="16dp"
-                android:layout_marginEnd="16dp"
-                app:tint="@color/white"
-                android:background="@drawable/bg_green_circle"
                 android:src="@drawable/ic_favourite"
-                app:layout_constraintTop_toBottomOf="@id/vpProductImage"
                 app:layout_constraintBottom_toBottomOf="@id/vpProductImage"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="1dp"/>
+                app:layout_constraintTop_toBottomOf="@id/vpProductImage"
+                app:tint="@color/white" />
 
             <LinearLayout
                 style="@style/Widget.Card.MatchWrap"
@@ -103,13 +94,13 @@
 
                         <TextView
                             android:id="@+id/originalPrice"
-                            android:visibility="invisible"
                             style="@style/Widget.Card.Wrap"
                             android:letterSpacing="0.05"
                             android:paddingVertical="4dp"
                             android:textColor="@color/text_dark"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
 
                         <Space style="@style/Widget.Card.layout_weight" />
 
@@ -157,8 +148,8 @@
                         android:id="@+id/productDescription"
                         style="@style/Widget.Card.MatchWrap"
                         android:letterSpacing="0.05"
-                        android:maxLines="1"
                         android:lineHeight="30dp"
+                        android:maxLines="1"
                         android:textColor="@color/text_dark"
                         android:textSize="14sp" />
 
@@ -202,7 +193,7 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvSizeOption"
-                        style="@style/Widget.Card.MatchWrap"/>
+                        style="@style/Widget.Card.MatchWrap" />
 
                     <TextView
                         android:id="@+id/colorLabel"
@@ -268,18 +259,17 @@
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/Widget.Card.MatchWrap">
+                <androidx.constraintlayout.widget.ConstraintLayout style="@style/Widget.Card.MatchWrap">
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:scaleType="centerCrop"
                         android:foreground="@drawable/bg_green_to_blue_overlay"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/product_detail_bg"
                         app:layout_constraintDimensionRatio="16:13"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -287,10 +277,10 @@
                         style="@style/Widget.Card.Wrap"
                         android:layout_width="0dp"
                         android:layout_marginTop="@dimen/margin_medium"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -305,62 +295,62 @@
 
                         <androidx.cardview.widget.CardView
                             style="@style/Widget.Card.MatchWrap"
-                            app:cardBackgroundColor="#F9F9F9"
-                            app:cardCornerRadius="16dp"
+                            android:elevation="0dp"
                             android:minWidth="136dp"
                             android:minHeight="84dp"
-                            android:elevation="0dp">
+                            app:cardBackgroundColor="#F9F9F9"
+                            app:cardCornerRadius="16dp">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/ratingBox"
-                                android:padding="32dp"
-                                style="@style/Widget.Card.MatchWrap">
+                                style="@style/Widget.Card.MatchWrap"
+                                android:padding="32dp">
 
                                 <TextView
                                     android:id="@+id/avgRating"
                                     style="@style/Widget.Card.Wrap"
+                                    android:letterSpacing="0.05"
                                     android:paddingVertical="2dp"
                                     android:textSize="34sp"
-                                    android:letterSpacing="0.05"
                                     app:layout_constraintStart_toStartOf="@id/ratingBox"
-                                    app:layout_constraintTop_toTopOf="@id/ratingBox"/>
+                                    app:layout_constraintTop_toTopOf="@id/ratingBox" />
 
                                 <TextView
                                     style="@style/Widget.Card.Wrap"
-                                    android:text=" /5"
-                                    android:paddingVertical="2dp"
                                     android:letterSpacing="0.05"
+                                    android:paddingVertical="2dp"
+                                    android:text=" /5"
                                     android:textSize="16sp"
-                                    app:layout_constraintStart_toEndOf="@id/avgRating"
-                                    app:layout_constraintBottom_toBottomOf="@id/avgRating"/>
+                                    app:layout_constraintBottom_toBottomOf="@id/avgRating"
+                                    app:layout_constraintStart_toEndOf="@id/avgRating" />
 
                                 <TextView
                                     android:id="@+id/basedOn"
                                     style="@style/Widget.Card.Wrap"
-                                    android:textSize="12sp"
-                                    android:textColor="@color/text_dark"
-                                    android:textStyle="bold"
                                     android:text="Based on "
-                                    app:layout_constraintTop_toBottomOf="@id/avgRating"
-                                    app:layout_constraintStart_toStartOf="@id/ratingBox"/>
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="@id/ratingBox"
+                                    app:layout_constraintTop_toBottomOf="@id/avgRating" />
 
                                 <TextView
                                     android:id="@+id/totalReviews"
                                     style="@style/Widget.Card.Wrap"
-                                    android:textStyle="bold"
-                                    android:textSize="12sp"
                                     android:textColor="@color/text_dark"
-                                    app:layout_constraintTop_toBottomOf="@id/avgRating"
-                                    app:layout_constraintStart_toEndOf="@id/basedOn"/>
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toEndOf="@id/basedOn"
+                                    app:layout_constraintTop_toBottomOf="@id/avgRating" />
 
                                 <TextView
                                     style="@style/Widget.Card.Wrap"
                                     android:text=" reviews"
+                                    android:textColor="@color/text_dark"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
-                                    android:textColor="@color/text_dark"
-                                    app:layout_constraintTop_toBottomOf="@id/avgRating"
-                                    app:layout_constraintStart_toEndOf="@id/totalReviews"/>
+                                    app:layout_constraintStart_toEndOf="@id/totalReviews"
+                                    app:layout_constraintTop_toBottomOf="@id/avgRating" />
 
                                 <include
                                     android:id="@+id/ratingStar"
@@ -369,16 +359,16 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_medium"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/basedOn"/>
+                                    app:layout_constraintTop_toBottomOf="@id/basedOn" />
 
                                 <include
                                     android:id="@+id/ratingProgressBar"
+                                    layout="@layout/progress_bar_rating"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    layout="@layout/progress_bar_rating"
-                                    app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"/>
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -388,8 +378,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/Widget.Card.MatchWrap">
+                <LinearLayout style="@style/Widget.Card.MatchWrap">
 
                 </LinearLayout>
 
@@ -402,12 +391,12 @@
     <LinearLayout
         android:id="@+id/productDetailBottomNav"
         style="@style/Widget.Card.MatchWrap"
-        android:orientation="horizontal"
         android:background="@color/white"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             style="@style/Widget.Card.Wrap"
@@ -417,79 +406,79 @@
             <TextView
                 android:id="@+id/productTitle"
                 style="@style/Widget.Card.Wrap"
-                android:paddingVertical="4dp"
-                android:textSize="14sp"
                 android:letterSpacing="0.05"
-                android:textColor="@color/text_dark"/>
+                android:paddingVertical="4dp"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/bottomProductPrice"
                 style="@style/Widget.Card.Wrap"
-                android:textSize="16sp"
                 android:letterSpacing="0.05"
-                android:textStyle="bold"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <Space style="@style/Widget.Card.layout_weight"/>
+        <Space style="@style/Widget.Card.layout_weight" />
 
         <LinearLayout
             android:id="@+id/addToCartBG"
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:minWidth="148dp"
             android:background="@drawable/bg_continue_shopping"
             android:gravity="center"
+            android:minWidth="148dp"
             android:orientation="horizontal">
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/plusProductBtn"
-                android:paddingVertical="@dimen/margin_medium"
-                android:paddingHorizontal="@dimen/padding_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:minWidth="16dp"
                 android:minHeight="16dp"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/margin_medium"
                 android:src="@drawable/ic_plus"
-                android:background="@null"/>
+                android:visibility="gone" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/tvCartCount"
                 style="@style/Widget.Card.Wrap"
-                android:textColor="@color/white"
+                android:background="#1FAC00"
+                android:letterSpacing="0.1"
+                android:paddingHorizontal="@dimen/margin_large"
                 android:paddingVertical="@dimen/margin_medium"
+                android:text="25"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:background="#1FAC00"
-                android:paddingHorizontal="@dimen/margin_large"
-                android:letterSpacing="0.1"
-                android:text="25"/>
+                android:visibility="gone" />
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/minusProductBtn"
-                android:paddingVertical="@dimen/margin_medium"
-                android:paddingHorizontal="@dimen/padding_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:minWidth="16dp"
                 android:minHeight="16dp"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/margin_medium"
                 android:src="@drawable/ic_minus"
-                android:background="@null"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/bottomAddToCartBtn"
                 style="@style/Widget.Card.Wrap"
-                android:textColor="@color/white"
-                android:paddingVertical="@dimen/margin_medium"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingHorizontal="34dp"
                 android:letterSpacing="0.1"
-                android:text="Add To Cart"/>
+                android:paddingHorizontal="34dp"
+                android:paddingVertical="@dimen/margin_medium"
+                android:text="Add To Cart"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
