@@ -245,6 +245,14 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
+                android:id="@+id/uncheckedTermMsg"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:textSize="12sp"
+                android:textColor="@color/red"
+                style="@style/Widget.Card.MatchWrap"/>
+
+            <TextView
                 android:id="@+id/registerBtn"
                 style="@style/Widget.Card.MatchWrap"
                 android:gravity="center"
@@ -313,18 +321,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:indeterminateTint="@color/green"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/registerCancelBtn"
-            style="@style/Widget.Card.Wrap"
-            android:text="Cancel"
-            android:paddingVertical="@dimen/padding_small"
-            android:paddingHorizontal="@dimen/padding_large"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:background="@drawable/bg_continue_shopping"
-            android:layout_marginTop="50dp"
             android:layout_gravity="center"/>
     </FrameLayout>
 

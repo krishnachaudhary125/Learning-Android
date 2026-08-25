@@ -69,6 +69,12 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
 
+        binding.cbTerms.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.uncheckedTermMsg.visibility = View.GONE
+            }
+        }
+
         binding.registerBtn.setOnClickListener {
 
             val fullName = binding.fname.text.toString().trim()
@@ -129,6 +135,14 @@ class RegisterActivity : AppCompatActivity() {
                 !password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")) -> {
                     binding.password.error = "Password must contain uppercase, lowercase, number & special character"
                     binding.password.requestFocus()
+                    return@setOnClickListener
+                }
+
+                !binding.cbTerms.isChecked -> {
+                    binding.uncheckedTermMsg.visibility = View.VISIBLE
+                    binding.uncheckedTermMsg.error
+                    binding.uncheckedTermMsg.text = "❗Please accept the terms and conditions"
+                    binding.uncheckedTermMsg.requestFocus()
                     return@setOnClickListener
                 }
 
