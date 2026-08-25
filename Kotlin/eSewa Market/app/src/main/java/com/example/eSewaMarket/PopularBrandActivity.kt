@@ -9,7 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.data.repository.UserSessionRepository
-import com.example.eSewaMarket.databinding.ActivityFeaturedProductsBinding
+import com.example.eSewaMarket.databinding.ActivityPopularBrandBinding
 import com.example.eSewaMarket.ui.compose.SectionProductScreen
 import com.example.eSewaMarket.ui.factory.SectionProductViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
@@ -19,12 +19,14 @@ import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
-class FeaturedProductActivity : AppCompatActivity() {
+class PopularBrandActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFeaturedProductsBinding
-    private val featuredProductViewModel: SectionProductViewModel by viewModels {
-        SectionProductViewModelFactory("featured")
+    private lateinit var binding: ActivityPopularBrandBinding
+
+    private val popularBrandViewModel: SectionProductViewModel by viewModels {
+        SectionProductViewModelFactory("popular-brand")
     }
     private val cartViewModel: CartViewModel by viewModels {
         ViewModelFactoryProvider.cartFactory(this)
@@ -37,12 +39,13 @@ class FeaturedProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.enableEdgeToEdge(window)
 
-        binding = ActivityFeaturedProductsBinding.inflate(layoutInflater)
+        binding = ActivityPopularBrandBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.tbFeaturedProducts.root) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.tbPopularBrandProducts.root){ view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -51,15 +54,11 @@ class FeaturedProductActivity : AppCompatActivity() {
                 view.paddingRight,
                 view.paddingBottom
             )
-
             insets
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.composeView) { view, insets ->
-
-            val bottom = insets.getInsets(
-                WindowInsetsCompat.Type.navigationBars()
-            ).bottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.composeView){ view, insets ->
+            val bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
 
             view.setPadding(
                 view.paddingLeft,
@@ -67,30 +66,28 @@ class FeaturedProductActivity : AppCompatActivity() {
                 view.paddingRight,
                 bottom
             )
-
             insets
         }
 
-        binding.tbFeaturedProducts.toolbarTitle.text = "Featured Products"
-
-        binding.tbFeaturedProducts.backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        binding.tbPopularBrandProducts.backBtn.setOnClickListener {
+            onBackPressedDispatcher
+                .onBackPressed()
         }
+
+        binding.tbPopularBrandProducts.toolbarTitle.text = "Popular Brands"
 
         userSessionRepository = UserSessionRepository(this)
         authNavigator = AuthNavigator(userSessionRepository)
 
-
         binding.composeView.setContent {
-
             SectionProductScreen(
-                viewModel = featuredProductViewModel,
+                viewModel = popularBrandViewModel,
                 cartViewModel = cartViewModel,
                 favouriteViewModel = favouriteViewModel,
 
                 onClick = { product ->
                     val intent = Intent(
-                        this@FeaturedProductActivity,
+                        this@PopularBrandActivity,
                         ProductDetailActivity::class.java
                     )
 
@@ -105,13 +102,13 @@ class FeaturedProductActivity : AppCompatActivity() {
                         } else {
                             SnackBarUtil.show(
                                 view = binding.root,
-                                context = this@FeaturedProductActivity,
+                                context = this@PopularBrandActivity,
                                 text = "Login to continue.",
                                 actionText = "GO TO LOGIN"
                             ) {
                                 startActivity(
                                     Intent(
-                                        this@FeaturedProductActivity,
+                                        this@PopularBrandActivity,
                                         LoginActivity::class.java
                                     )
                                 )
@@ -135,13 +132,13 @@ class FeaturedProductActivity : AppCompatActivity() {
                         } else {
                             SnackBarUtil.show(
                                 view = binding.root,
-                                context = this@FeaturedProductActivity,
+                                context = this@PopularBrandActivity,
                                 text = "Login to continue.",
                                 actionText = "GO TO LOGIN"
                             ) {
                                 startActivity(
                                     Intent(
-                                        this@FeaturedProductActivity,
+                                        this@PopularBrandActivity,
                                         LoginActivity::class.java
                                     )
                                 )

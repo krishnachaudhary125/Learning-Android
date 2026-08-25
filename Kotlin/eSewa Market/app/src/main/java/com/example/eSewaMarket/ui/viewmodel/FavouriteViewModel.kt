@@ -8,6 +8,9 @@ import com.example.eSewaMarket.data.models.Product
 import com.example.eSewaMarket.data.repository.FavouriteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.SocketTimeoutException
 import kotlin.coroutines.cancellation.CancellationException
 
 class FavouriteViewModel(
@@ -18,7 +21,15 @@ class FavouriteViewModel(
 
     fun toggleFavourite(product: Product) {
         viewModelScope.launch {
-            repository.toggleFavourite(product)
+            try {
+                repository.toggleFavourite(product)
+            } catch (e: SocketTimeoutException) {
+                Log.e("Favourite", "Favourite request timed out", e)
+            } catch (e: IOException) {
+                Log.e("Favourite", "Network error", e)
+            } catch (e: HttpException) {
+                Log.e("Favourite", "HTTP ${e.code()}", e)
+            }
         }
     }
 
@@ -34,9 +45,19 @@ class FavouriteViewModel(
         repository.deleteFavourites()
     }
 
-    fun removeOne(productId: Long){
+    fun removeOne(productId: Long) {
         viewModelScope.launch {
-            repository.removeOneFromFavourite(productId)
+            try {
+                repository.removeOneFromFavourite(productId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SocketTimeoutException) {
+                Log.e("Favourite", "Remove favourite timed out", e)
+            } catch (e: IOException) {
+                Log.e("Favourite", "Network error", e)
+            } catch (e: HttpException) {
+                Log.e("Favourite", "HTTP ${e.code()}", e)
+            }
         }
     }
 

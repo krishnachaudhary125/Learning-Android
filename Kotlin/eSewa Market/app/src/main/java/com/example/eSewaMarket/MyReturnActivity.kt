@@ -37,10 +37,11 @@ class MyReturnActivity : AppCompatActivity() {
         }
 
         binding.continueShopping.setOnClickListener {
-            val intent =  Intent(this, MainActivity::class.java)
-            intent.putExtra("openHome", true)
+            val intent =  Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra("open_fragment", "home")
+            }
             startActivity(intent)
-            finish()
         }
     }
 }

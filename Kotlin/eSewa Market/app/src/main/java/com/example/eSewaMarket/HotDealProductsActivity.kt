@@ -9,7 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.eSewaMarket.data.repository.UserSessionRepository
-import com.example.eSewaMarket.databinding.ActivityFeaturedProductsBinding
+import com.example.eSewaMarket.databinding.ActivityHotDealProductsBinding
 import com.example.eSewaMarket.ui.compose.SectionProductScreen
 import com.example.eSewaMarket.ui.factory.SectionProductViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
@@ -19,12 +19,13 @@ import com.example.eSewaMarket.ui.viewmodel.SectionProductViewModel
 import com.example.eSewaMarket.utils.AuthNavigator
 import com.example.eSewaMarket.utils.SnackBarUtil
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
-class FeaturedProductActivity : AppCompatActivity() {
+class HotDealProductsActivity : AppCompatActivity(){
 
-    private lateinit var binding: ActivityFeaturedProductsBinding
-    private val featuredProductViewModel: SectionProductViewModel by viewModels {
-        SectionProductViewModelFactory("featured")
+    private lateinit var binding: ActivityHotDealProductsBinding
+    private val hotDealProductViewModel: SectionProductViewModel by viewModels {
+        SectionProductViewModelFactory("hot-deals")
     }
     private val cartViewModel: CartViewModel by viewModels {
         ViewModelFactoryProvider.cartFactory(this)
@@ -37,12 +38,13 @@ class FeaturedProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.enableEdgeToEdge(window)
 
-        binding = ActivityFeaturedProductsBinding.inflate(layoutInflater)
+        binding = ActivityHotDealProductsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.tbFeaturedProducts.root) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.tbHotDealProducts.root) { view, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
 
             view.setPadding(
@@ -55,11 +57,8 @@ class FeaturedProductActivity : AppCompatActivity() {
             insets
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.composeView) { view, insets ->
-
-            val bottom = insets.getInsets(
-                WindowInsetsCompat.Type.navigationBars()
-            ).bottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.composeView){ view, insets ->
+            val bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
 
             view.setPadding(
                 view.paddingLeft,
@@ -67,30 +66,29 @@ class FeaturedProductActivity : AppCompatActivity() {
                 view.paddingRight,
                 bottom
             )
-
             insets
         }
 
-        binding.tbFeaturedProducts.toolbarTitle.text = "Featured Products"
-
-        binding.tbFeaturedProducts.backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        binding.tbHotDealProducts.backBtn.setOnClickListener {
+            onBackPressedDispatcher
+                .onBackPressed()
         }
+
+        binding.tbHotDealProducts.toolbarTitle.text = "Hot Deals of The Day"
 
         userSessionRepository = UserSessionRepository(this)
         authNavigator = AuthNavigator(userSessionRepository)
 
-
         binding.composeView.setContent {
 
             SectionProductScreen(
-                viewModel = featuredProductViewModel,
+                viewModel = hotDealProductViewModel,
                 cartViewModel = cartViewModel,
                 favouriteViewModel = favouriteViewModel,
 
                 onClick = { product ->
                     val intent = Intent(
-                        this@FeaturedProductActivity,
+                        this@HotDealProductsActivity,
                         ProductDetailActivity::class.java
                     )
 
@@ -105,13 +103,13 @@ class FeaturedProductActivity : AppCompatActivity() {
                         } else {
                             SnackBarUtil.show(
                                 view = binding.root,
-                                context = this@FeaturedProductActivity,
+                                context = this@HotDealProductsActivity,
                                 text = "Login to continue.",
                                 actionText = "GO TO LOGIN"
                             ) {
                                 startActivity(
                                     Intent(
-                                        this@FeaturedProductActivity,
+                                        this@HotDealProductsActivity,
                                         LoginActivity::class.java
                                     )
                                 )
@@ -135,13 +133,13 @@ class FeaturedProductActivity : AppCompatActivity() {
                         } else {
                             SnackBarUtil.show(
                                 view = binding.root,
-                                context = this@FeaturedProductActivity,
+                                context = this@HotDealProductsActivity,
                                 text = "Login to continue.",
                                 actionText = "GO TO LOGIN"
                             ) {
                                 startActivity(
                                     Intent(
-                                        this@FeaturedProductActivity,
+                                        this@HotDealProductsActivity,
                                         LoginActivity::class.java
                                     )
                                 )

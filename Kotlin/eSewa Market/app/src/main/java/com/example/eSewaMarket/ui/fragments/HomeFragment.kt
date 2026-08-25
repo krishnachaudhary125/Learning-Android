@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.eSewaMarket.FeaturedProductActivity
+import com.example.eSewaMarket.HotDealProductsActivity
 import com.example.eSewaMarket.LoginActivity
 import com.example.eSewaMarket.NotificationActivity
+import com.example.eSewaMarket.PopularBrandActivity
 import com.example.eSewaMarket.PostProductActivity
 import com.example.eSewaMarket.ProductDetailActivity
 import com.example.eSewaMarket.R
@@ -150,7 +152,7 @@ class HomeFragment : Fragment() {
                         binding.homeAppBar.userName.text = "${user.name},"
                     }
                 } else {
-                    userSessionRepository.user.collect { user ->
+                    userSessionRepository.user.collect {
                         binding.homeAppBar.userName.text = "User,"
                     }
                 }
@@ -161,18 +163,28 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireContext(), FeaturedProductActivity::class.java)
             startActivity(intent)
         }
+
+        binding.hotDealProductsBtn.setOnClickListener {
+            val intent = Intent(requireContext(), HotDealProductsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.popularBrandBtn.setOnClickListener {
+            val intent = Intent(requireContext(), PopularBrandActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initAdapters() {
-        bannerAdapter = BannerPagerAdapter { banner ->
+        bannerAdapter = BannerPagerAdapter {
             Toast.makeText(requireContext(), "Banner: ", Toast.LENGTH_SHORT).show()
         }
 
-        categoryAdapter = CategoryAdapter { category ->
+        categoryAdapter = CategoryAdapter {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
-        hotDealCategoryAdapter = HotDealCategoryAdapter { hotDealCategories ->
+        hotDealCategoryAdapter = HotDealCategoryAdapter {
             Toast.makeText(requireContext(), "Category: ", Toast.LENGTH_SHORT).show()
         }
 
