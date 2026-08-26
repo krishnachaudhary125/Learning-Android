@@ -259,28 +259,31 @@
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout style="@style/Widget.Card.MatchWrap">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/Widget.Card.MatchWrap">
 
                     <ImageView
+                        android:id="@+id/staticImage"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:foreground="@drawable/bg_green_to_blue_overlay"
                         android:scaleType="centerCrop"
                         android:src="@drawable/product_detail_bg"
-                        app:layout_constraintDimensionRatio="16:13"
+                        app:layout_constraintDimensionRatio="18:16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvSimilarProduct"
                         style="@style/Widget.Card.Wrap"
                         android:layout_width="0dp"
                         android:layout_marginTop="@dimen/margin_medium"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/staticImage"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@id/staticImage" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
