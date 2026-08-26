@@ -53,7 +53,7 @@ class CheckoutActivity : AppCompatActivity() {
                 productPrice = priceProductOnly,
                 totalTax = taxAmount,
                 shippingCharge = shippingCharge,
-                address = "Pulchowk, Lalitpur - 20",
+                address = "Add Shipping Address",
                 onProductClick = {}
             )
         }

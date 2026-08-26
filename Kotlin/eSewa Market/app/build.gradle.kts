@@ -1,4 +1,16 @@
 import org.gradle.kotlin.dsl.implementation
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use {
+        localProperties.load(it)
+    }
+}
+
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY")
 
 plugins {
     alias(libs.plugins.android.application)
@@ -34,6 +46,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey ?: ""
 
         buildFeatures{
             viewBinding = true
@@ -126,4 +140,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.2")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    //Google Maps integration
+    implementation("com.google.android.gms:play-services-maps:20.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.maps.android:maps-compose:6.12.0")
 }

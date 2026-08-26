@@ -86,7 +86,7 @@ fun AddressCard(
                 contentAlignment = Alignment.Center
             ){
                 Icon(
-                    painter = painterResource(R.drawable.ic_edit),
+                    painter = painterResource(R.drawable.ic_plus),
                     contentDescription = "Location",
                     tint = Color.Unspecified
                 )
