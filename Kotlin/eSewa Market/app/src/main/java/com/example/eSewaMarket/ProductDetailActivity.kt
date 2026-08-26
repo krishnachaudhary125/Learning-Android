@@ -8,7 +8,6 @@ import android.text.Spanned
 import android.text.style.StrikethroughSpan
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,17 +20,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.eSewaMarket.data.api.RetrofitInstance
 import com.example.eSewaMarket.data.models.Product
-import com.example.eSewaMarket.data.repository.CartRepository
-import com.example.eSewaMarket.data.repository.FavouriteRepository
 import com.example.eSewaMarket.data.repository.UserSessionRepository
 import com.example.eSewaMarket.databinding.ActivityProductDetailBinding
 import com.example.eSewaMarket.ui.adapters.OptionAdapter
 import com.example.eSewaMarket.ui.adapters.ProductImageAdapter
 import com.example.eSewaMarket.ui.adapters.SimilarProductAdapter
-import com.example.eSewaMarket.ui.factory.CartViewModelFactory
-import com.example.eSewaMarket.ui.factory.FavouriteViewModelFactory
 import com.example.eSewaMarket.ui.factory.ViewModelFactoryProvider
 import com.example.eSewaMarket.ui.viewmodel.CartViewModel
 import com.example.eSewaMarket.ui.viewmodel.FavouriteViewModel
@@ -89,6 +83,8 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding.toolbarProductDetail.toolbarIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbarProductDetail.toolbarIcon.setBackgroundResource(R.drawable.bg_cart)
+        binding.toolbarProductDetail.toolbarIcon.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.esewa_bg_light))
 
         userSessionRepository = UserSessionRepository(applicationContext)
         authNavigator = AuthNavigator(userSessionRepository)
@@ -233,20 +229,21 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.bottomProductPrice.text = "Rs.${product.price}"
 
             if(product.discountPercentage != null){
+                val amount = product.price
                 val discountAmount =
-                    (product.discountPercentage?.times(product.price.toDouble()) ?: 0.0) / 100
+                    (product.discountPercentage.times(amount) / 100)
 
-                val priceBeforeDiscount = product.price.toDouble() + discountAmount
+                val priceBeforeDiscount = amount + discountAmount
 
-                val strikedPrice = SpannableString("Rs. ${String.format("%.2f", priceBeforeDiscount)}")
-                strikedPrice.setSpan(
+                val struckPrice = SpannableString("Rs. ${String.format("%.2f", priceBeforeDiscount)}")
+                struckPrice.setSpan(
                     StrikethroughSpan(),
                     0,
-                    strikedPrice.length,
+                    struckPrice.length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
 
-                binding.originalPrice.text = strikedPrice
+                binding.originalPrice.text = struckPrice
                 binding.originalPrice.visibility = View.VISIBLE
             }else{
                 binding.originalPrice.visibility = View.GONE

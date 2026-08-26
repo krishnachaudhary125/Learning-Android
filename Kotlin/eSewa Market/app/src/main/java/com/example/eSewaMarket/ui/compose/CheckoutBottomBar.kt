@@ -50,6 +50,7 @@ fun CheckoutBottomBar(
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
+                .padding(top = 16.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(
@@ -231,7 +232,7 @@ fun CheckoutBottomBar(
                     onClick = onToggleClick
                 )
                 .constrainAs(icon) {
-                    top.linkTo(box.top, margin = (-26).dp)
+                    top.linkTo(box.top, margin = (-10).dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }

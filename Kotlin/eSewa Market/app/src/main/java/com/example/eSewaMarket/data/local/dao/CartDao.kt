@@ -65,6 +65,7 @@ interface CartDao {
         INNER JOIN products AS p
         ON c.productId = p.productId
         WHERE c.userId = :userId
+        ORDER BY c.addedAt DESC
     """
     )
     fun getCartProducts(userId: Long): Flow<List<ProductResponse>>

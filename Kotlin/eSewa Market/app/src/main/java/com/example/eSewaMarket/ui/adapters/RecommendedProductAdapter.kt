@@ -81,7 +81,7 @@ class RecommendedProductAdapter(
 
             holder.binding.apply {
                 productTitle.text = product.title
-                brand.text = product.brand
+                brand.text = product.brand.uppercase()
                 price.text = product.price.toString()
                 if(product.stock != 0){
                     soldOut.visibility = View.GONE

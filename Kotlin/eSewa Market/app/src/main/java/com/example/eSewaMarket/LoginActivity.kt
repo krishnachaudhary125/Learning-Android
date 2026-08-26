@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -26,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by viewModels()
     private lateinit var cartViewModel: CartViewModel
     private lateinit var favouriteViewModel: FavouriteViewModel
 
@@ -61,17 +62,18 @@ class LoginActivity : AppCompatActivity() {
             apiService = RetrofitInstance.api
         )
 
-        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-
         cartViewModel = ViewModelProvider(
-            this,
-            CartViewModelFactory(cartRepository)
-        )[CartViewModel::class.java]
+                this,
+                CartViewModelFactory(cartRepository)
+            )[CartViewModel::class.java]
 
-        favouriteViewModel = ViewModelProvider(
-            this,
-            FavouriteViewModelFactory(favouriteRepository)
-        )[FavouriteViewModel::class.java]
+        favouriteViewModel =
+            ViewModelProvider(
+                this,
+                FavouriteViewModelFactory(
+                    favouriteRepository
+                )
+            )[FavouriteViewModel::class.java]
 
         observeViewModels()
 
@@ -84,26 +86,42 @@ class LoginActivity : AppCompatActivity() {
 
         userViewModel.loading.observe(this) { isLoading ->
 
-            if (isLoading) {
-                binding.loadingOverlay.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.loadingOverlay.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-            }
+            binding.loadingOverlay.visibility =
+                if (isLoading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            binding.progressBar.visibility =
+                if (isLoading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
 
-        userViewModel.user.observe(this) {
+        userViewModel.user.observe(this) { user ->
+
+            if (user == null) {
+                return@observe
+            }
 
             cartViewModel.syncCartWithServer()
-            favouriteViewModel.syncFavouritesWithServer()
+
+            favouriteViewModel
+                .syncFavouritesWithServer()
 
             val intent = Intent(
                 this@LoginActivity,
                 MainActivity::class.java
-            )
+            ).apply {
 
-            intent.putExtra("login_success", true)
+                putExtra(
+                    "login_success",
+                    true
+                )
+            }
 
             startActivity(intent)
             finish()
@@ -111,7 +129,16 @@ class LoginActivity : AppCompatActivity() {
 
         userViewModel.error.observe(this) { error ->
 
+            binding.loadingOverlay.visibility =
+                View.GONE
+
+            binding.progressBar.visibility =
+                View.GONE
+
+            binding.loginBtn.isEnabled = true
+
             if (!error.isNullOrEmpty()) {
+
                 Toast.makeText(
                     this,
                     error,
@@ -146,25 +173,32 @@ class LoginActivity : AppCompatActivity() {
 
         binding.redirectToRegister.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                RegisterActivity::class.java
+            startActivity(
+                Intent(
+                    this,
+                    RegisterActivity::class.java
+                )
             )
-
-            startActivity(intent)
         }
 
         binding.loginBtn.setOnClickListener {
 
             val email =
-                binding.loginEmail.text.toString().trim()
+                binding.loginEmail
+                    .text
+                    .toString()
+                    .trim()
 
             val password =
-                binding.password.text.toString().trim()
+                binding.password
+                    .text
+                    .toString()
+                    .trim()
 
             when {
 
                 email.isEmpty() -> {
+
                     binding.loginEmail.error =
                         "Email is required"
 
@@ -174,6 +208,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 password.isEmpty() -> {
+
                     binding.password.error =
                         "Password is required"
 
@@ -183,11 +218,18 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            binding.loadingOverlay.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.VISIBLE
+            binding.loadingOverlay.visibility =
+                View.VISIBLE
+
+            binding.progressBar.visibility =
+                View.VISIBLE
+
             binding.loginBtn.isEnabled = false
 
-            loginUser(email, password)
+            loginUser(
+                email,
+                password
+            )
         }
     }
 
@@ -201,57 +243,107 @@ class LoginActivity : AppCompatActivity() {
             password
         ).addOnCompleteListener { task ->
 
-            if (task.isSuccessful) {
+            if (!task.isSuccessful) {
 
-                getFirebaseToken()
+                handleLoginError(
+                    task.exception?.localizedMessage
+                        ?: "Login failed"
+                )
 
-            } else {
+                return@addOnCompleteListener
+            }
 
-                binding.loadingOverlay.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
+            val user = auth.currentUser
+
+            if (user == null) {
+
+                handleLoginError(
+                    "User authentication failed"
+                )
+
+                return@addOnCompleteListener
+            }
+
+            if (!user.isEmailVerified) {
+
+                binding.loadingOverlay.visibility =
+                    View.GONE
+
+                binding.progressBar.visibility =
+                    View.GONE
+
                 binding.loginBtn.isEnabled = true
 
-                Toast.makeText(
+                val intent = Intent(
                     this,
-                    task.exception?.message
-                        ?: "Login failed",
-                    Toast.LENGTH_LONG
-                ).show()
+                    EmailVerificationActivity::class.java
+                ).apply {
+
+                    putExtra(
+                        "fromRegistration",
+                        false
+                    )
+                }
+
+                startActivity(intent)
+                finish()
+
+                return@addOnCompleteListener
             }
+
+            getFirebaseToken()
         }
     }
 
     private fun getFirebaseToken() {
+
         val user = auth.currentUser
 
         if (user == null) {
-            handleLoginError("User authentication failed")
+
+            handleLoginError(
+                "User authentication failed"
+            )
+
             return
         }
 
-        user.getIdToken(false)
+        user.getIdToken(true)
             .addOnSuccessListener { result ->
 
                 val token = result.token
 
                 if (token != null) {
-                    userViewModel.getCurrentUser(token)
+
+                    userViewModel
+                        .getCurrentUser(token)
+
                 } else {
-                    handleLoginError("Unable to get Firebase token")
+
+                    handleLoginError(
+                        "Unable to get Firebase token"
+                    )
                 }
             }
             .addOnFailureListener { exception ->
 
                 handleLoginError(
-                    exception.message ?: "Unable to get Firebase token"
+                    exception.localizedMessage
+                        ?: "Unable to get Firebase token"
                 )
             }
     }
 
-    private fun handleLoginError(message: String) {
+    private fun handleLoginError(
+        message: String
+    ) {
 
-        binding.loadingOverlay.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        binding.loadingOverlay.visibility =
+            View.GONE
+
+        binding.progressBar.visibility =
+            View.GONE
+
         binding.loginBtn.isEnabled = true
 
         Toast.makeText(
