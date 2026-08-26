@@ -14,7 +14,7 @@ private val Context.userSession by preferencesDataStore(name = "user_session")
 
 class UserSessionRepository(private val context: Context) {
 
-    private object Keys{
+    private object Keys {
         val ID = longPreferencesKey("id")
         val FIREBASE_UID = stringPreferencesKey("firebase_uid")
         val NAME = stringPreferencesKey("name")
@@ -25,7 +25,7 @@ class UserSessionRepository(private val context: Context) {
         val LOGGED_IN = booleanPreferencesKey("logged_in")
     }
 
-    suspend fun saveUser(user: UserResponse){
+    suspend fun saveUser(user: UserResponse) {
         context.userSession.edit { prefs ->
             prefs[Keys.ID] = user.id
             prefs[Keys.FIREBASE_UID] = user.firebaseUid
@@ -33,29 +33,38 @@ class UserSessionRepository(private val context: Context) {
             prefs[Keys.EMAIL] = user.email
             prefs[Keys.PHONE] = user.phone ?: ""
             prefs[Keys.PHOTO] = user.photoUrl ?: ""
+            prefs[Keys.EMAIL_VERIFIED] = true
             prefs[Keys.LOGGED_IN] = true
         }
     }
 
-    val isLoggedIn: Flow<Boolean> = context.userSession.data.map{
-        it[Keys.LOGGED_IN] ?: false
-    }
+    val isLoggedIn: Flow<Boolean> =
+        context.userSession.data.map {
+            it[Keys.LOGGED_IN] ?: false
+        }
 
-    val user: Flow<UserResponse> = context.userSession.data.map { prefs ->
-        UserResponse(
-            id = prefs[Keys.ID] ?: 0L,
-            firebaseUid = prefs[Keys.FIREBASE_UID] ?: "",
-            name = prefs[Keys.NAME] ?: "",
-            phone = prefs[Keys.PHONE] ?: "",
-            email = prefs[Keys.EMAIL] ?: "",
-            photoUrl = prefs[Keys.PHOTO] ?: "",
-            role = "",
-            createdAt = "",
-            updatedAt = ""
-        )
-    }
+    val user: Flow<UserResponse> =
+        context.userSession.data.map { prefs ->
+            UserResponse(
+                id = prefs[Keys.ID] ?: 0L,
+                firebaseUid = prefs[Keys.FIREBASE_UID] ?: "",
+                name = prefs[Keys.NAME] ?: "",
+                phone = prefs[Keys.PHONE] ?: "",
+                email = prefs[Keys.EMAIL] ?: "",
+                photoUrl = prefs[Keys.PHOTO] ?: "",
+                role = "",
+                createdAt = "",
+                updatedAt = ""
+            )
+        }
 
     suspend fun logout() {
-        context.userSession.edit { it.clear() }
+        clearSession()
+    }
+
+    suspend fun clearSession() {
+        context.userSession.edit {
+            it.clear()
+        }
     }
 }

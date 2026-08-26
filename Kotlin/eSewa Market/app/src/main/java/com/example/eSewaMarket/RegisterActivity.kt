@@ -19,7 +19,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
-    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,26 +46,6 @@ class RegisterActivity : AppCompatActivity() {
         binding.redirectToLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-        }
-
-        userViewModel.loading.observe(this) { isLoading ->
-            binding.loadingOverlay.visibility =
-                if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        userViewModel.user.observe(this) {
-
-            Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        userViewModel.error.observe(this) { error ->
-            binding.loadingOverlay.visibility = View.GONE
-
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
 
         binding.cbTerms.setOnCheckedChangeListener { _, isChecked ->
@@ -133,7 +112,8 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 !password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")) -> {
-                    binding.password.error = "Password must contain uppercase, lowercase, number & special character"
+                    binding.password.error =
+                        "Password must contain uppercase, lowercase, number & special character"
                     binding.password.requestFocus()
                     return@setOnClickListener
                 }
@@ -146,35 +126,45 @@ class RegisterActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                else -> {
-
-                    binding.loadingOverlay.visibility = View.VISIBLE
-
+                else ->
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
 
                             if (task.isSuccessful) {
-                                val firebaseUser = auth.currentUser
 
-                                firebaseUser?.sendEmailVerification()
-                                firebaseUser?.getIdToken(true)
-                                    ?.addOnSuccessListener { result ->
-                                        val token = result.token ?: return@addOnSuccessListener
-                                        val request = UserSyncRequest(fullName = fullName, email = email, phone = phone)
-                                        userViewModel.syncUser(token, request)
-                                    }
-                                    ?.addOnFailureListener { e ->
-                                        binding.loadingOverlay.visibility = View.GONE
-                                        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
-                                    }
+                                binding.loadingOverlay.visibility = View.GONE
+
+                                val intent = Intent(
+                                    this,
+                                    EmailVerificationActivity::class.java
+                                ).apply {
+                                    putExtra("fullName", fullName)
+                                    putExtra("email", email)
+                                    putExtra("phone", phone)
+                                    putExtra("fromRegistration", true)
+                                }
+
+                                startActivity(intent)
+                                finish()
 
                             } else {
+
                                 binding.loadingOverlay.visibility = View.GONE
-                                Log.e("FirebaseRegister", "Registration failed", task.exception)
-                                Toast.makeText(this, task.exception?.localizedMessage ?: "Registration failed", Toast.LENGTH_LONG).show()
+
+                                Log.e(
+                                    "FirebaseRegister",
+                                    "Registration failed",
+                                    task.exception
+                                )
+
+                                Toast.makeText(
+                                    this,
+                                    task.exception?.localizedMessage
+                                        ?: "Registration failed",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
-                }
             }
         }
     }

@@ -24,8 +24,7 @@ import com.example.eSewaMarket.R
 @Composable
 fun EmailVerificationScreen(
     onBackClick: () -> Unit,
-    sendEmail: () -> Unit,
-    emailVerified: Boolean
+    sendEmail: () -> Unit
 ) {
     Scaffold(
         containerColor = colorResource(id = R.color.background),
@@ -77,21 +76,6 @@ fun EmailVerificationScreen(
                     Text(
                         "Send Verification Email",
                         fontWeight = FontWeight.Bold
-                    )
-                }
-
-                if (emailVerified){
-                    Text(
-                        "Email Verified\nSuccessfully.",
-                        fontSize = 20.sp,
-                        letterSpacing = 2.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        lineHeight = 24.sp,
-                        color = colorResource(id = R.color.green),
-                        modifier = Modifier
-                            .padding(top = 32.dp)
-                            .align(Alignment.CenterHorizontally)
                     )
                 }
             }
