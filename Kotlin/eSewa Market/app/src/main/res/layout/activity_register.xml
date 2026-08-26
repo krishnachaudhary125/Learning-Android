@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.05"
                     android:layout_marginBottom="4dp"
-                    android:text="@string/full_name"
+                    android:text="FIRST NAME"
                     android:textColor="@color/text_dark"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -74,7 +74,77 @@
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fname"
+                        android:id="@+id/fName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter your full name"
+                        android:inputType="textEmailAddress"
+                        android:letterSpacing="0.1"
+                        android:minHeight="56dp"
+                        android:background="@drawable/bg_faq_question" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="4dp"
+                    android:text="MIDDLE NAME (Optional)"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter your full name"
+                        android:inputType="textEmailAddress"
+                        android:letterSpacing="0.1"
+                        android:minHeight="56dp"
+                        android:background="@drawable/bg_faq_question" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="4dp"
+                    android:text="LAST NAME"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter your full name"

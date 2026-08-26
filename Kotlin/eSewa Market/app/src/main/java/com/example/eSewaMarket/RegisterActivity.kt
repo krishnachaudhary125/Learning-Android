@@ -56,16 +56,46 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.registerBtn.setOnClickListener {
 
-            val fullName = binding.fname.text.toString().trim()
+            val firstName = binding.fName.text.toString().trim()
+            val middleName = binding.mName.text.toString().trim()
+            val lastName = binding.lName.text.toString().trim()
             val phone = binding.phone.text.toString().trim()
             val email = binding.email.text.toString().trim()
             val password = binding.password.text.toString().trim()
+            val nameRegex = Regex("^[A-Za-z.]+$")
+            val fullName = listOf(firstName, middleName, lastName)
+                .filter { it.isNotBlank() }
+                .joinToString(" ")
 
             when {
 
-                fullName.isEmpty() -> {
-                    binding.fname.error = "Full name is required"
-                    binding.fname.requestFocus()
+                firstName.isEmpty() -> {
+                    binding.fName.error = "First name is required"
+                    binding.fName.requestFocus()
+                    return@setOnClickListener
+                }
+
+                !firstName.matches(nameRegex) -> {
+                    binding.fName.error = "Invalid input"
+                    binding.fName.requestFocus()
+                    return@setOnClickListener
+                }
+
+                middleName.isNotBlank() && !middleName.matches(nameRegex) -> {
+                    binding.mName.error = "Invalid input"
+                    binding.mName.requestFocus()
+                    return@setOnClickListener
+                }
+
+                lastName.isEmpty() -> {
+                    binding.lName.error = "Last name is required"
+                    binding.lName.requestFocus()
+                    return@setOnClickListener
+                }
+
+                !lastName.matches(nameRegex) -> {
+                    binding.lName.error = "Invalid input"
+                    binding.lName.requestFocus()
                     return@setOnClickListener
                 }
 
