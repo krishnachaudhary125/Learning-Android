@@ -392,7 +392,8 @@
         android:id="@+id/productDetailBottomNav"
         style="@style/Widget.Card.MatchWrap"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/padding_medium"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -400,7 +401,8 @@
 
         <LinearLayout
             style="@style/Widget.Card.Wrap"
-            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -422,13 +424,13 @@
 
         </LinearLayout>
 
-        <Space style="@style/Widget.Card.layout_weight" />
+        <Space style="@style/Widget.Card.layout_weight"
+            android:layout_weight="0.2"/>
 
         <LinearLayout
             android:id="@+id/addToCartBG"
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_medium"
             android:background="@drawable/bg_continue_shopping"
             android:gravity="center"
             android:minWidth="148dp"
