@@ -408,6 +408,8 @@
                 style="@style/Widget.Card.Wrap"
                 android:letterSpacing="0.05"
                 android:paddingVertical="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp" />
 
