@@ -61,6 +61,7 @@ fun CheckoutScreen(
     totalTax: Double,
     shippingCharge: Double,
     address: String,
+    onAddMapClick: () -> Unit,
     onProductClick: (ProductResponse) -> Unit
 ) {
     var isExpanded by rememberSaveable {
@@ -122,7 +123,8 @@ fun CheckoutScreen(
                         lineHeight = 24.sp,
                         letterSpacing = 2.sp
                     )
-                }
+                },
+                onAddMapClick = onAddMapClick
             )
 
             Text(

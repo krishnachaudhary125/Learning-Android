@@ -1,5 +1,6 @@
 package com.example.eSewaMarket
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -53,7 +54,11 @@ class CheckoutActivity : AppCompatActivity() {
                 productPrice = priceProductOnly,
                 totalTax = taxAmount,
                 shippingCharge = shippingCharge,
-                address = "Pulchowk, Lalitpur - 20",
+                address = "Add Shipping Address",
+                onAddMapClick = {
+                    val intent = Intent(this, MapActivity::class.java)
+                    startActivity(intent)
+                },
                 onProductClick = {}
             )
         }

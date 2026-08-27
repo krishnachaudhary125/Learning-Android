@@ -15,6 +15,11 @@
         android:roundIcon="@mipmap/ic_esewa_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Try">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
         <activity
             android:name="com.example.eSewaMarket.MainActivity"
             android:exported="true"
@@ -40,6 +45,7 @@
         <activity android:name=".HotDealProductsActivity"/>
         <activity android:name=".PopularBrandActivity"/>
         <activity android:name=".EmailVerificationActivity"/>
+        <activity android:name=".MapActivity"/>
     </application>
 
 </manifest>

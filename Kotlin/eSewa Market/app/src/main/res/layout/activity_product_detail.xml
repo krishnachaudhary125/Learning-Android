@@ -4,22 +4,26 @@
     style="@style/Widget.Card.Match"
     android:background="#E6ECF4">
 
+    <include
+        android:id="@+id/toolbarProductDetail"
+        style="@style/Widget.Card.MatchWrap"
+        android:layout_width="0dp"
+        layout="@layout/toolbar_back_action"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/productDetailLayout"
-        style="@style/Widget.Card.Match"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbarProductDetail">
 
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/Widget.Card.Match">
-
-            <include
-                android:id="@+id/toolbarProductDetail"
-                style="@style/Widget.Card.MatchWrap"
-                layout="@layout/toolbar_back_action"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpProductImage"
@@ -262,12 +266,14 @@
                 <androidx.constraintlayout.widget.ConstraintLayout style="@style/Widget.Card.MatchWrap">
 
                     <ImageView
+                        android:id="@+id/staticImage"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:foreground="@drawable/bg_green_to_blue_overlay"
                         android:scaleType="centerCrop"
                         android:src="@drawable/product_detail_bg"
-                        app:layout_constraintDimensionRatio="16:13"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="18:16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -277,10 +283,10 @@
                         style="@style/Widget.Card.Wrap"
                         android:layout_width="0dp"
                         android:layout_marginTop="@dimen/margin_medium"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/staticImage"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@id/staticImage" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -392,24 +398,26 @@
         android:id="@+id/productDetailBottomNav"
         style="@style/Widget.Card.MatchWrap"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/padding_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             style="@style/Widget.Card.Wrap"
-            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/productTitle"
                 style="@style/Widget.Card.Wrap"
-                android:letterSpacing="0.05"
-                android:paddingVertical="4dp"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:letterSpacing="0.05"
+                android:maxLines="1"
+                android:paddingVertical="4dp"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp" />
 
@@ -422,13 +430,14 @@
 
         </LinearLayout>
 
-        <Space style="@style/Widget.Card.layout_weight" />
+        <Space
+            style="@style/Widget.Card.layout_weight"
+            android:layout_weight="0.2" />
 
         <LinearLayout
             android:id="@+id/addToCartBG"
             style="@style/Widget.Card.Wrap"
             android:layout_marginVertical="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_medium"
             android:background="@drawable/bg_continue_shopping"
             android:gravity="center"
             android:minWidth="148dp"
